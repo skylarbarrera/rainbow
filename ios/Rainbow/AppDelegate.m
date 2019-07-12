@@ -12,6 +12,7 @@
 #import <React/RCTLinkingManager.h>
 #import <React/RCTRootView.h>
 #import <Firebase.h>
+#import "Intercom/intercom.h"
 #import "RNFirebaseMessaging.h"
 #import "RNFirebaseNotifications.h"
 #import "RNSplashScreen.h"
@@ -20,6 +21,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  // Intercom
+  [Intercom setApiKey:@"ios_sdk-88b41a13af4c65c3d6db1a94f4a5d577935af9a4" forAppId:@"cg1quwy2"];
+  // Register an unidentifed user with Intercom
+  [Intercom registerUnidentifiedUser];
+  
   // Firebase - Push Notifications
   [FIRApp configure];
   [RNFirebaseNotifications configure];
@@ -64,6 +70,17 @@
 
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
     [[RNFirebaseMessaging instance] didRegisterUserNotificationSettings:notificationSettings];
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+  [Intercom setDeviceToken:deviceToken];
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+  [application registerUserNotificationSettings:
+   [UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert)
+                                 categories:nil]];
+  [application registerForRemoteNotifications];
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url

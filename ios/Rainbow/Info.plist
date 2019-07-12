@@ -52,8 +52,8 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>Rainbow</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Send photos to help resolve app issues</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>Rainbow</string>
 	<key>NSCalendarsUsageDescription</key>

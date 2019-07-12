@@ -2,6 +2,7 @@ import { get } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { createElement } from 'react';
 import { InteractionManager } from 'react-native';
+import Intercom from 'react-native-intercom';
 import {
   compose,
   onlyUpdateForKeys,
@@ -48,6 +49,7 @@ const SettingsModal = ({
   onCloseModal,
   onPressBack,
   onPressImportSeedPhrase,
+  onPressOpenIntercom,
   onPressSection,
 }) => {
   const { component, title } = currentSettingsPage;
@@ -72,6 +74,7 @@ const SettingsModal = ({
             onPressImportSeedPhrase={onPressImportSeedPhrase}
             onPressLanguage={onPressSection(SettingsPages.language)}
             onPressNetwork={onPressSection(SettingsPages.network)}
+            onPressOpenIntercom={onPressOpenIntercom}
           />
           {component && createElement(component, { navigation })}
         </AnimatedPager>
@@ -86,6 +89,7 @@ SettingsModal.propTypes = {
   onCloseModal: PropTypes.func,
   onPressBack: PropTypes.func,
   onPressImportSeedPhrase: PropTypes.func,
+  onPressOpenIntercom: PropTypes.func,
   onPressSection: PropTypes.func,
 };
 
@@ -102,6 +106,7 @@ export default compose(
         navigation.navigate('ImportSeedPhraseSheet');
       });
     },
+    onPressOpenIntercom: () => () => Intercom.displayMessenger(),
     onPressSection: ({ navigation }) => (section) => () => navigation.setParams({ section }),
   }),
   onlyUpdateForKeys(['currentSettingsPage']),

@@ -15,7 +15,6 @@ export { default as withNeverRerender } from './withNeverRerender';
 export { default as withRequests } from './withRequests';
 export { default as withRotationForDirection } from './withRotationForDirection';
 export { default as withSafeAreaViewInsetValues } from './withSafeAreaViewInsetValues';
-export { default as withSendFeedback } from './withSendFeedback';
 export { default as withStatusBarStyle } from './withStatusBarStyle';
 export { default as withTransactionConfirmationScreen } from './withTransactionConfirmationScreen';
 export { default as withTransitionProps } from './withTransitionProps';

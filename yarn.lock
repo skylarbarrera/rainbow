@@ -8903,6 +8903,11 @@ react-native-indicators@^0.13.0:
   dependencies:
     prop-types "^15.5.10"
 
+react-native-intercom@^13.1.0:
+  version "13.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-intercom/-/react-native-intercom-13.1.0.tgz#35b7f177a701bf91a419b40ec80fa8162269c9d9"
+  integrity sha512-HhYg5Wl5wiiw++ElE1mwaaeikNUKiHrPQP9vGQqWaxt40yXhfTvTLRgLPhzj/OuWTL1Zr7gwYa1s0lrS1epg6Q==
+
 react-native-ios11-devicecheck@^0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/react-native-ios11-devicecheck/-/react-native-ios11-devicecheck-0.0.3.tgz#2a9156a35f4aef8d5e196f9e49ceb89fce7f2a52"

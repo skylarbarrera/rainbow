@@ -1,5 +1,6 @@
 import { debounce } from 'lodash';
 import { Clipboard } from 'react-native';
+import Intercom from 'react-native-intercom';
 import Mailer from 'react-native-mail';
 import { withHandlers } from 'recompact';
 import { Alert } from '../components/alerts';
@@ -31,7 +32,7 @@ const feedbackEmailOptions = {
 };
 
 const withSendFeedback = ComponentToWrap => withHandlers({
-  onSendFeedback: () => () => Mailer.mail(feedbackEmailOptions, handleMailError),
+  onSendFeedback: () => () => Intercom.displayMessenger(),
 })(ComponentToWrap);
 
 export default withSendFeedback;

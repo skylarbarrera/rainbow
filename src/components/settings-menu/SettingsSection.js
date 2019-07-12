@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { Linking, ScrollView } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import Intercom from 'react-native-intercom';
 import { compose, onlyUpdateForKeys, withHandlers } from 'recompact';
 import styled from 'styled-components/primitives';
 import BackupIcon from '../../assets/backup-icon.png';
@@ -10,7 +11,7 @@ import LanguageIcon from '../../assets/language-icon.png';
 import NetworkIcon from '../../assets/network-icon.png';
 import { supportedLanguages } from '../../languages';
 // import SecurityIcon from '../../assets/security-icon.png';
-import { withAccountSettings, withSendFeedback } from '../../hoc';
+import { withAccountSettings } from '../../hoc';
 import { position } from '../../styles';
 import AppVersionStamp from '../AppVersionStamp';
 import { Icon } from '../icons';
@@ -24,9 +25,8 @@ import {
 import { Emoji } from '../text';
 
 const SettingsExternalURLs = {
-  about: 'https://twitter.com/rainbowdotme',
-  feedback: 'http://rainbow.me',
-  legal: 'https://github.com/rainbow-me/rainbow/blob/master/LICENSE',
+  review: 'https://itunes.apple.com/us/app/appName/id1457119021?mt=8&action=write-review',
+  twitter: 'https://twitter.com/rainbowdotme',
 };
 
 // ⚠️ Beware: magic numbers lol
@@ -46,6 +46,7 @@ const SettingsSection = ({
   onPressImportSeedPhrase,
   onPressLanguage,
   onPressNetwork,
+  onPressOpenIntercom,
   onSendFeedback,
   // onPressSecurity,
   openWebView,
@@ -114,29 +115,29 @@ const SettingsSection = ({
     <ListFooter />
     <Column>
       <ListItem
-        icon={<Emoji name="seedling" />}
-        label="Import Seed Phrase"
-        onPress={onPressImportSeedPhrase}
-      />
-      <ListItemDivider />
-      <ListItem
         icon={<Emoji name="rainbow" />}
         label="Follow Us"
         onPress={openWebView}
-        value={SettingsExternalURLs.about}
+        value={SettingsExternalURLs.twitter}
+      />
+      <ListItemDivider />
+      <ListItem
+        icon={<Emoji name="speech_balloon" />}
+        label="Chat with Us"
+        onPress={onPressOpenIntercom}
       />
       <ListItemDivider />
       <ListItem
         icon={<Emoji name="heart" />}
-        label="Leave Feedback️"
-        onPress={onSendFeedback}
+        label="Review Rainbow"
+        onPress={openWebView}
+        value={SettingsExternalURLs.review}
       />
       <ListItemDivider />
       <ListItem
-        icon={<Emoji name="page_with_curl" />}
-        label="Legal"
-        onPress={openWebView}
-        value={SettingsExternalURLs.legal}
+        icon={<Emoji name="seedling" />}
+        label="Import Seed Phrase"
+        onPress={onPressImportSeedPhrase}
       />
     </Column>
     <Column
@@ -159,6 +160,7 @@ SettingsSection.propTypes = {
   onPressImportSeedPhrase: PropTypes.func.isRequired,
   onPressLanguage: PropTypes.func.isRequired,
   onPressNetwork: PropTypes.func,
+  onPressOpenIntercom: PropTypes.func,
   onSendFeedback: PropTypes.func.isRequired,
   // onPressSecurity: PropTypes.func.isRequired,
   openWebView: PropTypes.func,
@@ -171,7 +173,6 @@ SettingsSection.defaultProps = {
 
 export default compose(
   withAccountSettings,
-  withSendFeedback,
   withHandlers({ openWebView: () => uri => Linking.openURL(uri) }),
   onlyUpdateForKeys(['language', 'nativeCurrency']),
 )(SettingsSection);
