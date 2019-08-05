@@ -8,6 +8,7 @@ import { FlexItem, Page } from '../components/layout';
 import { Icon } from '../components/icons';
 import { ProfileMasthead } from '../components/profile';
 import { colors, position } from '../styles';
+import HeaderProfileInfo from '../components/header/HeaderProfileInfo';
 
 const ProfileScreen = ({
   accountAddress,
@@ -26,6 +27,9 @@ const ProfileScreen = ({
       <HeaderButton onPress={onPressSettings}>
         <Icon name="gear" />
       </HeaderButton>
+      <HeaderProfileInfo onPress={onPressSettings}>
+        <Icon name="gear" />
+      </HeaderProfileInfo>
       <BackButton
         direction="right"
         onPress={onPressBackButton}
