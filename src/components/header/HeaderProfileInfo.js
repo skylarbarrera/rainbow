@@ -5,7 +5,9 @@ import { pure } from 'recompact';
 import { ButtonPressAnimation } from '../animations';
 import { colors } from '../../styles';
 import FastImage from 'react-native-fast-image';
+import Caret from '../../assets/family-dropdown-arrow.png';
 import AvatarImageSource from '../../assets/avatar.png';
+import RotationArrow from '../animations/RotationArrow';
 
 const Container = styled.View`
   height: 46px;
@@ -17,10 +19,30 @@ const Container = styled.View`
   flex-direction: row;
 `;
 
+const RightSide = styled.View`
+
+`;
+
 const TopRow = styled.View`
+  flex-direction: row;
 `;
 
 const BottomRow = styled.View`
+
+`;
+
+const Nickname = styled.Text`
+
+`;
+
+const Address = styled.Text`
+
+`;
+
+const SettingIcon = styled(FastImage)`
+  height: 12px;
+  width: 6px;
+  transform: rotate(90deg);
 `;
 
 const HeaderButton = ({
@@ -38,12 +60,19 @@ const HeaderButton = ({
           width: 32,
         }}
       />
-      <TopRow>
-
-      </TopRow>
-      <BottomRow>
-        
-      </BottomRow>
+      <RightSide>
+        <TopRow>
+          <Nickname>
+            Mike Demarais
+          </Nickname>
+          <SettingIcon source={Caret} />
+        </TopRow>
+        <BottomRow>
+          <Address>
+            Address
+          </Address>
+        </BottomRow>
+      </RightSide>
     </Container>
   </ButtonPressAnimation>
 );
