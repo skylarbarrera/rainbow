@@ -29,6 +29,7 @@ const ProfileScreen = ({
         <Icon name="gear" />
       </HeaderButton>
       <HeaderProfileInfo
+        displayName={'Bob'}
         onPress={onPressProfileHeader}
         accountAddress={accountAddress}
       >

@@ -60,11 +60,10 @@ const AddressAbbreviation = styled(TruncatedAddress).attrs({
 `;
 
 
-const HeaderButton = ({
+const HeaderProfileInfo = ({
   accountAddress,
-  children,
+  displayName,
   onPress,
-  transformOrigin,
 }) => (
   <ButtonPressAnimation onPress={onPress} scaleTo={0.90}>
     <Container>
@@ -81,7 +80,7 @@ const HeaderButton = ({
       <RightSide>
         <TopRow>
           <Nickname>
-            Mike Demarais
+            {displayName}
           </Nickname>
           <ArrowWrapper>
             <SettingIcon source={Caret} />
@@ -93,11 +92,10 @@ const HeaderButton = ({
   </ButtonPressAnimation>
 );
 
-HeaderButton.propTypes = {
+HeaderProfileInfo.propTypes = {
   accountAddress: PropTypes.string,
-  ...ButtonPressAnimation.propTypes,
-  children: PropTypes.node,
+  displayName: PropTypes.string,
   onPress: PropTypes.func.isRequired,
 };
 
-export default pure(HeaderButton);
+export default pure(HeaderProfileInfo);
