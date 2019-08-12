@@ -70,6 +70,7 @@ class WalletScreen extends Component {
   }
 
   shouldComponentUpdate = (nextProps) => {
+    const isNewAllAssetsCount = isNewValueForPath(this.props, nextProps, 'allAssetsCount');
     const isNewBlurIntensity = isNewValueForPath(this.props, nextProps, 'blurIntensity');
     const isNewCurrency = isNewValueForPath(this.props, nextProps, 'nativeCurrency');
     const isNewFetchingAssets = isNewValueForPath(this.props, nextProps, 'fetchingAssets');
@@ -81,11 +82,8 @@ class WalletScreen extends Component {
     const isNewShowShitcoins = isNewValueForPath(this.props, nextProps, 'showShitcoins');
     const isNewTransitionProps = isNewValueForPath(this.props, nextProps, 'transitionProps');
 
-    if (!nextProps.isFocused) {
-      return isNewBlurIntensity || isNewTransitionProps;
-    }
-
-    return isNewFetchingAssets
+    return isNewAllAssetsCount
+      || isNewFetchingAssets
       || isNewFetchingUniqueTokens
       || isNewIsWalletEmpty
       || isNewIsWalletEthZero

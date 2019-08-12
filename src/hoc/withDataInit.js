@@ -46,6 +46,35 @@ const PromiseAllWithFails = async (promises) => (
       : promise
   ))));
 
+const walletInitialization = async (isImported, isNew, walletAddress, ownProps) => {
+  if (isNil(walletAddress)) {
+    Alert.alert('Import failed due to an invalid private key. Please try again.');
+    return null;
+  }
+  if (isImported) {
+    await ownProps.clearAccountData();
+  }
+  ownProps.settingsUpdateAccountAddress(walletAddress, 'RAINBOWWALLET');
+  if (isNew) {
+    ownProps.setIsWalletEthZero(true);
+  } else if (isImported) {
+    await ownProps.checkEthBalance(walletAddress);
+  } else {
+    const isWalletEmpty = await getIsWalletEmpty(walletAddress, 'mainnet');
+    if (isNil(isWalletEmpty)) {
+      ownProps.checkEthBalance(walletAddress);
+    } else {
+      ownProps.setIsWalletEthZero(isWalletEmpty);
+    }
+  }
+  if (!(isImported || isNew)) {
+    await ownProps.loadAccountData();
+  }
+  ownProps.onHideSplashScreen();
+  ownProps.initializeAccountData();
+  return walletAddress;
+}
+
 export default Component => compose(
   connect(null, {
     clearIsWalletEmpty,
@@ -126,32 +155,18 @@ export default Component => compose(
     initializeWallet: (ownProps) => async (seedPhrase) => {
       try {
         const { isImported, isNew, walletAddress } = await walletInit(seedPhrase);
-        if (isNil(walletAddress)) {
-          Alert.alert('Import failed due to an invalid private key. Please try again.');
-          return null;
-        }
-        if (isImported) {
-          await ownProps.clearAccountData();
-        }
-        ownProps.settingsUpdateAccountAddress(walletAddress, 'RAINBOWWALLET');
-        if (isNew) {
-          ownProps.setIsWalletEthZero(true);
-        } else if (isImported) {
-          await ownProps.checkEthBalance(walletAddress);
-        } else {
-          const isWalletEmpty = await getIsWalletEmpty(walletAddress, 'mainnet');
-          if (isNil(isWalletEmpty)) {
-            ownProps.checkEthBalance(walletAddress);
-          } else {
-            ownProps.setIsWalletEthZero(isWalletEmpty);
-          }
-        }
-        if (!(isImported || isNew)) {
-          await ownProps.loadAccountData();
-        }
+        console.log(isImported, isNew, walletAddress);
+        return await walletInitialization(isImported, isNew, walletAddress, ownProps);
+      } catch (error) {
+        // TODO specify error states more granular
         ownProps.onHideSplashScreen();
-        ownProps.initializeAccountData();
-        return walletAddress;
+        Alert.alert('Import failed due to an invalid private key. Please try again.');
+        return null;
+      }
+    },
+    initializeWalletWithAddress: (ownProps) => async (isImported, isNew, walletAddress) => {
+      try {
+        return await walletInitialization(isImported, isNew, walletAddress, ownProps);
       } catch (error) {
         // TODO specify error states more granular
         ownProps.onHideSplashScreen();

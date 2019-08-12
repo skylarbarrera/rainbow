@@ -2,13 +2,11 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components/primitives';
 import { pure } from 'recompact';
+import FastImage from 'react-native-fast-image';
 import { ButtonPressAnimation } from '../animations';
 import { colors, fonts } from '../../styles';
-import FastImage from 'react-native-fast-image';
 import Caret from '../../assets/family-dropdown-arrow.png';
 import AvatarImageSource from '../../assets/avatar.png';
-import RotationArrow from '../animations/RotationArrow';
-import { abbreviations } from '../../utils';
 import { TruncatedAddress } from '../text';
 
 const Container = styled.View`
@@ -22,15 +20,10 @@ const Container = styled.View`
 `;
 
 const RightSide = styled.View`
-
 `;
 
 const TopRow = styled.View`
   flex-direction: row;
-`;
-
-const BottomRow = styled.View`
-
 `;
 
 const ArrowWrapper = styled.View`
@@ -45,6 +38,7 @@ const ArrowWrapper = styled.View`
 const Nickname = styled.Text`
   font-family: ${fonts.family.SFProText};
   font-weight: ${fonts.weight.medium};
+  font-size: ${fonts.size.smedium};
   color: ${colors.dark};
 `;
 
@@ -77,10 +71,10 @@ const HeaderButton = ({
       <FastImage
         source={AvatarImageSource}
         style={{
-          marginTop: 4,
+          height: 33,
           marginLeft: 7,
           marginRight: 3,
-          height: 33,
+          marginTop: 4,
           width: 35,
         }}
       />
@@ -93,9 +87,7 @@ const HeaderButton = ({
             <SettingIcon source={Caret} />
           </ArrowWrapper>
         </TopRow>
-        <BottomRow>
-          <AddressAbbreviation address={accountAddress} />
-        </BottomRow>
+        <AddressAbbreviation address={accountAddress} />
       </RightSide>
     </Container>
   </ButtonPressAnimation>
