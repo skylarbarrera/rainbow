@@ -24,6 +24,7 @@ export default compose(
   withRequests,
   withHandlers({
     onPressBackButton: ({ navigation }) => () => navigation.navigate('WalletScreen'),
+    onPressProfileHeader: ({ navigation }) => () => navigation.navigate('ChangeWalletModal'),
     onPressSettings: ({ navigation }) => () => navigation.navigate('SettingsModal'),
   }),
   withProps(({ isWalletEmpty, transactionsCount }) => ({

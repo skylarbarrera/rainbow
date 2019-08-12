@@ -17,6 +17,7 @@ const ProfileScreen = ({
   nativeCurrency,
   navigation,
   onPressBackButton,
+  onPressProfileHeader,
   onPressSettings,
   requests,
   transactions,
@@ -27,7 +28,10 @@ const ProfileScreen = ({
       <HeaderButton onPress={onPressSettings}>
         <Icon name="gear" />
       </HeaderButton>
-      <HeaderProfileInfo onPress={onPressSettings}>
+      <HeaderProfileInfo
+        onPress={onPressProfileHeader}
+        accountAddress={accountAddress}
+      >
         <Icon name="gear" />
       </HeaderProfileInfo>
       <BackButton
@@ -66,6 +70,7 @@ ProfileScreen.propTypes = {
   nativeCurrency: PropTypes.string,
   navigation: PropTypes.object,
   onPressBackButton: PropTypes.func,
+  onPressProfileHeader: PropTypes.func,
   onPressSettings: PropTypes.func,
   requests: PropTypes.array,
   transactions: PropTypes.array,

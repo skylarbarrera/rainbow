@@ -3,11 +3,13 @@ import React from 'react';
 import styled from 'styled-components/primitives';
 import { pure } from 'recompact';
 import { ButtonPressAnimation } from '../animations';
-import { colors } from '../../styles';
+import { colors, fonts } from '../../styles';
 import FastImage from 'react-native-fast-image';
 import Caret from '../../assets/family-dropdown-arrow.png';
 import AvatarImageSource from '../../assets/avatar.png';
 import RotationArrow from '../animations/RotationArrow';
+import { abbreviations } from '../../utils';
+import { TruncatedAddress } from '../text';
 
 const Container = styled.View`
   height: 46px;
@@ -31,12 +33,19 @@ const BottomRow = styled.View`
 
 `;
 
-const Nickname = styled.Text`
-
+const ArrowWrapper = styled.View`
+  height: 16px;
+  width: 12px;
+  padding-left: 8px;
+  padding-top: 2px;
+  justify-content: center;
+  align-items: center;
 `;
 
-const Address = styled.Text`
-
+const Nickname = styled.Text`
+  font-family: ${fonts.family.SFProText};
+  font-weight: ${fonts.weight.medium};
+  color: ${colors.dark};
 `;
 
 const SettingIcon = styled(FastImage)`
@@ -45,7 +54,20 @@ const SettingIcon = styled(FastImage)`
   transform: rotate(90deg);
 `;
 
+const AddressAbbreviation = styled(TruncatedAddress).attrs({
+  firstSectionLength: 6,
+  size: 'smaller',
+  truncationLength: 4,
+  weight: 'medium',
+})`
+  font-family: ${fonts.family.SFProText};
+  width: 100%;
+  opacity: 0.5;
+`;
+
+
 const HeaderButton = ({
+  accountAddress,
   children,
   onPress,
   transformOrigin,
@@ -55,9 +77,11 @@ const HeaderButton = ({
       <FastImage
         source={AvatarImageSource}
         style={{
-          height: 32,
+          marginTop: 4,
           marginLeft: 7,
-          width: 32,
+          marginRight: 3,
+          height: 33,
+          width: 35,
         }}
       />
       <RightSide>
@@ -65,12 +89,12 @@ const HeaderButton = ({
           <Nickname>
             Mike Demarais
           </Nickname>
-          <SettingIcon source={Caret} />
+          <ArrowWrapper>
+            <SettingIcon source={Caret} />
+          </ArrowWrapper>
         </TopRow>
         <BottomRow>
-          <Address>
-            Address
-          </Address>
+          <AddressAbbreviation address={accountAddress} />
         </BottomRow>
       </RightSide>
     </Container>
@@ -78,6 +102,7 @@ const HeaderButton = ({
 );
 
 HeaderButton.propTypes = {
+  accountAddress: PropTypes.string,
   ...ButtonPressAnimation.propTypes,
   children: PropTypes.node,
   onPress: PropTypes.func.isRequired,
