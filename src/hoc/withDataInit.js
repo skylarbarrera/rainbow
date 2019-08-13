@@ -32,7 +32,7 @@ import {
   uniqueTokensLoadState,
   uniqueTokensRefreshState,
 } from '../redux/uniqueTokens';
-import { walletInit } from '../model/wallet';
+import { walletInit, saveWalletDetails } from '../model/wallet';
 import {
   walletConnectLoadState,
   walletConnectClearState,
@@ -155,7 +155,6 @@ export default Component => compose(
     initializeWallet: (ownProps) => async (seedPhrase) => {
       try {
         const { isImported, isNew, walletAddress } = await walletInit(seedPhrase);
-        console.log(isImported, isNew, walletAddress);
         return await walletInitialization(isImported, isNew, walletAddress, ownProps);
       } catch (error) {
         // TODO specify error states more granular
@@ -164,9 +163,10 @@ export default Component => compose(
         return null;
       }
     },
-    initializeWalletWithAddress: (ownProps) => async (isImported, isNew, walletAddress) => {
+    initializeWalletWithProfile: (ownProps) => async (isImported, isNew, profile) => {
       try {
-        return await walletInitialization(isImported, isNew, walletAddress, ownProps);
+        saveWalletDetails(profile.seedPhrase, profile.privateKey, profile.address);
+        return await walletInitialization(isImported, isNew, profile.address, ownProps);
       } catch (error) {
         // TODO specify error states more granular
         ownProps.onHideSplashScreen();

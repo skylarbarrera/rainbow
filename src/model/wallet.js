@@ -17,6 +17,8 @@ import {
   web3Provider,
 } from '../handlers/web3';
 
+const profiles = 'rainbowProfiles';
+const walletName = 'rainbowWalletName';
 const seedPhraseKey = 'rainbowSeedPhrase';
 const privateKeyKey = 'rainbowPrivateKey';
 const addressKey = 'rainbowAddressKey';
@@ -148,15 +150,21 @@ const createWallet = async (seed) => {
   }
 };
 
-const saveWalletDetails = async (seedPhrase, privateKey, address) => {
+export const saveWalletDetails = async (seedPhrase, privateKey, address) => {
   const canAuthenticate = await canImplyAuthentication({ authenticationType: AUTHENTICATION_TYPE.DEVICE_PASSCODE_OR_BIOMETRICS });
   let accessControlOptions = {};
   if (canAuthenticate) {
     accessControlOptions = { accessControl: ACCESS_CONTROL.USER_PRESENCE, accessible: ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY };
   }
+  saveUserInfo('My Wallet', seedPhrase, privateKey, address, accessControlOptions);
   saveSeedPhrase(seedPhrase, accessControlOptions);
   savePrivateKey(privateKey, accessControlOptions);
   saveAddress(address);
+  saveName('My Wallet');
+};
+
+const saveName = async (name, accessControlOptions = {}) => {
+  await keychain.saveString(walletName, name, accessControlOptions);
 };
 
 const saveSeedPhrase = async (seedPhrase, accessControlOptions = {}) => {
@@ -178,4 +186,50 @@ const loadPrivateKey = async (authenticationPrompt = lang.t('wallet.authenticate
 
 const saveAddress = async (address) => {
   await keychain.saveString(addressKey, address);
+};
+
+const saveUserInfo = async (name, seedPhrase, privateKey, address, accessControlOptions = {}) => {
+  const newProfile = {
+    address,
+    name,
+    privateKey,
+    seedPhrase,
+  };
+  let newProfilesTable = [];
+  let userAlreadyInProfiles = false;
+  const usersInfo = await loadUsersInfo();
+  if (usersInfo) {
+    newProfilesTable = usersInfo;
+    for (let i = 0; i < newProfilesTable.length; i++) {
+      if (usersInfo[i].address === address) {
+        userAlreadyInProfiles = true;
+      }
+    }
+  }
+  if (!userAlreadyInProfiles) {
+    newProfilesTable.push(newProfile);
+  }
+  await keychain.saveString(profiles, JSON.stringify(newProfilesTable), accessControlOptions);
+};
+
+export const loadUsersInfo = async (authenticationPrompt = lang.t('wallet.authenticate.please')) => {
+  try {
+    const usersInfo = await keychain.loadString(profiles, { authenticationPrompt });
+    return JSON.parse(usersInfo);
+  } catch (error) {
+    return null;
+  }
+};
+
+export const loadCurrentUserInfo = async (authenticationPrompt = lang.t('wallet.authenticate.please')) => {
+  try {
+    let userName = await keychain.loadString(walletName, { authenticationPrompt });
+    const userAddress = await keychain.loadString(addressKey, { authenticationPrompt });
+    if (!userName) {
+      userName = 'My Wallet';
+    }
+    return { address: userAddress, name: userName };
+  } catch (error) {
+    return null;
+  }
 };
