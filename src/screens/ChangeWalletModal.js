@@ -14,13 +14,14 @@ import ProfileRow from '../components/change-wallet/ProfileRow';
 import ProfileDivider from '../components/change-wallet/ProfileDivider';
 import ProfileOption from '../components/change-wallet/ProfileOption';
 import { withDataInit, withIsWalletImporting } from '../hoc';
-import { loadUsersInfo } from '../model/wallet';
+import { loadUsersInfo, loadCurrentUserInfo } from '../model/wallet';
 
 const Container = styled.View`
   padding-top: 2px;
 `;
 
 const ChangeWalletModal = ({
+  currentProfile,
   navigation,
   onChangeWallet,
   onCloseModal,
@@ -31,25 +32,29 @@ const ChangeWalletModal = ({
 }) => {
   let renderProfiles = null;
   if (profiles) {
-    renderProfiles = profiles.map((profile) => (
-      <ProfileRow key={profile.address} accountName={profile.name} accountAddress={profile.address} isHeader onPress={() => onChangeWallet(profile)}/>
-    ));
+    renderProfiles = profiles.map((profile) => {
+      if (currentProfile && profile.address !== currentProfile.address) {
+        return <ProfileRow key={profile.address} accountName={profile.name} accountAddress={profile.address} isHeader onPress={() => onChangeWallet(profile)}/>;
+      } 
+      return null;
+    });
   }
-  const size = profiles ? profiles.length : 0;
+  const size = profiles ? profiles.length - 1 : 0;
   return (
     <Modal height={68 + (54 * 2) + (54 * size)} onCloseModal={onCloseModal}>
       <Container>
-        <ProfileRow accountName={'Bob'} accountAddress={''} isHeader onPress={() => onChangeWallet('')}/>
+        { currentProfile && <ProfileRow accountName={currentProfile.name} accountAddress={currentProfile.address} isHeader onPress={() => navigation.navigate('WalletScreen')}/>}
         <ProfileDivider />
         {renderProfiles}
-        <ProfileOption accountName={'Add another wallet'}/>
-        <ProfileOption accountName={'Manage my wallets'}/>
+        <ProfileOption label={'Add another wallet'} onPress={() => onPressImportSeedPhrase()}/>
+        <ProfileOption label={'Manage my wallets'}/>
       </Container>
     </Modal>
   );
 };
 
 ChangeWalletModal.propTypes = {
+  currentProfile: PropTypes.object,
   navigation: PropTypes.object,
   onChangeWallet: PropTypes.func,
   onCloseModal: PropTypes.func,
@@ -79,6 +84,9 @@ export default compose(
         navigation.navigate('ImportSeedPhraseSheet');
       });
     },
+    setCurrentProfile: ({ setCurrentProfile }) => (currentProfile) => {
+      setCurrentProfile(currentProfile);
+    },
     setProfiles: ({ setProfiles }) => (profiles) => {
       setProfiles(profiles);
     },
@@ -88,6 +96,10 @@ export default compose(
       loadUsersInfo()
         .then((response) => {
           this.props.setProfiles(response);
+        });
+      loadCurrentUserInfo()
+        .then((response) => {
+          this.props.setCurrentProfile(response);
         });
     },
   }),

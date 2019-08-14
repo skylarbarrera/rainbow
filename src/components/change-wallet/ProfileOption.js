@@ -31,11 +31,10 @@ const Nickname = styled.Text`
 `;
 
 const ProfileOption = ({
-  accountAddress,
-  accountName,
-  isHeader,
+  label,
+  onPress,
 }) => (
-  <ButtonPressAnimation scaleTo={0.96}>
+  <ButtonPressAnimation scaleTo={0.96} onPress={onPress}>
     <Container>
       <IconWrapper>
         <Icon
@@ -47,7 +46,7 @@ const ProfileOption = ({
       </IconWrapper>
       <View>
         <Nickname>
-          {accountName}
+          {label}
         </Nickname>
       </View>
     </Container>
@@ -55,13 +54,8 @@ const ProfileOption = ({
 );
 
 ProfileOption.propTypes = {
-  accountAddress: PropTypes.string.isRequired,
-  accountName: PropTypes.string.isRequired,
-  isHeader: PropTypes.bool,
-};
-
-ProfileOption.defaultProps = {
-  isHeader: false,
+  label: PropTypes.string.isRequired,
+  onPress: PropTypes.func,
 };
 
 export default ProfileOption;

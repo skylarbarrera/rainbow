@@ -31,6 +31,7 @@ const AddressAbbreviation = styled(TruncatedAddress).attrs({
   font-family: ${fonts.family.SFProText};
   width: 100%;
   opacity: 0.5;
+  text-transform: lowercase;
 `;
 
 const ProfileRow = ({
