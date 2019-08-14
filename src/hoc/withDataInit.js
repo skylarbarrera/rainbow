@@ -54,7 +54,7 @@ const walletInitialization = async (isImported, isNew, walletAddress, ownProps) 
   if (isImported) {
     await ownProps.clearAccountData();
   }
-  ownProps.settingsUpdateAccountAddress(walletAddress, 'RAINBOWWALLET');
+  ownProps.settingsUpdateAccountAddress(walletAddress, 'RAINBOWWALLET', 'My Wallet');
   if (isNew) {
     ownProps.setIsWalletEthZero(true);
   } else if (isImported) {

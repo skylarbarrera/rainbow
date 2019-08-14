@@ -14,11 +14,14 @@ import ProfileRow from '../components/change-wallet/ProfileRow';
 import ProfileDivider from '../components/change-wallet/ProfileDivider';
 import ProfileOption from '../components/change-wallet/ProfileOption';
 import { withDataInit, withIsWalletImporting } from '../hoc';
-import { loadUsersInfo, loadCurrentUserInfo } from '../model/wallet';
+import { loadUsersInfo, loadCurrentUserInfo, saveCurrentUserInfo } from '../model/wallet';
 
 const Container = styled.View`
   padding-top: 2px;
 `;
+
+const headerHeight = 68;
+const profileRowHeight = 54;
 
 const ChangeWalletModal = ({
   currentProfile,
@@ -35,13 +38,13 @@ const ChangeWalletModal = ({
     renderProfiles = profiles.map((profile) => {
       if (currentProfile && profile.address !== currentProfile.address) {
         return <ProfileRow key={profile.address} accountName={profile.name} accountAddress={profile.address} isHeader onPress={() => onChangeWallet(profile)}/>;
-      } 
+      }
       return null;
     });
   }
   const size = profiles ? profiles.length - 1 : 0;
   return (
-    <Modal height={68 + (54 * 2) + (54 * size)} onCloseModal={onCloseModal}>
+    <Modal height={headerHeight + (profileRowHeight * 2) + (profileRowHeight * size)} onCloseModal={onCloseModal}>
       <Container>
         { currentProfile && <ProfileRow accountName={currentProfile.name} accountAddress={currentProfile.address} isHeader onPress={() => navigation.navigate('WalletScreen')}/>}
         <ProfileDivider />
@@ -95,7 +98,14 @@ export default compose(
     componentDidMount(setProfiles) {
       loadUsersInfo()
         .then((response) => {
-          this.props.setProfiles(response);
+          if (response && response.length > 0) {
+            this.props.setProfiles(response);
+          } else {
+            saveCurrentUserInfo();
+          }
+        })
+        .catch((error) => {
+          console.log(error);
         });
       loadCurrentUserInfo()
         .then((response) => {

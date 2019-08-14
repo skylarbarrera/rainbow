@@ -42,12 +42,12 @@ export const settingsLoadState = () => async dispatch => {
   }
 };
 
-export const settingsUpdateAccountAddress = (accountAddress, accountType) => (
+export const settingsUpdateAccountAddress = (accountAddress, accountType, accountName) => (
   dispatch,
   getState,
 ) => {
   dispatch({
-    payload: { accountAddress, accountType },
+    payload: { accountAddress, accountName, accountType },
     type: SETTINGS_UPDATE_SETTINGS_ADDRESS,
   });
 };
@@ -104,6 +104,7 @@ export const settingsChangeNativeCurrency = nativeCurrency => (
 // -- Reducer --------------------------------------------------------------- //
 export const INITIAL_STATE = {
   accountAddress: '',
+  accountName: '',
   accountType: '',
   chainId: 1,
   language: 'en',
@@ -117,6 +118,7 @@ export default (state = INITIAL_STATE, action) => {
     return {
       ...state,
       accountAddress: action.payload.accountAddress,
+      accountName: action.payload.accountName,
       accountType: action.payload.accountType,
     };
   case SETTINGS_UPDATE_NATIVE_CURRENCY_SUCCESS:

@@ -3,7 +3,7 @@ import { compose, withProps } from 'recompose';
 import { createSelector } from 'reselect';
 import { settingsUpdateAccountAddress } from '../redux/settings';
 
-const mapStateToProps = ({ settings: { accountAddress } }) => ({ accountAddress });
+const mapStateToProps = ({ settings: { accountAddress, accountName } }) => ({ accountAddress, accountName });
 
 const accountAddressSelector = state => state.accountAddress;
 

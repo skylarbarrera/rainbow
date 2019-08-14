@@ -12,6 +12,7 @@ import HeaderProfileInfo from '../components/header/HeaderProfileInfo';
 
 const ProfileScreen = ({
   accountAddress,
+  accountName,
   blurIntensity,
   isEmpty,
   nativeCurrency,
@@ -29,7 +30,7 @@ const ProfileScreen = ({
         <Icon name="gear" />
       </HeaderButton>
       <HeaderProfileInfo
-        displayName={'Bob'}
+        displayName={accountName}
         onPress={onPressProfileHeader}
         accountAddress={accountAddress}
       >
@@ -66,6 +67,7 @@ const ProfileScreen = ({
 
 ProfileScreen.propTypes = {
   accountAddress: PropTypes.string,
+  accountName: PropTypes.string,
   blurIntensity: PropTypes.object,
   isEmpty: PropTypes.bool,
   nativeCurrency: PropTypes.string,
