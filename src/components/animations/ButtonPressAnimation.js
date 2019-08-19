@@ -2,7 +2,7 @@ import { compact } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import { Animated } from 'react-native';
-import { State, TapGestureHandler } from 'react-native-gesture-handler';
+import { State, TapGestureHandler, LongPressGestureHandler } from 'react-native-gesture-handler';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import { animations } from '../../styles';
 import { directionPropType } from '../../utils';
@@ -23,7 +23,9 @@ export default class ButtonPressAnimation extends PureComponent {
     children: PropTypes.any,
     disabled: PropTypes.bool,
     enableHapticFeedback: PropTypes.bool,
+    onLongPress: PropTypes.func,
     onPress: PropTypes.func,
+    onPressStart: PropTypes.func,
     scaleTo: PropTypes.number,
     style: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
     tapRef: PropTypes.object,
@@ -65,6 +67,7 @@ export default class ButtonPressAnimation extends PureComponent {
       activeOpacity,
       enableHapticFeedback,
       onPress,
+      onPressStart,
       scaleTo,
       transformOrigin,
     } = this.props;
@@ -134,6 +137,10 @@ export default class ButtonPressAnimation extends PureComponent {
       this.initPos = { absoluteX, absoluteY };
     }
 
+    if (state === State.BEGAN && onPressStart) {
+      onPressStart();
+    }
+
     if (state === State.END && onPress) {
       // condition below covers issue when tap is simultaneous with pan
       if (Math.abs(this.initPos.absoluteX - absoluteX) < 5 && Math.abs(this.initPos.absoluteY - absoluteY) < 5) {
@@ -153,13 +160,12 @@ export default class ButtonPressAnimation extends PureComponent {
     });
   }
 
-  render = () => {
+  tapGesture = () => {
     const {
       children,
       disabled,
       style,
       tapRef,
-      waitFor,
     } = this.props;
 
     return (
@@ -167,7 +173,7 @@ export default class ButtonPressAnimation extends PureComponent {
         enabled={!disabled}
         ref={tapRef}
         onHandlerStateChange={this.handleStateChange}
-        waitFor={waitFor}
+        waitFor={this.props.waitFor}
       >
         <Animated.View
           onLayout={this.handleLayout}
@@ -177,5 +183,34 @@ export default class ButtonPressAnimation extends PureComponent {
         </Animated.View>
       </TapGestureHandler>
     );
+  }
+
+  longPressGesture = () => {
+    const {
+      onLongPress,
+    } = this.props;
+
+    return (
+      <LongPressGestureHandler
+        onHandlerStateChange={({ nativeEvent }) => {
+          if (nativeEvent.state === State.ACTIVE) {
+            if (onLongPress) {
+              onLongPress();
+            }
+          }
+        }}
+        minDurationMs={500}>
+        {this.tapGesture()}
+      </LongPressGestureHandler>
+    );
+  }
+
+  render = () => {
+    const { onLongPress } = this.props;
+
+    if (onLongPress) {
+      return this.longPressGesture();
+    }
+    return this.tapGesture();
   }
 }

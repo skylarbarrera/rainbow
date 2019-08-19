@@ -20,15 +20,14 @@ const ConfirmImportAlert = onSuccess => (
   Alert({
     buttons: [{
       onPress: onSuccess,
-      style: 'destructive',
-      text: 'Delete and Import',
+      text: 'Import New Wallet',
     }, {
       style: 'cancel',
       text: 'Cancel',
     }],
     // eslint-disable-next-line
-    message: 'Importing this private key will overwrite your existing wallet. Before continuing, please make sure you’ve transferred its contents or backed up its private key.',
-    title: 'Are you sure you want to import?',
+    message: 'Importing this private key will create new wallet. You can switch between your existing wallets in the menu on the top of profile screen.',
+    title: 'Are you sure you want to import new wallet?',
   })
 );
 

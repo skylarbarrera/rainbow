@@ -40,7 +40,7 @@ const ProfileRow = ({
   isHeader,
   onPress,
 }) => (
-  <ButtonPressAnimation scaleTo={0.96} onPress={onPress}>
+  <ButtonPressAnimation scaleTo={0.96} onPress={onPress} onLongPress={() => console.log('long press')}>
     <Container>
       <FastImage
         source={AvatarImageSource}
