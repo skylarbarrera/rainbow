@@ -38,9 +38,10 @@ const ProfileRow = ({
   accountAddress,
   accountName,
   isHeader,
+  onLongPress,
   onPress,
 }) => (
-  <ButtonPressAnimation scaleTo={0.96} onPress={onPress} onLongPress={() => console.log('long press')}>
+  <ButtonPressAnimation scaleTo={0.96} onPress={onPress} onLongPress={onLongPress}>
     <Container>
       <FastImage
         source={AvatarImageSource}
@@ -66,6 +67,7 @@ ProfileRow.propTypes = {
   accountAddress: PropTypes.string.isRequired,
   accountName: PropTypes.string.isRequired,
   isHeader: PropTypes.bool,
+  onLongPress: PropTypes.func,
   onPress: PropTypes.func,
 };
 

@@ -37,7 +37,22 @@ const ChangeWalletModal = ({
   if (profiles) {
     renderProfiles = profiles.map((profile) => {
       if (currentProfile && profile.address !== currentProfile.address) {
-        return <ProfileRow key={profile.address} accountName={profile.name} accountAddress={profile.address} isHeader onPress={() => onChangeWallet(profile)}/>;
+        return (
+          <ProfileRow
+            key={profile.address}
+            accountName={profile.name}
+            accountAddress={profile.address}
+            isHeader
+            onPress={() => onChangeWallet(profile)}
+            onLongPress={() => navigation.navigate('ExpandedAssetScreen', {
+              address: profile.address,
+              asset: [],
+              color: 2,
+              onCloseModal: () => {},
+              profile,
+              type: 'profile_creator',
+            })}
+          />);
       }
       return null;
     });
@@ -46,11 +61,33 @@ const ChangeWalletModal = ({
   return (
     <Modal height={headerHeight + (profileRowHeight * 2) + (profileRowHeight * size)} onCloseModal={onCloseModal}>
       <Container>
-        { currentProfile && <ProfileRow accountName={currentProfile.name} accountAddress={currentProfile.address} isHeader onPress={() => navigation.navigate('WalletScreen')}/>}
+        { currentProfile && (
+          <ProfileRow
+            accountName={currentProfile.name}
+            accountAddress={currentProfile.address}
+            isHeader
+            onPress={() => navigation.navigate('WalletScreen')}
+            onLongPress={() => navigation.navigate('ExpandedAssetScreen', {
+              address: currentProfile.address,
+              asset: [],
+              color: 2,
+              onCloseModal: () => {},
+              profile: currentProfile,
+              type: 'profile_creator',
+            })}
+          />)}
         <ProfileDivider />
         {renderProfiles}
         <ProfileOption label={'Add another wallet'} onPress={() => onPressImportSeedPhrase()}/>
-        <ProfileOption label={'Manage my wallets'}/>
+        <ProfileOption label={'Manage my wallets'} onPress={() => navigation.navigate('ExpandedAssetScreen', {
+          address: 'asdasdasd',
+          asset: [],
+          color: 2,
+          contact: {},
+          onCloseModal: () => {},
+          type: 'profile_creator',
+        })}
+        />
       </Container>
     </Modal>
   );

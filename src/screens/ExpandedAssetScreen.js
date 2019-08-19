@@ -4,6 +4,7 @@ import {
   InvestmentExpandedState,
   TokenExpandedState,
   UniqueTokenExpandedState,
+  ProfileCreator,
 } from '../components/expanded-state';
 import { Centered } from '../components/layout';
 import TouchableBackdrop from '../components/TouchableBackdrop';
@@ -17,6 +18,7 @@ const {
 } = safeAreaInsetValues;
 
 const ScreenTypes = {
+  profile_creator: ProfileCreator,
   token: TokenExpandedState,
   unique_token: UniqueTokenExpandedState,
   uniswap: InvestmentExpandedState,
@@ -43,7 +45,7 @@ ExpandedAssetScreen.propTypes = {
   containerPadding: PropTypes.number.isRequired,
   onPressBackground: PropTypes.func,
   panelWidth: PropTypes.number,
-  type: PropTypes.oneOf(['token', 'unique_token', 'uniswap']),
+  type: PropTypes.oneOf(['token', 'unique_token', 'uniswap', 'profile_creator']),
 };
 
 ExpandedAssetScreen.defaultProps = {
