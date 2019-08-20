@@ -157,7 +157,10 @@ export default Component => compose(
     initializeWallet: (ownProps) => async (seedPhrase) => {
       try {
         const { isImported, isNew, walletAddress } = await walletInit(seedPhrase);
-        const name = await loadUserNameForAddress(walletAddress);
+        let name = await loadUserNameForAddress(walletAddress);
+        if (!name) {
+          name = 'My Wallet';
+        }
         ownProps.settingsUpdateAccountName(name);
         return await walletInitialization(isImported, isNew, walletAddress, ownProps);
       } catch (error) {
