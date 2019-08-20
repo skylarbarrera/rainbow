@@ -13,6 +13,7 @@ import { web3SetHttpProvider } from '../handlers/web3';
 const SETTINGS_UPDATE_NETWORK = 'settings/SETTINGS_UPDATE_NETWORK';
 const SETTINGS_UPDATE_CHAIN_ID = 'settings/SETTINGS_UPDATE_CHAIN_ID';
 const SETTINGS_UPDATE_SETTINGS_ADDRESS = 'settings/SETTINGS_UPDATE_SETTINGS_ADDRESS';
+const SETTINGS_UPDATE_SETTINGS_NAME = 'settings/SETTINGS_UPDATE_SETTINGS_NAME';
 
 const SETTINGS_UPDATE_NATIVE_CURRENCY_SUCCESS = 'settings/SETTINGS_UPDATE_NATIVE_CURRENCY_SUCCESS';
 const SETTINGS_UPDATE_NATIVE_CURRENCY_FAILURE = 'settings/SETTINGS_UPDATE_NATIVE_CURRENCY_FAILURE';
@@ -42,13 +43,23 @@ export const settingsLoadState = () => async dispatch => {
   }
 };
 
-export const settingsUpdateAccountAddress = (accountAddress, accountType, accountName) => (
+export const settingsUpdateAccountAddress = (accountAddress, accountType) => (
   dispatch,
   getState,
 ) => {
   dispatch({
-    payload: { accountAddress, accountName, accountType },
+    payload: { accountAddress, accountType },
     type: SETTINGS_UPDATE_SETTINGS_ADDRESS,
+  });
+};
+
+export const settingsUpdateAccountName = (accountName) => (
+  dispatch,
+  getState,
+) => {
+  dispatch({
+    payload: { accountName },
+    type: SETTINGS_UPDATE_SETTINGS_NAME,
   });
 };
 
@@ -118,8 +129,12 @@ export default (state = INITIAL_STATE, action) => {
     return {
       ...state,
       accountAddress: action.payload.accountAddress,
-      accountName: action.payload.accountName,
       accountType: action.payload.accountType,
+    };
+  case SETTINGS_UPDATE_SETTINGS_NAME:
+    return {
+      ...state,
+      accountName: action.payload.accountName,
     };
   case SETTINGS_UPDATE_NATIVE_CURRENCY_SUCCESS:
     return {

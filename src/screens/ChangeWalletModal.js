@@ -63,9 +63,9 @@ const ChangeWalletModal = ({
   return (
     <Modal height={headerHeight + (profileRowHeight * 2) + (profileRowHeight * size)} onCloseModal={onCloseModal}>
       <Container>
-        { accountAddress && (
+        { currentProfile && (
           <ProfileRow
-            accountName={'Me kappa'}
+            accountName={currentProfile.name}
             accountAddress={accountAddress}
             isHeader
             onPress={() => navigation.navigate('WalletScreen')}

@@ -163,7 +163,7 @@ export const saveWalletDetails = async (seedPhrase, privateKey, address) => {
   saveName('My Wallet');
 };
 
-const saveName = async (name, accessControlOptions = {}) => {
+export const saveName = async (name, accessControlOptions = {}) => {
   await keychain.saveString(walletName, name, accessControlOptions);
 };
 
@@ -261,12 +261,25 @@ export const editUserInfo = async (name, seedPhrase, privateKey, address, access
       }
     }
   }
-  if (searchedUserIndex) {
+  if (searchedUserIndex >= 0) {
     newProfilesTable.splice(searchedUserIndex, 1, newProfile);
     await keychain.saveString(profiles, JSON.stringify(newProfilesTable), accessControlOptions);
     return true;
   }
   return false;
+};
+
+export const loadUserNameForAddress = async (address, accessControlOptions = {}) => {
+  let searchedName;
+  const usersInfo = await loadUsersInfo();
+  if (usersInfo) {
+    for (let i = 0; i < usersInfo.length; i++) {
+      if (usersInfo[i].address === address) {
+        searchedName = usersInfo[i].name;
+      }
+    }
+  }
+  return searchedName;
 };
 
 export const loadUsersInfo = async () => {
@@ -282,10 +295,7 @@ export const loadCurrentUserInfo = async (authenticationPrompt = lang.t('wallet.
   try {
     const address = await keychain.loadString(addressKey, { authenticationPrompt });
     const seedPhrase = await keychain.loadString(seedPhraseKey, { authenticationPrompt });
-    let name = await keychain.loadString(walletName, { authenticationPrompt });
-    if (!name) {
-      name = 'My Wallet';
-    }
+    const name = await keychain.loadString(walletName, { authenticationPrompt });
     return {
       address,
       name,

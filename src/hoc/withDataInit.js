@@ -21,6 +21,7 @@ import {
 import {
   settingsLoadState,
   settingsUpdateAccountAddress,
+  settingsUpdateAccountName,
 } from '../redux/settings';
 import {
   uniswapLoadState,
@@ -32,7 +33,7 @@ import {
   uniqueTokensLoadState,
   uniqueTokensRefreshState,
 } from '../redux/uniqueTokens';
-import { walletInit, saveWalletDetails } from '../model/wallet';
+import { walletInit, saveWalletDetails, saveName, loadUserNameForAddress } from '../model/wallet';
 import {
   walletConnectLoadState,
   walletConnectClearState,
@@ -54,7 +55,7 @@ const walletInitialization = async (isImported, isNew, walletAddress, ownProps) 
   if (isImported) {
     await ownProps.clearAccountData();
   }
-  ownProps.settingsUpdateAccountAddress(walletAddress, 'RAINBOWWALLET', 'My Wallet');
+  ownProps.settingsUpdateAccountAddress(walletAddress, 'RAINBOWWALLET');
   if (isNew) {
     ownProps.setIsWalletEthZero(true);
   } else if (isImported) {
@@ -88,6 +89,7 @@ export default Component => compose(
     setIsWalletEthZero,
     settingsLoadState,
     settingsUpdateAccountAddress,
+    settingsUpdateAccountName,
     uniqueTokensClearState,
     uniqueTokensLoadState,
     uniqueTokensRefreshState,
@@ -155,6 +157,8 @@ export default Component => compose(
     initializeWallet: (ownProps) => async (seedPhrase) => {
       try {
         const { isImported, isNew, walletAddress } = await walletInit(seedPhrase);
+        const name = await loadUserNameForAddress(walletAddress);
+        ownProps.settingsUpdateAccountName(name);
         return await walletInitialization(isImported, isNew, walletAddress, ownProps);
       } catch (error) {
         // TODO specify error states more granular
@@ -166,6 +170,8 @@ export default Component => compose(
     initializeWalletWithProfile: (ownProps) => async (isImported, isNew, profile) => {
       try {
         saveWalletDetails(profile.seedPhrase, profile.privateKey, profile.address);
+        ownProps.settingsUpdateAccountName(profile.name);
+        saveName(profile.name);
         return await walletInitialization(isImported, isNew, profile.address, ownProps);
       } catch (error) {
         // TODO specify error states more granular

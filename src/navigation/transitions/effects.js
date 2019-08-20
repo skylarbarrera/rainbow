@@ -133,6 +133,16 @@ const onTransitionStart = props => {
   }
 };
 
+export const walletChangePreset = {
+  cardShadowEnabled: true,
+  cardStyleInterpolator: expandStyleInterpolator,
+  cardTransparent: true,
+  gestureDirection: 'vertical',
+  gestureResponseDistance,
+  onTransitionStart,
+  transitionSpec: { close: closeSpec, open: openSpec },
+};
+
 export const expandedPreset = {
   cardShadowEnabled: true,
   cardStyleInterpolator: expandStyleInterpolator,
