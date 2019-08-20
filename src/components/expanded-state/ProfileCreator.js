@@ -29,6 +29,7 @@ import { ButtonPressAnimation } from '../animations';
 import CopyTooltip from '../CopyTooltip';
 import { showActionSheetWithOptions } from '../../utils/actionsheet';
 import AvatarImageSource from '../../assets/avatar.png';
+import { deleteUserInfo, editUserInfo } from '../../model/wallet';
 
 const TopMenu = styled(View)`
   justify-content: center;
@@ -40,23 +41,6 @@ const TopMenu = styled(View)`
 const Container = styled(View)`
   justify-content: center;
   align-items: center;
-`;
-
-const NameCircle = styled(View)`
-  height: 60px;
-  width: 60px;
-  border-radius: 30px;
-  margin-bottom: 19px;
-`;
-
-const FirstLetter = styled(Text)`
-  width: 100%;
-  text-align: center;
-  line-height: 58px;
-  font-size: 27px;
-  color: #fff;
-  padding-left: 1px;
-  font-weight: 600;
 `;
 
 const AddressAbbreviation = styled(TruncatedAddress).attrs({
@@ -127,6 +111,8 @@ class ProfileCreator extends React.PureComponent {
 
   editProfile = async () => {
     if (this.state.value.length > 0) {
+      const { address, privateKey, seedPhrase } = this.props.profile;
+      editUserInfo(this.state.value, seedPhrase, privateKey, address);
       this.props.onCloseModal();
       this.props.navigation.goBack();
     }
@@ -143,7 +129,7 @@ class ProfileCreator extends React.PureComponent {
       options: ['Delete Wallet', 'Cancel'],
     }, async (buttonIndex) => {
       if (buttonIndex === 0) {
-        this.props.onUnmountModal('', 0, false);
+        deleteUserInfo(this.props.address);
         this.props.onCloseModal();
         this.props.navigation.goBack();
       }
@@ -163,11 +149,6 @@ class ProfileCreator extends React.PureComponent {
                 <AssetPanel>
                   <TopMenu>
                     <ButtonPressAnimation onPress={this.onChangeAvatar} scaleTo={0.96}>
-                      {/* <NameCircle style={{ backgroundColor: '#222' }}>
-                        <FirstLetter>
-                          {this.state.value[0]}
-                        </FirstLetter>
-                      </NameCircle> */}
                       <FastImage
                         source={AvatarImageSource}
                         style={{

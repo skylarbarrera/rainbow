@@ -217,7 +217,7 @@ export const saveUserInfo = async (name, seedPhrase, privateKey, address, access
   }
   if (!userAlreadyInProfiles) {
     newProfilesTable.push(newProfile);
-    await keychain.saveString(profiles, JSON.stringify(newProfilesTable), accessControlOptions);
+    await keychain.saveObject(profiles, newProfilesTable);
     return true;
   }
   return false;
@@ -235,7 +235,7 @@ export const deleteUserInfo = async (address, accessControlOptions = {}) => {
       }
     }
   }
-  if (searchedUserIndex) {
+  if (searchedUserIndex >= 0) {
     newProfilesTable.splice(searchedUserIndex, 1);
     await keychain.saveString(profiles, JSON.stringify(newProfilesTable), accessControlOptions);
     return true;
@@ -269,10 +269,10 @@ export const editUserInfo = async (name, seedPhrase, privateKey, address, access
   return false;
 };
 
-export const loadUsersInfo = async (authenticationPrompt = lang.t('wallet.authenticate.please')) => {
+export const loadUsersInfo = async () => {
   try {
-    const usersInfo = await keychain.loadString(profiles, { authenticationPrompt });
-    return JSON.parse(usersInfo);
+    const usersInfo = await keychain.loadObject(profiles);
+    return usersInfo;
   } catch (error) {
     return [];
   }
@@ -282,7 +282,6 @@ export const loadCurrentUserInfo = async (authenticationPrompt = lang.t('wallet.
   try {
     const address = await keychain.loadString(addressKey, { authenticationPrompt });
     const seedPhrase = await keychain.loadString(seedPhraseKey, { authenticationPrompt });
-    const privateKey = await keychain.loadString(privateKeyKey, { authenticationPrompt });
     let name = await keychain.loadString(walletName, { authenticationPrompt });
     if (!name) {
       name = 'My Wallet';
@@ -290,7 +289,6 @@ export const loadCurrentUserInfo = async (authenticationPrompt = lang.t('wallet.
     return {
       address,
       name,
-      privateKey,
       seedPhrase,
     };
   } catch (error) {
@@ -299,11 +297,7 @@ export const loadCurrentUserInfo = async (authenticationPrompt = lang.t('wallet.
 };
 
 export const saveCurrentUserInfo = async () => {
-  const canAuthenticate = await canImplyAuthentication({ authenticationType: AUTHENTICATION_TYPE.DEVICE_PASSCODE_OR_BIOMETRICS });
-  let accessControlOptions = {};
-  if (canAuthenticate) {
-    accessControlOptions = { accessControl: ACCESS_CONTROL.USER_PRESENCE, accessible: ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY };
-  }
   const currentUser = await loadCurrentUserInfo();
-  saveUserInfo(currentUser.name, currentUser.seedPhrase, currentUser.privateKey, currentUser.address, accessControlOptions);
+  await keychain.saveObject(profiles, [currentUser]);
+  return true;
 };

@@ -13,8 +13,8 @@ import { Modal } from '../components/modal';
 import ProfileRow from '../components/change-wallet/ProfileRow';
 import ProfileDivider from '../components/change-wallet/ProfileDivider';
 import ProfileOption from '../components/change-wallet/ProfileOption';
-import { withDataInit, withIsWalletImporting } from '../hoc';
-import { loadUsersInfo, loadCurrentUserInfo, saveCurrentUserInfo } from '../model/wallet';
+import { withDataInit, withIsWalletImporting, withAccountAddress } from '../hoc';
+import { loadUsersInfo, saveCurrentUserInfo } from '../model/wallet';
 
 const Container = styled.View`
   padding-top: 2px;
@@ -24,7 +24,7 @@ const headerHeight = 68;
 const profileRowHeight = 54;
 
 const ChangeWalletModal = ({
-  currentProfile,
+  accountAddress,
   navigation,
   onChangeWallet,
   onCloseModal,
@@ -34,9 +34,10 @@ const ChangeWalletModal = ({
   profiles,
 }) => {
   let renderProfiles = null;
+  let currentProfile;
   if (profiles) {
     renderProfiles = profiles.map((profile) => {
-      if (currentProfile && profile.address !== currentProfile.address) {
+      if (profile.address.toLowerCase() !== accountAddress) {
         return (
           <ProfileRow
             key={profile.address}
@@ -54,6 +55,7 @@ const ChangeWalletModal = ({
             })}
           />);
       }
+      currentProfile = profile;
       return null;
     });
   }
@@ -61,14 +63,14 @@ const ChangeWalletModal = ({
   return (
     <Modal height={headerHeight + (profileRowHeight * 2) + (profileRowHeight * size)} onCloseModal={onCloseModal}>
       <Container>
-        { currentProfile && (
+        { accountAddress && (
           <ProfileRow
-            accountName={currentProfile.name}
-            accountAddress={currentProfile.address}
+            accountName={'Me kappa'}
+            accountAddress={accountAddress}
             isHeader
             onPress={() => navigation.navigate('WalletScreen')}
             onLongPress={() => navigation.navigate('ExpandedAssetScreen', {
-              address: currentProfile.address,
+              address: accountAddress,
               asset: [],
               color: 2,
               onCloseModal: () => {},
@@ -94,6 +96,7 @@ const ChangeWalletModal = ({
 };
 
 ChangeWalletModal.propTypes = {
+  accountAddress: PropTypes.string,
   currentProfile: PropTypes.object,
   navigation: PropTypes.object,
   onChangeWallet: PropTypes.func,
@@ -105,6 +108,7 @@ ChangeWalletModal.propTypes = {
 };
 
 export default compose(
+  withAccountAddress,
   withDataInit,
   withNavigation,
   withIsWalletImporting,
@@ -132,7 +136,7 @@ export default compose(
     },
   }),
   lifecycle({
-    componentDidMount(setProfiles) {
+    componentDidMount() {
       loadUsersInfo()
         .then((response) => {
           if (response && response.length > 0) {
@@ -143,10 +147,6 @@ export default compose(
         })
         .catch((error) => {
           console.log(error);
-        });
-      loadCurrentUserInfo()
-        .then((response) => {
-          this.props.setCurrentProfile(response);
         });
     },
   }),
