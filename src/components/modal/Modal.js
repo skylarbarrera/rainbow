@@ -20,12 +20,13 @@ const ModalElement = styled(Column)`
 `;
 
 const Modal = ({
+  fixedToTop,
   height,
   onCloseModal,
   statusBarStyle,
   ...props
 }) => (
-  <Container direction="column">
+  <Container direction="column" style={{ justifyContent: fixedToTop ? 'flex-start' : 'center', top: fixedToTop ? 90 : 0 }}>
     <TouchableBackdrop onPress={onCloseModal} />
     <ModalElement
       {...props}
@@ -35,12 +36,14 @@ const Modal = ({
 );
 
 Modal.propTypes = {
+  fixedToTop: PropTypes.bool,
   height: PropTypes.number.isRequired,
   onCloseModal: PropTypes.func.isRequired,
   statusBarStyle: PropTypes.oneOf(['default', 'light-content', 'dark-content']),
 };
 
 Modal.defaultProps = {
+  fixedToTop: false,
   height: deviceUtils.dimensions.height - 230,
   statusBarStyle: 'light-content',
 };

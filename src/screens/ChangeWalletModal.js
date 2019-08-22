@@ -15,6 +15,7 @@ import ProfileDivider from '../components/change-wallet/ProfileDivider';
 import ProfileOption from '../components/change-wallet/ProfileOption';
 import { withDataInit, withIsWalletImporting, withAccountAddress } from '../hoc';
 import { loadUsersInfo, saveCurrentUserInfo } from '../model/wallet';
+import { settingsUpdateAccountName } from '../redux/settings';
 
 const Container = styled.View`
   padding-top: 2px;
@@ -49,7 +50,7 @@ const ChangeWalletModal = ({
               address: profile.address,
               asset: [],
               color: 2,
-              onCloseModal: () => {},
+              onCloseModal: () => settingsUpdateAccountName(),
               profile,
               type: 'profile_creator',
             })}
@@ -61,7 +62,7 @@ const ChangeWalletModal = ({
   }
   const size = profiles ? profiles.length - 1 : 0;
   return (
-    <Modal height={headerHeight + (profileRowHeight * 2) + (profileRowHeight * size)} onCloseModal={onCloseModal}>
+    <Modal fixedToTop height={headerHeight + (profileRowHeight * 2) + (profileRowHeight * size)} onCloseModal={onCloseModal}>
       <Container>
         { currentProfile && (
           <ProfileRow
