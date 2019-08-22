@@ -129,7 +129,7 @@ class ProfileCreator extends React.PureComponent {
       options: ['Delete Wallet', 'Cancel'],
     }, async (buttonIndex) => {
       if (buttonIndex === 0) {
-        deleteUserInfo(this.props.address);
+        await deleteUserInfo(this.props.address);
         this.props.onCloseModal();
         this.props.navigation.goBack();
       }
