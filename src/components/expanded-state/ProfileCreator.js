@@ -112,7 +112,7 @@ class ProfileCreator extends React.PureComponent {
   editProfile = async () => {
     if (this.state.value.length > 0) {
       const { address, privateKey, seedPhrase } = this.props.profile;
-      editUserInfo(this.state.value, seedPhrase, privateKey, address);
+      await editUserInfo(this.state.value, seedPhrase, privateKey, address);
       this.props.onCloseModal();
       this.props.navigation.goBack();
     }

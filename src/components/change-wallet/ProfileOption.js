@@ -31,6 +31,7 @@ const Nickname = styled.Text`
 `;
 
 const ProfileOption = ({
+  icon,
   label,
   onPress,
 }) => (
@@ -41,7 +42,7 @@ const ProfileOption = ({
           color={colors.blueGreyMedium}
           height={15}
           width={15}
-          name="gear"
+          name={icon}
         />
       </IconWrapper>
       <View>
@@ -54,6 +55,7 @@ const ProfileOption = ({
 );
 
 ProfileOption.propTypes = {
+  icon: PropTypes.string,
   label: PropTypes.string.isRequired,
   onPress: PropTypes.func,
 };

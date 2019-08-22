@@ -16,6 +16,7 @@ import CloseIcon from './svg/CloseIcon';
 import CompassIcon from './svg/CompassIcon';
 import CopyIcon from './svg/CopyIcon';
 import CrosshairIcon from './svg/CrosshairIcon';
+import PlusIcon from './svg/PlusIcon';
 import DotIcon from './svg/DotIcon';
 import DoubleCaretIcon from './svg/DoubleCaretIcon';
 import FaceIdIcon from './svg/FaceIdIcon';
@@ -58,6 +59,7 @@ Icon.IconTypes = {
   handle: HandleIcon,
   inbox: InboxIcon,
   offline: OfflineIcon,
+  plus: PlusIcon,
   progress: ProgressIcon,
   send: SendIcon,
   sendSmall: SendSmallIcon,

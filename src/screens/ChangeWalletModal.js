@@ -28,6 +28,7 @@ const ChangeWalletModal = ({
   accountAddress,
   navigation,
   onChangeWallet,
+  onCloseEditProfileModal,
   onCloseModal,
   onPressBack,
   onPressImportSeedPhrase,
@@ -50,7 +51,7 @@ const ChangeWalletModal = ({
               address: profile.address,
               asset: [],
               color: 2,
-              onCloseModal: () => settingsUpdateAccountName(),
+              onCloseModal: () => onCloseEditProfileModal(),
               profile,
               type: 'profile_creator',
             })}
@@ -74,15 +75,15 @@ const ChangeWalletModal = ({
               address: accountAddress,
               asset: [],
               color: 2,
-              onCloseModal: () => {},
+              onCloseModal: () => onCloseEditProfileModal(),
               profile: currentProfile,
               type: 'profile_creator',
             })}
           />)}
         <ProfileDivider />
         {renderProfiles}
-        <ProfileOption label={'Add another wallet'} onPress={() => onPressImportSeedPhrase()}/>
-        <ProfileOption label={'Manage my wallets'} onPress={() => navigation.navigate('ExpandedAssetScreen', {
+        <ProfileOption icon={'plus'} label={'Add another wallet'} onPress={() => onPressImportSeedPhrase()}/>
+        <ProfileOption icon={'gear'} label={'Manage my wallets'} onPress={() => navigation.navigate('ExpandedAssetScreen', {
           address: 'asdasdasd',
           asset: [],
           color: 2,
@@ -101,6 +102,7 @@ ChangeWalletModal.propTypes = {
   currentProfile: PropTypes.object,
   navigation: PropTypes.object,
   onChangeWallet: PropTypes.func,
+  onCloseEditProfileModal: PropTypes.func,
   onCloseModal: PropTypes.func,
   onPressBack: PropTypes.func,
   onPressImportSeedPhrase: PropTypes.func,
@@ -121,6 +123,11 @@ export default compose(
       setIsWalletImporting(true);
       await initializeWalletWithProfile(true, false, profile);
       setIsWalletImporting(false);
+    },
+    onCloseEditProfileModal: ({ setProfiles }) => async () => {
+      const newProfiles = await loadUsersInfo();
+      console.log(newProfiles);
+      setProfiles(newProfiles);
     },
     onCloseModal: ({ navigation }) => () => navigation.goBack(),
     onPressImportSeedPhrase: ({ navigation, setSafeTimeout }) => () => {
