@@ -15,7 +15,6 @@ import ProfileDivider from '../components/change-wallet/ProfileDivider';
 import ProfileOption from '../components/change-wallet/ProfileOption';
 import { withDataInit, withIsWalletImporting, withAccountAddress } from '../hoc';
 import { loadUsersInfo, saveCurrentUserInfo } from '../model/wallet';
-import { settingsUpdateAccountName } from '../redux/settings';
 
 const Container = styled.View`
   padding-top: 2px;
@@ -51,6 +50,7 @@ const ChangeWalletModal = ({
               address: profile.address,
               asset: [],
               color: 2,
+              isCurrentProfile: false,
               onCloseModal: () => onCloseEditProfileModal(),
               profile,
               type: 'profile_creator',
@@ -75,7 +75,8 @@ const ChangeWalletModal = ({
               address: accountAddress,
               asset: [],
               color: 2,
-              onCloseModal: () => onCloseEditProfileModal(),
+              isCurrentProfile: true,
+              onCloseModal: () => onCloseEditProfileModal(true),
               profile: currentProfile,
               type: 'profile_creator',
             })}
@@ -126,7 +127,6 @@ export default compose(
     },
     onCloseEditProfileModal: ({ setProfiles }) => async () => {
       const newProfiles = await loadUsersInfo();
-      console.log(newProfiles);
       setProfiles(newProfiles);
     },
     onCloseModal: ({ navigation }) => () => navigation.goBack(),

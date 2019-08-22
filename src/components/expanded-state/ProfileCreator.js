@@ -30,6 +30,8 @@ import CopyTooltip from '../CopyTooltip';
 import { showActionSheetWithOptions } from '../../utils/actionsheet';
 import AvatarImageSource from '../../assets/avatar.png';
 import { deleteUserInfo, editUserInfo } from '../../model/wallet';
+import store from '../../redux/store';
+import { settingsUpdateAccountName } from '../../redux/settings';
 
 const TopMenu = styled(View)`
   justify-content: center;
@@ -113,6 +115,9 @@ class ProfileCreator extends React.PureComponent {
     if (this.state.value.length > 0) {
       const { address, privateKey, seedPhrase } = this.props.profile;
       await editUserInfo(this.state.value, seedPhrase, privateKey, address);
+      if (this.props.isCurrentProfile) {
+        store.dispatch(settingsUpdateAccountName(this.state.value));
+      }
       this.props.onCloseModal();
       this.props.navigation.goBack();
     }
@@ -134,6 +139,11 @@ class ProfileCreator extends React.PureComponent {
         this.props.navigation.goBack();
       }
     });
+  }
+
+  onCancel = () => {
+    this.props.onCloseModal();
+    this.props.navigation.goBack();
   }
 
   render() {
@@ -191,11 +201,18 @@ class ProfileCreator extends React.PureComponent {
                     >
                       {this.props.profile ? 'Done' : 'Add Wallet'}
                     </Button>
-                    <CancelButton
-                      style={{ paddingTop: 11 }}
-                      onPress={this.onDeleteProfile}
-                      text="Delete Wallet"
-                    />
+                    {!this.props.isCurrentProfile
+                      ? <CancelButton
+                        style={{ paddingTop: 11 }}
+                        onPress={this.onDeleteProfile}
+                        text="Delete Wallet"
+                      />
+                      : <CancelButton
+                        style={{ paddingTop: 11 }}
+                        onPress={this.onCancel}
+                        text="Cancel"
+                      />
+                    }
                   </TopMenu>
                 </AssetPanel>
               </TouchableWithoutFeedback>
@@ -211,6 +228,7 @@ ProfileCreator.propTypes = {
   address: PropTypes.string,
   color: PropTypes.number,
   format: PropTypes.func,
+  isCurrentProfile: PropTypes.bool,
   navigation: PropTypes.object,
   onCloseModal: PropTypes.func,
   onPressSend: PropTypes.func,
@@ -231,6 +249,7 @@ export default compose(
     },
     address,
     color,
+    isCurrentProfile,
     assets,
     nativeCurrencySymbol,
   }) => { }),
