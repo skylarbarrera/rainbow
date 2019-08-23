@@ -16,11 +16,20 @@ import { deviceUtils } from '../utils';
 import ImportSeedPhraseSheet from './ImportSeedPhraseSheet';
 import { isValidSeed as validateSeed } from '../helpers/validators';
 
-const ConfirmImportAlert = onSuccess => (
+const ConfirmImportAlert = (onSuccess, navigation) => (
   Alert({
     buttons: [{
-      onPress: onSuccess,
-      text: 'Import New Wallet',
+      onPress: () => navigation.navigate('ExpandedAssetScreen', {
+        address: undefined,
+        asset: [],
+        color: 2,
+        isCurrentProfile: false,
+        isNewProfile: true,
+        onCloseModal: (isCanceled) => (isCanceled ? null : onSuccess()),
+        profile: {},
+        type: 'profile_creator',
+      }),
+      text: 'Import As New Wallet',
     }, {
       style: 'cancel',
       text: 'Cancel',
@@ -65,7 +74,7 @@ const ImportSeedPhraseSheetWithData = compose(
   }),
   withHandlers({
     getClipboardContents: ({ setClipboardContents }) => async () => Clipboard.getString().then(setClipboardContents),
-    onImportSeedPhrase: ({ setIsWalletImporting }) => () => ConfirmImportAlert(() => setIsWalletImporting(true)),
+    onImportSeedPhrase: ({ setIsWalletImporting, navigation }) => () => ConfirmImportAlert(() => setIsWalletImporting(true), navigation),
     onInputChange: ({ isImporting, setSeedPhrase }) => ({ nativeEvent }) => {
       if (!isImporting) {
         setSeedPhrase(nativeEvent.text);

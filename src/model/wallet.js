@@ -27,12 +27,12 @@ export function generateSeedPhrase() {
   return ethers.utils.HDNode.entropyToMnemonic(ethers.utils.randomBytes(16));
 }
 
-export const walletInit = async (seedPhrase = null) => {
+export const walletInit = async (seedPhrase = null, accountName = null) => {
   let walletAddress = null;
   let isImported = false;
   let isNew = false;
   if (!isEmpty(seedPhrase)) {
-    walletAddress = await createWallet(seedPhrase);
+    walletAddress = await createWallet(seedPhrase, accountName);
     isImported = !isNil(walletAddress);
     return { isImported, isNew, walletAddress };
   }
@@ -126,7 +126,7 @@ export const loadAddress = async () => {
   }
 };
 
-const createWallet = async (seed) => {
+const createWallet = async (seed, name) => {
   const walletSeed = seed || generateSeedPhrase();
   let wallet = null;
   try {
@@ -141,7 +141,7 @@ const createWallet = async (seed) => {
       wallet = new ethers.Wallet(node.privateKey);
     }
     if (wallet) {
-      saveWalletDetails(walletSeed, wallet.privateKey, wallet.address);
+      saveWalletDetails(name, walletSeed, wallet.privateKey, wallet.address);
       return wallet.address;
     }
     return null;
@@ -150,17 +150,20 @@ const createWallet = async (seed) => {
   }
 };
 
-export const saveWalletDetails = async (seedPhrase, privateKey, address) => {
+export const saveWalletDetails = async (name, seedPhrase, privateKey, address) => {
   const canAuthenticate = await canImplyAuthentication({ authenticationType: AUTHENTICATION_TYPE.DEVICE_PASSCODE_OR_BIOMETRICS });
   let accessControlOptions = {};
   if (canAuthenticate) {
     accessControlOptions = { accessControl: ACCESS_CONTROL.USER_PRESENCE, accessible: ACCESSIBLE.WHEN_UNLOCKED_THIS_DEVICE_ONLY };
   }
-  saveUserInfo('My Wallet', seedPhrase, privateKey, address, accessControlOptions);
+  if (!name) {
+    name = 'My Wallet';
+  }
+  saveUserInfo(name, seedPhrase, privateKey, address, accessControlOptions);
   saveSeedPhrase(seedPhrase, accessControlOptions);
   savePrivateKey(privateKey, accessControlOptions);
   saveAddress(address);
-  saveName('My Wallet');
+  saveName(name);
 };
 
 export const saveName = async (name, accessControlOptions = {}) => {

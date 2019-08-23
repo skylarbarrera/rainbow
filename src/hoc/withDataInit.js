@@ -39,6 +39,7 @@ import {
   walletConnectClearState,
 } from '../redux/walletconnect';
 import withHideSplashScreen from './withHideSplashScreen';
+import withAccountAddress from './withAccountAddress';
 
 const PromiseAllWithFails = async (promises) => (
   Promise.all(promises.map(promise => (
@@ -99,6 +100,7 @@ export default Component => compose(
     walletConnectClearState,
     walletConnectLoadState,
   }),
+  withAccountAddress,
   withHideSplashScreen,
   withHandlers({
     checkEthBalance: (ownProps) => async (walletAddress) => {
@@ -156,8 +158,8 @@ export default Component => compose(
   withHandlers({
     initializeWallet: (ownProps) => async (seedPhrase) => {
       try {
-        const { isImported, isNew, walletAddress } = await walletInit(seedPhrase);
-        let name = await loadUserNameForAddress(walletAddress);
+        const { isImported, isNew, walletAddress } = await walletInit(seedPhrase, ownProps.accountName);
+        let name = ownProps.accountName;
         if (!name) {
           name = 'My Wallet';
         }
@@ -172,7 +174,7 @@ export default Component => compose(
     },
     initializeWalletWithProfile: (ownProps) => async (isImported, isNew, profile) => {
       try {
-        saveWalletDetails(profile.seedPhrase, profile.privateKey, profile.address);
+        saveWalletDetails(profile.name, profile.seedPhrase, profile.privateKey, profile.address);
         ownProps.settingsUpdateAccountName(profile.name);
         saveName(profile.name);
         return await walletInitialization(isImported, isNew, profile.address, ownProps);

@@ -123,6 +123,14 @@ class ProfileCreator extends React.PureComponent {
     }
   }
 
+  addProfileInfo = async () => {
+    if (this.state.value.length > 0) {
+      await store.dispatch(settingsUpdateAccountName(this.state.value));
+    }
+    this.props.onCloseModal();
+    this.props.navigation.goBack();
+  }
+
   onChangeAvatar = async () => {
 
   }
@@ -142,11 +150,13 @@ class ProfileCreator extends React.PureComponent {
   }
 
   onCancel = () => {
-    this.props.onCloseModal();
+    this.props.onCloseModal(true);
     this.props.navigation.goBack();
   }
 
   render() {
+    const placeholderText = this.props.isNewProfile ? 'New Wallet Name' : 'Name';
+    const acceptAction = this.props.isNewProfile ? this.addProfileInfo : this.editProfile;
     return (
       <TouchableWithoutFeedback
         style={{ width: deviceUtils.dimensions.width }}
@@ -169,7 +179,7 @@ class ProfileCreator extends React.PureComponent {
                       />
                     </ButtonPressAnimation>
                     <Placeholder>
-                      {this.state.value.length > 0 ? ' ' : 'Name'}
+                      {this.state.value.length > 0 ? ' ' : placeholderText}
                     </Placeholder>
                     <Input
                       style={{ fontWeight: 600, width: '100%' }}
@@ -183,13 +193,15 @@ class ProfileCreator extends React.PureComponent {
                       textAlign={'center'}
                       value={this.state.value}
                       autoCapitalize
-                      onSubmitEditing={this.editProfile}
+                      onSubmitEditing={acceptAction}
                       returnKeyType={'done'}
                     />
                     <ButtonPressAnimation scaleTo={1} onPress={() => Keyboard.dismiss()}>
-                      <CopyTooltip textToCopy={this.props.address} tooltipText="Copy Address" waitForKeyboard>
+                      {!this.props.isNewProfile
+                      && <CopyTooltip textToCopy={this.props.address} tooltipText="Copy Address" waitForKeyboard>
                         <AddressAbbreviation address={this.props.address} />
                       </CopyTooltip>
+                      }
                     </ButtonPressAnimation>
                     <Divider />
                     <Button
@@ -197,20 +209,20 @@ class ProfileCreator extends React.PureComponent {
                       width={215}
                       showShadow
                       disabled={!this.state.value.length > 0}
-                      onPress={this.editProfile}
+                      onPress={acceptAction}
                     >
-                      {this.props.profile ? 'Done' : 'Add Wallet'}
+                      {this.props.isNewProfile ? 'Add Wallet' : 'Done'}
                     </Button>
-                    {!this.props.isCurrentProfile
+                    {this.props.isCurrentProfile || this.props.isNewProfile
                       ? <CancelButton
-                        style={{ paddingTop: 11 }}
-                        onPress={this.onDeleteProfile}
-                        text="Delete Wallet"
-                      />
-                      : <CancelButton
                         style={{ paddingTop: 11 }}
                         onPress={this.onCancel}
                         text="Cancel"
+                      />
+                      : <CancelButton
+                        style={{ paddingTop: 11 }}
+                        onPress={this.onDeleteProfile}
+                        text="Delete Wallet"
                       />
                     }
                   </TopMenu>
@@ -229,6 +241,7 @@ ProfileCreator.propTypes = {
   color: PropTypes.number,
   format: PropTypes.func,
   isCurrentProfile: PropTypes.bool,
+  isNewProfile: PropTypes.bool,
   navigation: PropTypes.object,
   onCloseModal: PropTypes.func,
   onPressSend: PropTypes.func,
@@ -242,17 +255,6 @@ ProfileCreator.propTypes = {
 export default compose(
   withAccountData,
   withAccountSettings,
-  withProps(({
-    profile: {
-      nickname,
-      ...profile
-    },
-    address,
-    color,
-    isCurrentProfile,
-    assets,
-    nativeCurrencySymbol,
-  }) => { }),
   withHandlers({
     onPressSend: ({ navigation, asset: { address } }) => () => {
       navigation.goBack();
