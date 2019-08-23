@@ -40,6 +40,7 @@ const Nickname = styled.Text`
   font-weight: ${fonts.weight.medium};
   font-size: ${fonts.size.smedium};
   color: ${colors.dark};
+  max-width: 100px;
 `;
 
 const SettingIcon = styled(FastImage)`
@@ -79,7 +80,7 @@ const HeaderProfileInfo = ({
       />
       <RightSide>
         <TopRow>
-          <Nickname>
+          <Nickname numberOfLines={1}>
             {displayName}
           </Nickname>
           <ArrowWrapper>
