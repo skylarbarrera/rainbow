@@ -35,6 +35,7 @@ const ChangeWalletModal = ({
   profiles,
 }) => {
   let renderProfiles = null;
+  let renderCurrentProfile = null;
   let currentProfile;
   if (profiles) {
     renderProfiles = profiles.map((profile) => {
@@ -49,7 +50,6 @@ const ChangeWalletModal = ({
             onLongPress={() => navigation.navigate('ExpandedAssetScreen', {
               address: profile.address,
               asset: [],
-              color: 2,
               isCurrentProfile: false,
               onCloseModal: () => onCloseEditProfileModal(),
               profile,
@@ -61,38 +61,31 @@ const ChangeWalletModal = ({
       return null;
     });
   }
+  if (currentProfile) {
+    renderCurrentProfile = <ProfileRow
+      accountName={currentProfile.name}
+      accountAddress={accountAddress}
+      isHeader
+      onPress={() => navigation.navigate('WalletScreen')}
+      onLongPress={() => navigation.navigate('ExpandedAssetScreen', {
+        address: accountAddress,
+        asset: [],
+        isCurrentProfile: true,
+        onCloseModal: () => onCloseEditProfileModal(true),
+        profile: currentProfile,
+        type: 'profile_creator',
+      })}
+    />;
+  }
   const size = profiles ? profiles.length - 1 : 0;
   return (
     <Modal fixedToTop height={headerHeight + (profileRowHeight * 2) + (profileRowHeight * size)} onCloseModal={onCloseModal}>
       <Container>
-        { currentProfile && (
-          <ProfileRow
-            accountName={currentProfile.name}
-            accountAddress={accountAddress}
-            isHeader
-            onPress={() => navigation.navigate('WalletScreen')}
-            onLongPress={() => navigation.navigate('ExpandedAssetScreen', {
-              address: accountAddress,
-              asset: [],
-              color: 2,
-              isCurrentProfile: true,
-              onCloseModal: () => onCloseEditProfileModal(true),
-              profile: currentProfile,
-              type: 'profile_creator',
-            })}
-          />)}
+        {renderCurrentProfile}
         <ProfileDivider />
         {renderProfiles}
         <ProfileOption icon={'plus'} label={'Add another wallet'} onPress={() => onPressImportSeedPhrase()}/>
-        <ProfileOption icon={'gear'} label={'Manage my wallets'} onPress={() => navigation.navigate('ExpandedAssetScreen', {
-          address: 'asdasdasd',
-          asset: [],
-          color: 2,
-          contact: {},
-          onCloseModal: () => {},
-          type: 'profile_creator',
-        })}
-        />
+        <ProfileOption icon={'gear'} label={'Manage my wallets'}/>
       </Container>
     </Modal>
   );

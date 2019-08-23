@@ -87,7 +87,6 @@ class ProfileCreator extends React.PureComponent {
 
   componentDidMount = () => {
     const newState = {
-      color: this.props.color,
       value: '',
     };
     if (this.props.profile.name) {

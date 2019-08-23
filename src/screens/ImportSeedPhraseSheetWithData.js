@@ -22,7 +22,6 @@ const ConfirmImportAlert = (onSuccess, navigation) => (
       onPress: () => navigation.navigate('ExpandedAssetScreen', {
         address: undefined,
         asset: [],
-        color: 2,
         isCurrentProfile: false,
         isNewProfile: true,
         onCloseModal: (isCanceled) => (isCanceled ? null : onSuccess()),
