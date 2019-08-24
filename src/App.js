@@ -43,7 +43,7 @@ class App extends Component {
     walletConnectClearTimestamp: PropTypes.func,
     walletConnectOnSessionRequest: PropTypes.func,
     walletConnectUpdateTimestamp: PropTypes.func,
-  }
+  };
 
   state = { appState: AppState.currentState }
 

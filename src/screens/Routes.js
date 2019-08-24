@@ -1,10 +1,8 @@
 import analytics from '@segment/analytics-react-native';
 import { get } from 'lodash';
 import React from 'react';
-import {
-  createAppContainer,
-  createMaterialTopTabNavigator,
-} from 'react-navigation';
+import { createAppContainer } from 'react-navigation';
+import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
 import { ExchangeModalNavigator, Navigation } from '../navigation';
 import { updateStackTransitionProps } from '../redux/navigation';
