@@ -26,7 +26,7 @@ const Modal = ({
   statusBarStyle,
   ...props
 }) => (
-  <Container direction="column" style={{ justifyContent: fixedToTop ? 'flex-start' : 'center', top: fixedToTop ? 90 : 0 }}>
+  <Container direction="column" style={{ justifyContent: fixedToTop ? 'flex-start' : 'center', top: fixedToTop ? 91 : 0 }}>
     <TouchableBackdrop onPress={onCloseModal} />
     <ModalElement
       {...props}

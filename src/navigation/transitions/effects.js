@@ -1,5 +1,6 @@
 import { StatusBar } from 'react-native';
 import Animated from 'react-native-reanimated';
+import { transformOrigin } from 'react-native-redash';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import store from '../../redux/store';
 import { updateTransitionProps } from '../../redux/navigation';
@@ -100,30 +101,15 @@ const changeWalletStyleInterpolator = ({
   layouts: { screen },
   progress: { current },
 }) => {
-  const backgroundOpacity = interpolate(current, {
-    extrapolate: 'clamp',
-    inputRange: [0, 0.975],
-    outputRange: [0, 0.7],
-  });
-
-  const translateY = interpolate(current, {
-    inputRange: [0, 1],
-    outputRange: [-screen.height, 0],
-  });
 
   const cardOpacity = interpolate(current, {
     inputRange: [0, 1],
     outputRange: [0, 1],
   });
 
-  const scaleY = interpolate(current, {
+  const scale = interpolate(current, {
     inputRange: [0, 1],
-    outputRange: [0.43, 1],
-  });
-
-  const scaleX = interpolate(current, {
-    inputRange: [0, 1],
-    outputRange: [0.5, 1],
+    outputRange: [0.2, 1],
   });
 
   const onStart = or(and(eq(closing, 0), eq(current, 0)), and(eq(closing, 1), eq(current, 1)));
@@ -138,11 +124,11 @@ const changeWalletStyleInterpolator = ({
       shadowOffset: { height: 10, width: 0 },
       shadowOpacity: 0.6,
       shadowRadius: 50,
-      // Translation for the animation of the current card
-      transform: [{ scaleX, scaleY, translateY }],
+      transform: transformOrigin(0, -(screen.height / 2) + statusBarHeight + 62, { scale }),
     },
     containerStyle: {
-      backgroundColor: color(37, 41, 46, backgroundOpacity),
+      backgroundColor: color(37, 41, 46, 0.7),
+      opacity: cardOpacity,
     },
   };
 };
@@ -173,6 +159,25 @@ const openSpec = {
   timing: 'spring',
 };
 
+const walletModalCloseSpec = {
+  config: SpringUtils.makeConfigFromBouncinessAndSpeed({
+    ...SpringUtils.makeDefaultConfig(),
+    bounciness: 0,
+    overshootClamping: true,
+    speed: 150,
+  }),
+  timing: 'spring',
+};
+
+const walletModalOpenSpec = {
+  config: SpringUtils.makeConfigFromBouncinessAndSpeed({
+    ...SpringUtils.makeDefaultConfig(),
+    bounciness: 5,
+    speed: 75,
+  }),
+  timing: 'spring',
+};
+
 const gestureResponseDistance = {
   vertical: deviceUtils.dimensions.height,
 };
@@ -192,7 +197,7 @@ export const walletChangePreset = {
   gestureDirection: 'vertical-inverted',
   gestureResponseDistance,
   onTransitionStart,
-  transitionSpec: { close: closeSpec, open: openSpec },
+  transitionSpec: { close: walletModalCloseSpec, open: walletModalOpenSpec },
 };
 
 export const expandedPreset = {
