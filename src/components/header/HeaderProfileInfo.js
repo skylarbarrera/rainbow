@@ -11,9 +11,8 @@ import { TruncatedAddress } from '../text';
 
 const Container = styled.View`
   height: 46px;
-  width: 175px;
   background-color: ${colors.skeleton};
-  margin-left: 4px;
+  margin-left: 6px;
   border-radius: 23px;
   align-items: center;
   flex-direction: row;
@@ -29,7 +28,8 @@ const TopRow = styled.View`
 const ArrowWrapper = styled.View`
   height: 16px;
   width: 12px;
-  padding-left: 8px;
+  padding-left: 10px;
+  padding-right: 20px;
   padding-top: 2px;
   justify-content: center;
   align-items: center;
@@ -40,7 +40,7 @@ const Nickname = styled.Text`
   font-weight: ${fonts.weight.medium};
   font-size: ${fonts.size.smedium};
   color: ${colors.dark};
-  max-width: 100px;
+  max-width: 120px;
 `;
 
 const SettingIcon = styled(FastImage)`
@@ -55,9 +55,11 @@ const AddressAbbreviation = styled(TruncatedAddress).attrs({
   truncationLength: 4,
   weight: 'medium',
 })`
+  color: ${colors.blueGreyDark};
   font-family: ${fonts.family.SFProText};
-  width: 100%;
   opacity: 0.5;
+  padding-right: 15px;
+  width: 100%;
 `;
 
 
