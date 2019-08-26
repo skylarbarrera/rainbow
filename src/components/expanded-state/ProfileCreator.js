@@ -64,7 +64,7 @@ const Divider = styled(View)`
   margin: 19px 0;
   height: 2px;
   opacity: 0.05;
-  background-color: ${colors.blueGreyLigter};
+  background-color: ${colors.blueGreyLighter};
 `;
 
 const Placeholder = styled(Text)`

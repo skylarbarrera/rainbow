@@ -101,7 +101,6 @@ const changeWalletStyleInterpolator = ({
   layouts: { screen },
   progress: { current },
 }) => {
-
   const cardOpacity = interpolate(current, {
     inputRange: [0, 1],
     outputRange: [0, 1],
@@ -114,7 +113,7 @@ const changeWalletStyleInterpolator = ({
 
   const onStart = or(and(eq(closing, 0), eq(current, 0)), and(eq(closing, 1), eq(current, 1)));
   const setShowingModal = call([], () => {
-    store.dispatch(updateTransitionProps({ showingModal: true }));
+    store.dispatch(updateStackTransitionProps({ showingModal: true }));
   });
 
   return {

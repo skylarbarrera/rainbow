@@ -11,7 +11,7 @@ const Divider = styled.View`
   opacity: 0.04;
   height: 2px;
   width: 100%;
-  background-color: ${colors.blueGreyLigter};
+  background-color: ${colors.blueGreyLighter};
 `;
 
 const ProfileDivider = () => (
