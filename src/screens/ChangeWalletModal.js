@@ -47,14 +47,14 @@ const ChangeWalletModal = ({
             accountAddress={profile.address}
             isHeader
             onPress={() => onChangeWallet(profile)}
-            onLongPress={() => navigation.navigate('ExpandedAssetScreen', {
-              address: profile.address,
-              asset: [],
-              isCurrentProfile: false,
-              onCloseModal: () => onCloseEditProfileModal(),
-              profile,
-              type: 'profile_creator',
-            })}
+            // onLongPress={() => navigation.navigate('ExpandedAssetScreen', {
+            //   address: profile.address,
+            //   asset: [],
+            //   isCurrentProfile: false,
+            //   onCloseModal: () => onCloseEditProfileModal(),
+            //   profile,
+            //   type: 'profile_creator',
+            // })}
           />);
       }
       currentProfile = profile;
@@ -67,14 +67,14 @@ const ChangeWalletModal = ({
       accountAddress={accountAddress}
       isHeader
       onPress={() => navigation.navigate('WalletScreen')}
-      onLongPress={() => navigation.navigate('ExpandedAssetScreen', {
-        address: accountAddress,
-        asset: [],
-        isCurrentProfile: true,
-        onCloseModal: () => onCloseEditProfileModal(true),
-        profile: currentProfile,
-        type: 'profile_creator',
-      })}
+      // onLongPress={() => navigation.navigate('ExpandedAssetScreen', {
+      //   address: accountAddress,
+      //   asset: [],
+      //   isCurrentProfile: true,
+      //   onCloseModal: () => onCloseEditProfileModal(true),
+      //   profile: currentProfile,
+      //   type: 'profile_creator',
+      // })}
     />;
   }
   const size = profiles ? profiles.length - 1 : 0;
