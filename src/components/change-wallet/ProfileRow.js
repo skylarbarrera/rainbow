@@ -4,23 +4,21 @@ import styled from 'styled-components/primitives';
 import {
   View,
   Animated,
-  StyleSheet,
   Text,
 } from 'react-native';
-import FastImage from 'react-native-fast-image';
-import { RectButton } from 'react-native-gesture-handler';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+import GraphemeSplitter from 'grapheme-splitter';
 import { abbreviations } from '../../utils';
 import { TruncatedAddress } from '../text';
 import { fonts, colors } from '../../styles';
-import AvatarImageSource from '../../assets/avatar.png';
 import { ButtonPressAnimation } from '../animations';
 import { Icon } from '../icons';
 
 const Container = styled.View`
   align-items: center;
   flex-direction: row;
-  padding: 7.5px;
+  padding-left: 7.5px;
+  padding-right: 7.5px;
 `;
 
 const Nickname = styled.Text`
@@ -52,12 +50,27 @@ const IconWrapper = styled.View`
   margin-right: 19px;
 `;
 
+const AvatarCircle = styled(View)`
+  border-radius: 20px;
+  margin-left: 8;
+  margin-right: 9px;
+`;
+
+const FirstLetter = styled(Text)`
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  font-weight: 600;
+`;
+
 export default class ProfileRow extends Component {
   componentWillReceiveProps = () => {
     this.close();
   }
 
   onPress = () => {
+    this.close();
+    this.props.onEditWallet();
   }
 
   onLongPress = () => {
@@ -70,7 +83,7 @@ export default class ProfileRow extends Component {
       outputRange: [x, 0],
     });
     return (
-      <Animated.View style={{ flex: 1, transform: [{ translateX: trans }], justifyContent: 'center' }}>
+      <Animated.View style={{ flex: 1, justifyContent: 'center', transform: [{ translateX: trans }] }}>
         <ButtonPressAnimation onPress={onPress} scaleTo={0.9}>
           <IconWrapper>
             <Icon
@@ -86,8 +99,8 @@ export default class ProfileRow extends Component {
   };
 
   renderRightActions = progress => (
-    <View style={{ width: 50, flexDirection: 'row' }}>
-      {this.renderRightAction(50, progress, this.props.onPress)}
+    <View style={{ flexDirection: 'row', width: 50 }}>
+      {this.renderRightAction(50, progress, this.onPress)}
     </View>
   );
 
@@ -106,6 +119,7 @@ export default class ProfileRow extends Component {
       isHeader,
       onPress,
     } = this.props;
+    const avatarSize = isHeader ? 32 : 30;
     return (
       <Swipeable
         ref={this.updateRef}
@@ -113,17 +127,12 @@ export default class ProfileRow extends Component {
         rightThreshold={20}
         renderRightActions={this.renderRightActions}>
         <ButtonPressAnimation scaleTo={0.96} onPress={onPress} onLongPress={this.onLongPress}>
-          <Container>
-            <FastImage
-              source={AvatarImageSource}
-              style={{
-                height: isHeader ? 37 : 33,
-                marginLeft: 5,
-                marginRight: isHeader ? 2 : 4,
-                marginTop: isHeader ? 4 : 3.5,
-                width: isHeader ? 37 : 35,
-              }}
-            />
+          <Container style={{ padding: isHeader ? 15 : 10 }}>
+            <AvatarCircle style={{ backgroundColor: colors.purple, height: avatarSize, width: avatarSize }} >
+              <FirstLetter style={{ fontSize: isHeader ? 18 : 15, lineHeight: isHeader ? 31 : 29 }}>
+                {new GraphemeSplitter().splitGraphemes(accountName)[0]}
+              </FirstLetter>
+            </AvatarCircle>
             <View>
               <Nickname>
                 {accountName}
@@ -141,29 +150,10 @@ ProfileRow.propTypes = {
   accountAddress: PropTypes.string.isRequired,
   accountName: PropTypes.string.isRequired,
   isHeader: PropTypes.bool,
-  onLongPress: PropTypes.func,
+  onEditWallet: PropTypes.func,
   onPress: PropTypes.func,
 };
 
 ProfileRow.defaultProps = {
   isHeader: false,
 };
-
-const styles = StyleSheet.create({
-  leftAction: {
-    flex: 1,
-    backgroundColor: '#497AFC',
-    justifyContent: 'center',
-  },
-  actionText: {
-    color: 'white',
-    fontSize: 16,
-    backgroundColor: 'transparent',
-    padding: 10,
-  },
-  rightAction: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center',
-  },
-});

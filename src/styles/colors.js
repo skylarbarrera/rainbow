@@ -20,9 +20,11 @@ const base = {
   grey: '#a9adb9', // '169, 173, 185'
   highlightBackground: '#F0F7FF', // '240, 247, 255'
   lightestGrey: '#E9EBEF', // '238, 233, 232'
+  lightGreen: '#E7FFE0', // '231, 255, 224'
   lightGrey: '#f7f7f8', // '247, 247, 248'
   limeGreen: '#3FCC18', // '58, 166, 134'
   mediumGrey: '#a1a5b3', // '161, 165, 179'
+  moneyGreen: '#3FCC18', // '63, 204, 24'
   orangeMedium: '#FCA247', // '252, 162, 71'
   paleBlue: '#579DFF',
   placeholder: '#C4C6CB', // 196, 198, 203

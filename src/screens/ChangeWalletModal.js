@@ -45,16 +45,15 @@ const ChangeWalletModal = ({
             key={profile.address}
             accountName={profile.name}
             accountAddress={profile.address}
-            isHeader
             onPress={() => onChangeWallet(profile)}
-            // onLongPress={() => navigation.navigate('ExpandedAssetScreen', {
-            //   address: profile.address,
-            //   asset: [],
-            //   isCurrentProfile: false,
-            //   onCloseModal: () => onCloseEditProfileModal(),
-            //   profile,
-            //   type: 'profile_creator',
-            // })}
+            onEditWallet={() => navigation.navigate('ExpandedAssetScreen', {
+              address: profile.address,
+              asset: [],
+              isCurrentProfile: false,
+              onCloseModal: () => onCloseEditProfileModal(),
+              profile,
+              type: 'profile_creator',
+            })}
           />);
       }
       currentProfile = profile;
@@ -67,14 +66,14 @@ const ChangeWalletModal = ({
       accountAddress={accountAddress}
       isHeader
       onPress={() => navigation.navigate('WalletScreen')}
-      // onLongPress={() => navigation.navigate('ExpandedAssetScreen', {
-      //   address: accountAddress,
-      //   asset: [],
-      //   isCurrentProfile: true,
-      //   onCloseModal: () => onCloseEditProfileModal(true),
-      //   profile: currentProfile,
-      //   type: 'profile_creator',
-      // })}
+      onEditWallet={() => navigation.navigate('ExpandedAssetScreen', {
+        address: accountAddress,
+        asset: [],
+        isCurrentProfile: true,
+        onCloseModal: () => onCloseEditProfileModal(true),
+        profile: currentProfile,
+        type: 'profile_creator',
+      })}
     />;
   }
   const size = profiles ? profiles.length - 1 : 0;
@@ -84,8 +83,8 @@ const ChangeWalletModal = ({
         {renderCurrentProfile}
         <ProfileDivider />
         {renderProfiles}
-        <ProfileOption icon={'plus'} label={'Add another wallet'} onPress={() => onPressImportSeedPhrase()}/>
-        <ProfileOption icon={'gear'} label={'Manage my wallets'}/>
+        <ProfileOption icon={'plus'} label={'Create a Wallet'}/>
+        <ProfileOption icon={'gear'} label={'Import a Wallet'} onPress={() => onPressImportSeedPhrase()}/>
       </Container>
     </Modal>
   );

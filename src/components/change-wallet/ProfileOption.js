@@ -9,17 +9,17 @@ import { Icon } from '../icons';
 const Container = styled.View`
   align-items: center;
   flex-direction: row;
-  padding: 12px 7.5px;
+  padding: 10px 7.5px;
 `;
 
 const IconWrapper = styled.View`
-  height: 28px
-  width: 28px;
+  height: 30px
+  width: 30px;
   border-radius: 14px;
   background-color: ${colors.skeleton};
   justify-content: center;
   align-items: center;
-  margin-left: 9.5;
+  margin-left: 8;
   margin-right: 9px;
 `;
 
