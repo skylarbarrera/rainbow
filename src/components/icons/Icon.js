@@ -10,6 +10,7 @@ import CaretIcon from './svg/CaretIcon';
 import CaretThinIcon from './svg/CaretThinIcon';
 import CheckmarkCircledIcon from './svg/CheckmarkCircledIcon';
 import CheckmarkIcon from './svg/CheckmarkIcon';
+import ClearInputIcon from './svg/ClearInputIcon';
 import ClockIcon from './svg/ClockIcon';
 import CloseCircledIcon from './svg/CloseCircledIcon';
 import CloseIcon from './svg/CloseIcon';
@@ -23,13 +24,17 @@ import FaceIdIcon from './svg/FaceIdIcon';
 import GearIcon from './svg/GearIcon';
 import HandleIcon from './svg/HandleIcon';
 import InboxIcon from './svg/InboxIcon';
+import LockIcon from './svg/LockIcon';
 import OfflineIcon from './svg/OfflineIcon';
 import ProgressIcon from './svg/ProgressIcon';
+import SearchIcon from './svg/SearchIcon';
 import SendIcon from './svg/SendIcon';
 import SendSmallIcon from './svg/SendSmallIcon';
 import ShareIcon from './svg/ShareIcon';
 import SignatureIcon from './svg/SignatureIcon';
 import SpinnerIcon from './svg/SpinnerIcon';
+import StarIcon from './svg/StarIcon';
+import SwapIcon from './svg/SwapIcon';
 import ThreeDotsIcon from './svg/ThreeDotsIcon';
 import TouchIdIcon from './svg/TouchIdIcon';
 import WalletConnectIcon from './svg/WalletConnectIcon';
@@ -46,6 +51,7 @@ Icon.IconTypes = {
   caretThin: CaretThinIcon,
   checkmark: CheckmarkIcon,
   checkmarkCircled: CheckmarkCircledIcon,
+  clearInput: ClearInputIcon,
   clock: ClockIcon,
   close: CloseIcon,
   closeCircled: CloseCircledIcon,
@@ -58,14 +64,18 @@ Icon.IconTypes = {
   gear: GearIcon,
   handle: HandleIcon,
   inbox: InboxIcon,
+  lock: LockIcon,
   offline: OfflineIcon,
   plus: PlusIcon,
   progress: ProgressIcon,
+  search: SearchIcon,
   send: SendIcon,
   sendSmall: SendSmallIcon,
   share: ShareIcon,
   signature: SignatureIcon,
   spinner: SpinnerIcon,
+  star: StarIcon,
+  swap: SwapIcon,
   threeDots: ThreeDotsIcon,
   touchid: TouchIdIcon,
   walletConnect: WalletConnectIcon,

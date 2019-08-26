@@ -3,7 +3,7 @@ import Animated from 'react-native-reanimated';
 import { transformOrigin } from 'react-native-redash';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import store from '../../redux/store';
-import { updateTransitionProps } from '../../redux/navigation';
+import { updateStackTransitionProps } from '../../redux/navigation';
 import { deviceUtils } from '../../utils';
 import { colors } from '../../styles';
 
@@ -48,7 +48,7 @@ const expandStyleInterpolator = ({
 
   const onStart = or(and(eq(closing, 0), eq(current, 0)), and(eq(closing, 1), eq(current, 1)));
   const setShowingModal = call([], () => {
-    store.dispatch(updateTransitionProps({ showingModal: true }));
+    store.dispatch(updateStackTransitionProps({ showingModal: true }));
   });
 
   return {
@@ -135,7 +135,7 @@ const changeWalletStyleInterpolator = ({
 
 const backgroundInterpolator = ({ progress: { next } }) => {
   const dispatch = cond(call([], () => {
-    store.dispatch(updateTransitionProps({ position: next }));
+    store.dispatch(updateStackTransitionProps({ position: next }));
   }));
   return { cardStyle: { opacity: block([dispatch, 1]) } };
 };
@@ -182,7 +182,7 @@ const gestureResponseDistance = {
   vertical: deviceUtils.dimensions.height,
 };
 
-const onTransitionStart = props => {
+export const onTransitionStart = props => {
   if (props.closing) {
     StatusBar.setBarStyle('dark-content');
   } else {

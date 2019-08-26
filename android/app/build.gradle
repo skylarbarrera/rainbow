@@ -153,12 +153,12 @@ android {
 }
 
 dependencies {
-    implementation project(':@react-native-community_masked-view')
     implementation project(':@segment_analytics-react-native')
     implementation project(':react-native-firebase')
     implementation project(':@staltz_react-native-tcp')
     implementation project(':@react-native-community_blur')
     implementation project(':@react-native-community_netinfo')
+    implementation project(':@react-native-community_masked-view')
     implementation project(':@react-native-community_async-storage')
     implementation project(':react-native-camera')
     compile project(':react-native-device-info')

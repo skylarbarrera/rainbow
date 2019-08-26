@@ -6,9 +6,11 @@ import {
   createMaterialTopTabNavigator,
 } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import { Navigation } from '../navigation';
-import { updateTransitionProps } from '../redux/navigation';
+import { ExchangeModalNavigator, Navigation } from '../navigation';
+import { updateStackTransitionProps } from '../redux/navigation';
+import { deviceUtils } from '../utils';
 import store from '../redux/store';
+import { colors } from '../styles';
 import ExpandedAssetScreenWithData from './ExpandedAssetScreenWithData';
 import ImportSeedPhraseSheetWithData from './ImportSeedPhraseSheetWithData';
 import ProfileScreenWithData from './ProfileScreenWithData';
@@ -25,12 +27,13 @@ import {
   sheetPreset,
   backgroundPreset,
   walletChangePreset,
+  onTransitionStart as onTransitionStartEffect,
 } from '../navigation/transitions/effects';
 import ChangeWalletModal from './ChangeWalletModal';
+import restoreKeyboard from './restoreKeyboard';
 
-const onTransitionEnd = () => store.dispatch(updateTransitionProps({ isTransitioning: false }));
-
-const onTransitionStart = () => store.dispatch(updateTransitionProps({ isTransitioning: true }));
+const onTransitionEnd = () => store.dispatch(updateStackTransitionProps({ isTransitioning: false }));
+const onTransitionStart = () => store.dispatch(updateStackTransitionProps({ isTransitioning: true }));
 
 const SwipeStack = createMaterialTopTabNavigator({
   ProfileScreen: {
@@ -48,6 +51,7 @@ const SwipeStack = createMaterialTopTabNavigator({
   },
 }, {
   headerMode: 'none',
+  initialLayout: deviceUtils.dimensions,
   initialRouteName: 'WalletScreen',
   mode: 'modal',
   springConfig: {
@@ -78,6 +82,15 @@ const MainNavigator = createStackNavigator({
     screen: TransactionConfirmationScreenWithData,
   },
   ExampleScreen,
+  ExchangeModal: {
+    navigationOptions: {
+      ...expandedPreset,
+    },
+    params: {
+      isGestureBlocked: false,
+    },
+    screen: ExchangeModalNavigator,
+  },
   ExpandedAssetScreen: {
     navigationOptions: {
       ...expandedPreset,
@@ -99,13 +112,17 @@ const MainNavigator = createStackNavigator({
   SendSheet: {
     navigationOptions: {
       ...sheetPreset,
+      onTransitionStart: props => {
+        onTransitionStartEffect(props);
+        restoreKeyboard();
+      },
     },
     screen: SendSheetWithData,
   },
   SettingsModal: {
     navigationOptions: {
-      gesturesEnabled: false,
       ...expandedPreset,
+      gesturesEnabled: false,
     },
     screen: SettingsModal,
   },
@@ -128,6 +145,7 @@ const MainNavigator = createStackNavigator({
   },
   headerMode: 'none',
   initialRouteName: 'SwipeLayout',
+  keyboardDismissMode: 'none', // true?
   mode: 'modal',
 });
 
@@ -148,6 +166,12 @@ const AppContainerWithAnalytics = ({ ref, screenProps }) => (
 
       if (routeName !== prevRouteName) {
         let paramsToTrack = null;
+
+        if (prevRouteName === 'MainExchangeScreen' && routeName === 'WalletScreen') {
+          store.dispatch(updateStackTransitionProps({ blurColor: null }));
+        } else if (prevRouteName === 'WalletScreen' && routeName === 'MainExchangeScreen') {
+          store.dispatch(updateStackTransitionProps({ blurColor: colors.alpha(colors.black, 0.9) }));
+        }
 
         if (routeName === 'ExpandedAssetScreen') {
           const { asset, type } = params;
