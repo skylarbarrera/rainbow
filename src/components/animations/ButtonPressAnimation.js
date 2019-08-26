@@ -2,7 +2,7 @@ import { omit, pick, toUpper } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Fragment, PureComponent } from 'react';
 import { InteractionManager } from 'react-native';
-import { createNativeWrapper, PureNativeButton, State, TapGestureHandler, LongPressGestureHandler } from 'react-native-gesture-handler';
+import { createNativeWrapper, PureNativeButton, State, LongPressGestureHandler } from 'react-native-gesture-handler';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import Animated, { Easing } from 'react-native-reanimated';
 import {
@@ -76,9 +76,9 @@ export default class ButtonPressAnimation extends PureComponent {
     duration: PropTypes.number,
     easing: PropTypes.object,
     enableHapticFeedback: PropTypes.bool,
-    onLongPress: PropTypes.func,
     exclusive: PropTypes.bool,
     isInteraction: PropTypes.bool,
+    onLongPress: PropTypes.func,
     onPress: PropTypes.func,
     onPressStart: PropTypes.func,
     scaleTo: PropTypes.number,
@@ -273,32 +273,5 @@ export default class ButtonPressAnimation extends PureComponent {
     );
   }
 
-  longPressGesture = () => {
-    const {
-      onLongPress,
-    } = this.props;
-
-    return (
-      <LongPressGestureHandler
-        onHandlerStateChange={({ nativeEvent }) => {
-          if (nativeEvent.state === State.ACTIVE) {
-            if (onLongPress) {
-              onLongPress();
-            }
-          }
-        }}
-        minDurationMs={500}>
-        {this.tapGesture()}
-      </LongPressGestureHandler>
-    );
-  }
-
-  render = () => {
-    const { onLongPress } = this.props;
-
-    if (onLongPress) {
-      return this.longPressGesture();
-    }
-    return this.tapGesture();
-  }
+  render = () => this.tapGesture();
 }
