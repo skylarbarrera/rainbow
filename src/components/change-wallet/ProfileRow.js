@@ -18,7 +18,8 @@ const Container = styled.View`
   align-items: center;
   flex-direction: row;
   padding-left: 7.5px;
-  padding-right: 7.5px;
+  padding-right: 15px;
+  justify-content: space-between;
 `;
 
 const Nickname = styled.Text`
@@ -61,6 +62,23 @@ const FirstLetter = styled(Text)`
   text-align: center;
   color: #fff;
   font-weight: 600;
+`;
+
+const LeftSide = styled(View)`
+  flex-direction: row;
+`;
+
+const MoneyAmountWrapper = styled(View)`
+  background-color: ${colors.lightGreen};
+  border-radius: 16;
+  height: 24px;
+  padding: 4px 6.5px;
+`;
+
+const MoneyAmount = styled(Text)`
+  line-height: 16px;
+  color: ${colors.moneyGreen};
+  font-weight: ${fonts.weight.semibold};
 `;
 
 export default class ProfileRow extends Component {
@@ -128,23 +146,30 @@ export default class ProfileRow extends Component {
         renderRightActions={this.renderRightActions}>
         <ButtonPressAnimation scaleTo={0.96} onPress={onPress} onLongPress={this.onLongPress}>
           <Container style={{ padding: isHeader ? 15 : 10 }}>
-            <AvatarCircle style={{ backgroundColor: colors.purple, height: avatarSize, width: avatarSize }} >
-              <FirstLetter style={{ fontSize: isHeader ? 18 : 15, lineHeight: isHeader ? 31 : 29 }}>
-                {new GraphemeSplitter().splitGraphemes(accountName)[0]}
-              </FirstLetter>
-            </AvatarCircle>
-            <View>
-              <Nickname>
-                {accountName}
-              </Nickname>
-              <AddressAbbreviation address={accountAddress} />
-            </View>
+            <LeftSide>
+              <AvatarCircle style={{ backgroundColor: colors.purple, height: avatarSize, width: avatarSize }} >
+                <FirstLetter style={{ fontSize: isHeader ? 18 : 15, lineHeight: isHeader ? 31 : 29 }}>
+                  {new GraphemeSplitter().splitGraphemes(accountName)[0]}
+                </FirstLetter>
+              </AvatarCircle>
+              <View>
+                <Nickname>
+                  {accountName}
+                </Nickname>
+                <AddressAbbreviation address={accountAddress} />
+              </View>
+            </LeftSide>
+            <MoneyAmountWrapper>
+              <MoneyAmount>
+                $829.24
+              </MoneyAmount>
+            </MoneyAmountWrapper>
           </Container>
         </ButtonPressAnimation>
       </Swipeable>
     );
   }
-};
+}
 
 ProfileRow.propTypes = {
   accountAddress: PropTypes.string.isRequired,
