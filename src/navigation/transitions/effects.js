@@ -113,7 +113,7 @@ const changeWalletStyleInterpolator = ({
 
   const onStart = or(and(eq(closing, 0), eq(current, 0)), and(eq(closing, 1), eq(current, 1)));
   const setShowingModal = call([], () => {
-    store.dispatch(updateStackTransitionProps({ showingModal: true }));
+    store.dispatch(updateStackTransitionProps({ showingModal: false }));
   });
 
   return {

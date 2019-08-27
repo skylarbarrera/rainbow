@@ -30,6 +30,7 @@ const ChangeWalletModal = ({
   onCloseEditProfileModal,
   onCloseModal,
   onPressBack,
+  onPressCreateWallet,
   onPressImportSeedPhrase,
   onPressSection,
   profiles,
@@ -78,13 +79,18 @@ const ChangeWalletModal = ({
   }
   const size = profiles ? profiles.length - 1 : 0;
   return (
-    <Modal fixedToTop height={headerHeight + (profileRowHeight * 2) + (profileRowHeight * size)} onCloseModal={onCloseModal}>
+    <Modal
+      fixedToTop
+      height={headerHeight + (profileRowHeight * 2) + (profileRowHeight * size)}
+      onCloseModal={onCloseModal}
+      style={{ borderRadius: 18 }}
+    >
       <Container>
         {renderCurrentProfile}
         <ProfileDivider />
         {renderProfiles}
-        <ProfileOption icon={'plus'} label={'Create a Wallet'}/>
-        <ProfileOption icon={'gear'} label={'Import a Wallet'} onPress={() => onPressImportSeedPhrase()}/>
+        <ProfileOption icon={'plus'} label={'Create a Wallet'} onPress={onPressCreateWallet}/>
+        <ProfileOption icon={'gear'} label={'Import a Wallet'} onPress={onPressImportSeedPhrase}/>
       </Container>
     </Modal>
   );
@@ -98,6 +104,7 @@ ChangeWalletModal.propTypes = {
   onCloseEditProfileModal: PropTypes.func,
   onCloseModal: PropTypes.func,
   onPressBack: PropTypes.func,
+  onPressCreateWallet: PropTypes.func,
   onPressImportSeedPhrase: PropTypes.func,
   onPressSection: PropTypes.func,
   profiles: PropTypes.array,
@@ -122,6 +129,25 @@ export default compose(
       setProfiles(newProfiles);
     },
     onCloseModal: ({ navigation }) => () => navigation.goBack(),
+    onPressCreateWallet: ({ createNewWallet, navigation, clearAccountData }) => () => {
+      navigation.navigate('ExpandedAssetScreen', {
+        actionType: 'Create',
+        address: undefined,
+        asset: [],
+        isCurrentProfile: false,
+        isNewProfile: true,
+        onCloseModal: async (isCanceled) => {
+          if (!isCanceled) {
+            await clearAccountData();
+            await createNewWallet();
+            navigation.goBack();
+            navigation.navigate('WalletScreen');
+          }
+        },
+        profile: {},
+        type: 'profile_creator',
+      });
+    },
     onPressImportSeedPhrase: ({ navigation, setSafeTimeout }) => () => {
       navigation.goBack();
       InteractionManager.runAfterInteractions(() => {

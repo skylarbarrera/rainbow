@@ -33,7 +33,7 @@ import {
   uniqueTokensLoadState,
   uniqueTokensRefreshState,
 } from '../redux/uniqueTokens';
-import { walletInit, saveWalletDetails, saveName, loadUserNameForAddress } from '../model/wallet';
+import { walletInit, saveWalletDetails, saveName, loadUserNameForAddress, createWallet } from '../model/wallet';
 import {
   walletConnectLoadState,
   walletConnectClearState,
@@ -156,6 +156,19 @@ export default Component => compose(
     },
   }),
   withHandlers({
+    createNewWallet: (ownProps) => async () => {
+      try {
+        const name = ownProps.accountName || 'My Wallet';
+        const walletAddress = await createWallet(false, name);
+        ownProps.settingsUpdateAccountName(name);
+        return await walletInitialization(false, true, walletAddress, ownProps);
+      } catch (error) {
+        // TODO specify error states more granular
+        ownProps.onHideSplashScreen();
+        Alert.alert('Import failed due to an invalid private key. Please try again.');
+        return null;
+      }
+    },
     initializeWallet: (ownProps) => async (seedPhrase) => {
       try {
         const { isImported, isNew, walletAddress } = await walletInit(seedPhrase, ownProps.accountName);

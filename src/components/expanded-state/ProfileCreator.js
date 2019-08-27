@@ -210,7 +210,7 @@ class ProfileCreator extends React.PureComponent {
                       disabled={!this.state.value.length > 0}
                       onPress={acceptAction}
                     >
-                      {this.props.isNewProfile ? 'Add Wallet' : 'Done'}
+                      {this.props.isNewProfile ? `${this.props.actionType} Wallet` : 'Done'}
                     </Button>
                     {this.props.isCurrentProfile || this.props.isNewProfile
                       ? <CancelButton
@@ -236,6 +236,7 @@ class ProfileCreator extends React.PureComponent {
 }
 
 ProfileCreator.propTypes = {
+  actionType: PropTypes.string,
   address: PropTypes.string,
   color: PropTypes.number,
   format: PropTypes.func,

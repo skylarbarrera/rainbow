@@ -126,7 +126,7 @@ export const loadAddress = async () => {
   }
 };
 
-const createWallet = async (seed, name) => {
+export const createWallet = async (seed, name) => {
   const walletSeed = seed || generateSeedPhrase();
   let wallet = null;
   try {
