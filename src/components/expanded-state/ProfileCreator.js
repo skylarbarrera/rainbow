@@ -195,13 +195,12 @@ class ProfileCreator extends React.PureComponent {
                       onSubmitEditing={acceptAction}
                       returnKeyType={'done'}
                     />
-                    <ButtonPressAnimation scaleTo={1} onPress={() => Keyboard.dismiss()}>
-                      {!this.props.isNewProfile
-                      && <CopyTooltip textToCopy={this.props.address} tooltipText="Copy Address" waitForKeyboard>
-                        <AddressAbbreviation address={this.props.address} />
-                      </CopyTooltip>
-                      }
-                    </ButtonPressAnimation>
+                    <CopyTooltip textToCopy={this.props.address} tooltipText="Copy Address" waitForKeyboard>
+                      <ButtonPressAnimation scaleTo={1} onPress={() => Keyboard.dismiss()}>
+                        {!this.props.isNewProfile && <AddressAbbreviation address={this.props.address} />
+                        }
+                      </ButtonPressAnimation>
+                    </CopyTooltip>
                     <Divider />
                     <Button
                       backgroundColor={this.state.value.length > 0 ? colors.appleBlue : undefined}

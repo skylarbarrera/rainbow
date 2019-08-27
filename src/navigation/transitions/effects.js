@@ -195,7 +195,6 @@ export const walletChangePreset = {
   cardTransparent: true,
   gestureDirection: 'vertical-inverted',
   gestureResponseDistance,
-  onTransitionStart,
   transitionSpec: { close: walletModalCloseSpec, open: walletModalOpenSpec },
 };
 
