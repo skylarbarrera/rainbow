@@ -13,6 +13,7 @@ import { TruncatedAddress } from '../text';
 import { fonts, colors } from '../../styles';
 import { ButtonPressAnimation } from '../animations';
 import { Icon } from '../icons';
+import { removeFirstEmojiFromString } from '../../helpers/emojiHandler';
 
 const Container = styled.View`
   align-items: center;
@@ -138,6 +139,7 @@ export default class ProfileRow extends Component {
       onPress,
     } = this.props;
     const avatarSize = isHeader ? 32 : 30;
+    const name = accountName ? removeFirstEmojiFromString(accountName) : '';
     return (
       <Swipeable
         ref={this.updateRef}
@@ -155,7 +157,7 @@ export default class ProfileRow extends Component {
               </AvatarCircle>
               <View>
                 <Nickname>
-                  {accountName}
+                  {name}
                 </Nickname>
                 <AddressAbbreviation address={accountAddress} />
               </View>

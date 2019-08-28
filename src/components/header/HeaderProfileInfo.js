@@ -3,11 +3,13 @@ import React from 'react';
 import styled from 'styled-components/primitives';
 import { pure } from 'recompact';
 import FastImage from 'react-native-fast-image';
+import { View, Text } from 'react-native';
+import GraphemeSplitter from 'grapheme-splitter';
 import { ButtonPressAnimation } from '../animations';
 import { colors, fonts } from '../../styles';
 import Caret from '../../assets/family-dropdown-arrow.png';
-import AvatarImageSource from '../../assets/avatar.png';
 import { TruncatedAddress } from '../text';
+import { removeFirstEmojiFromString } from '../../helpers/emojiHandler';
 
 const Container = styled.View`
   height: 46px;
@@ -62,38 +64,53 @@ const AddressAbbreviation = styled(TruncatedAddress).attrs({
   width: 100%;
 `;
 
+const AvatarCircle = styled(View)`
+  border-radius: 20px;
+  margin-left: 8;
+  margin-right: 9px;
+  height: 32px;
+  width: 32px;
+`;
+
+const FirstLetter = styled(Text)`
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  font-weight: 600;
+  fontSize: 18;
+  lineHeight: 31;
+`;
 
 const HeaderProfileInfo = ({
   accountAddress,
   displayName,
   onPress,
-}) => (
-  <ButtonPressAnimation onPress={onPress} scaleTo={0.90}>
-    <Container>
-      <FastImage
-        source={AvatarImageSource}
-        style={{
-          height: 33,
-          marginLeft: 7,
-          marginRight: 3,
-          marginTop: 4,
-          width: 35,
-        }}
-      />
-      <RightSide>
-        <TopRow>
-          <Nickname numberOfLines={1}>
-            {displayName}
-          </Nickname>
-          <ArrowWrapper>
-            <SettingIcon source={Caret} />
-          </ArrowWrapper>
-        </TopRow>
-        <AddressAbbreviation address={accountAddress} />
-      </RightSide>
-    </Container>
-  </ButtonPressAnimation>
-);
+}) => {
+  const name = displayName ? removeFirstEmojiFromString(displayName) : '';
+
+  return (
+    <ButtonPressAnimation onPress={onPress} scaleTo={0.90}>
+      <Container>
+        <AvatarCircle style={{ backgroundColor: colors.purple }} >
+          <FirstLetter>
+            {new GraphemeSplitter().splitGraphemes(displayName)[0]}
+          </FirstLetter>
+        </AvatarCircle>
+        <RightSide>
+          <TopRow>
+            <Nickname numberOfLines={1}>
+              {name}
+            </Nickname>
+            <ArrowWrapper>
+              <SettingIcon source={Caret} />
+            </ArrowWrapper>
+          </TopRow>
+          <AddressAbbreviation address={accountAddress} />
+        </RightSide>
+      </Container>
+    </ButtonPressAnimation>
+  );
+};
 
 HeaderProfileInfo.propTypes = {
   accountAddress: PropTypes.string,

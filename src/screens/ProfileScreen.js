@@ -48,6 +48,7 @@ const ProfileScreen = ({
           accountAddress={accountAddress}
           navigation={navigation}
           showBottomDivider={!isEmpty}
+          displayName={accountName}
         />
       )}
       isEmpty={isEmpty}

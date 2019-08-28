@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Clipboard } from 'react-native';
+import { Clipboard, View, Text } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {
   compose,
@@ -8,9 +8,10 @@ import {
   withHandlers,
   withState,
 } from 'recompact';
+import GraphemeSplitter from 'grapheme-splitter';
 import styled from 'styled-components/primitives';
 import AvatarImageSource from '../../assets/avatar.png';
-import { borders, margin } from '../../styles';
+import { borders, margin, colors } from '../../styles';
 import { abbreviations } from '../../utils';
 import CopyTooltip from '../CopyTooltip';
 import Divider from '../Divider';
@@ -37,21 +38,36 @@ const Container = styled(Centered).attrs({ direction: 'column' })`
   padding-top: 3;
 `;
 
+const AvatarCircle = styled(View)`
+  border-radius: 33px;
+  margin-bottom: 16px;
+  height: 65px;
+  width: 65px;
+`;
+
+const FirstLetter = styled(Text)`
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  font-weight: 600;
+  fontSize: 30;
+  lineHeight: 64;
+`;
+
 const ProfileMasthead = ({
   accountAddress,
+  displayName,
   emojiCount,
   onPressCopy,
   onPressReceive,
   showBottomDivider,
 }) => (
   <Container>
-    <FastImage
-      source={AvatarImageSource}
-      style={{
-        ...borders.buildCircleAsObject(85),
-        marginBottom: 3,
-      }}
-    />
+    <AvatarCircle style={{ backgroundColor: colors.purple }} >
+      <FirstLetter>
+        {new GraphemeSplitter().splitGraphemes(displayName)[0]}
+      </FirstLetter>
+    </AvatarCircle>
     <CopyTooltip textToCopy={accountAddress} tooltipText="Copy Address">
       <AddressAbbreviation address={accountAddress} />
     </CopyTooltip>
@@ -83,6 +99,7 @@ const ProfileMasthead = ({
 
 ProfileMasthead.propTypes = {
   accountAddress: PropTypes.string,
+  displayName: PropTypes.string,
   emojiCount: PropTypes.number,
   onPressCopy: PropTypes.func,
   onPressReceive: PropTypes.func,
