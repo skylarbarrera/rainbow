@@ -26,6 +26,7 @@ const profileRowHeight = 54;
 const ChangeWalletModal = ({
   accountAddress,
   navigation,
+  onChangeCurrentOpenRow,
   onChangeWallet,
   onCloseEditProfileModal,
   onCloseModal,
@@ -47,6 +48,7 @@ const ChangeWalletModal = ({
             accountName={profile.name}
             accountAddress={profile.address}
             onPress={() => onChangeWallet(profile)}
+            onSwipeOpen={onChangeCurrentOpenRow}
             onEditWallet={() => navigation.navigate('ExpandedAssetScreen', {
               address: profile.address,
               asset: [],
@@ -67,6 +69,7 @@ const ChangeWalletModal = ({
       accountAddress={accountAddress}
       isHeader
       onPress={() => navigation.navigate('WalletScreen')}
+      onSwipeOpen={onChangeCurrentOpenRow}
       onEditWallet={() => navigation.navigate('ExpandedAssetScreen', {
         address: accountAddress,
         asset: [],
@@ -100,6 +103,7 @@ ChangeWalletModal.propTypes = {
   accountAddress: PropTypes.string,
   currentProfile: PropTypes.object,
   navigation: PropTypes.object,
+  onChangeCurrentOpenRow: PropTypes.func,
   onChangeWallet: PropTypes.func,
   onCloseEditProfileModal: PropTypes.func,
   onCloseModal: PropTypes.func,
@@ -117,7 +121,12 @@ export default compose(
   withIsWalletImporting,
   withState('currentProfile', 'setCurrentProfile', undefined),
   withState('profiles', 'setProfiles', undefined),
+  withState('currentOpenRow', 'setCurrentOpenRow', undefined),
   withHandlers({
+    onChangeCurrentOpenRow: ({ setCurrentOpenRow }) => async (address) => {
+      console.log(address);
+      setCurrentOpenRow(address);
+    },
     onChangeWallet: ({ initializeWalletWithProfile, navigation, setIsWalletImporting }) => async (profile) => {
       navigation.navigate('WalletScreen');
       setIsWalletImporting(true);

@@ -86,6 +86,11 @@ export default class ProfileRow extends Component {
     this.close();
   }
 
+  onSwipableWillOpen = () => {
+    this.duringTransition = true;
+    this.props.onSwipeOpen(this.props.accountAddress);
+  }
+
   onPress = () => {
     this.close();
     this.props.onEditWallet();
@@ -143,7 +148,9 @@ export default class ProfileRow extends Component {
         ref={this.updateRef}
         friction={2}
         rightThreshold={20}
-        renderRightActions={this.renderRightActions}>
+        renderRightActions={this.renderRightActions}
+        onSwipeableWillOpen={this.onSwipableWillOpen}
+      >
         <ButtonPressAnimation scaleTo={0.96} onPress={onPress} onLongPress={this.onLongPress}>
           <Container style={{ padding: isHeader ? 15 : 10 }}>
             <LeftSide>
@@ -177,6 +184,7 @@ ProfileRow.propTypes = {
   isHeader: PropTypes.bool,
   onEditWallet: PropTypes.func,
   onPress: PropTypes.func,
+  onSwipeOpen: PropTypes.func,
 };
 
 ProfileRow.defaultProps = {
