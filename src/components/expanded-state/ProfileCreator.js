@@ -12,10 +12,10 @@ import {
   withHandlers,
   withProps,
 } from 'recompact';
+import GraphemeSplitter from 'grapheme-splitter';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { Text } from 'react-primitives';
 import styled from 'styled-components/primitives';
-import FastImage from 'react-native-fast-image';
 import { AssetPanel } from './asset-panel';
 import FloatingPanels from './FloatingPanels';
 import { withAccountData, withAccountSettings } from '../../hoc';
@@ -28,7 +28,6 @@ import { abbreviations, deviceUtils } from '../../utils';
 import { ButtonPressAnimation } from '../animations';
 import CopyTooltip from '../CopyTooltip';
 import { showActionSheetWithOptions } from '../../utils/actionsheet';
-import AvatarImageSource from '../../assets/avatar.png';
 import { deleteUserInfo, editUserInfo } from '../../model/wallet';
 import store from '../../redux/store';
 import { settingsUpdateAccountName } from '../../redux/settings';
@@ -75,6 +74,22 @@ const Placeholder = styled(Text)`
   margin-bottom: -27px;
 `;
 
+const NameCircle = styled(View)`
+  height: 60px;
+  width: 60px;
+  border-radius: 30px;
+  margin-bottom: 19px;
+`;
+
+const FirstLetter = styled(Text)`
+  width: 100%;
+  text-align: center;
+  line-height: 58px;
+  font-size: 27px;
+  color: #fff;
+  padding-left: 1px;
+  font-weight: 600;
+`;
 
 class ProfileCreator extends React.PureComponent {
   constructor(props) {
@@ -168,14 +183,11 @@ class ProfileCreator extends React.PureComponent {
                 <AssetPanel>
                   <TopMenu>
                     <ButtonPressAnimation onPress={this.onChangeAvatar} scaleTo={0.96}>
-                      <FastImage
-                        source={AvatarImageSource}
-                        style={{
-                          height: 70,
-                          marginBottom: 10,
-                          width: 70,
-                        }}
-                      />
+                      <NameCircle style={{ backgroundColor: colors.purple }}>
+                        <FirstLetter>
+                          {new GraphemeSplitter().splitGraphemes(this.state.value)[0]}
+                        </FirstLetter>
+                      </NameCircle>
                     </ButtonPressAnimation>
                     <Placeholder>
                       {this.state.value.length > 0 ? ' ' : placeholderText}

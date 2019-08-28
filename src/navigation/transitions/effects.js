@@ -118,7 +118,7 @@ const changeWalletStyleInterpolator = ({
 
   return {
     cardStyle: {
-      opacity: block([cond(onStart, setShowingModal), cardOpacity]),
+      opacity: block([cond(onStart, setShowingModal), 1]),
       shadowColor: colors.dark,
       shadowOffset: { height: 10, width: 0 },
       shadowOpacity: 0.6,

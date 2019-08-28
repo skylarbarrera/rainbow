@@ -14,7 +14,7 @@ import ProfileRow from '../components/change-wallet/ProfileRow';
 import ProfileDivider from '../components/change-wallet/ProfileDivider';
 import ProfileOption from '../components/change-wallet/ProfileOption';
 import { withDataInit, withIsWalletImporting, withAccountAddress } from '../hoc';
-import { loadUsersInfo, saveCurrentUserInfo } from '../model/wallet';
+import { loadUsersInfo } from '../model/wallet';
 
 const Container = styled.View`
   padding-top: 2px;
@@ -26,7 +26,6 @@ const profileRowHeight = 54;
 const ChangeWalletModal = ({
   accountAddress,
   navigation,
-  onChangeCurrentOpenRow,
   onChangeWallet,
   onCloseEditProfileModal,
   onCloseModal,
@@ -48,7 +47,6 @@ const ChangeWalletModal = ({
             accountName={profile.name}
             accountAddress={profile.address}
             onPress={() => onChangeWallet(profile)}
-            onSwipeOpen={onChangeCurrentOpenRow}
             onEditWallet={() => navigation.navigate('ExpandedAssetScreen', {
               address: profile.address,
               asset: [],
@@ -69,7 +67,6 @@ const ChangeWalletModal = ({
       accountAddress={accountAddress}
       isHeader
       onPress={() => navigation.navigate('WalletScreen')}
-      onSwipeOpen={onChangeCurrentOpenRow}
       onEditWallet={() => navigation.navigate('ExpandedAssetScreen', {
         address: accountAddress,
         asset: [],
@@ -103,7 +100,6 @@ ChangeWalletModal.propTypes = {
   accountAddress: PropTypes.string,
   currentProfile: PropTypes.object,
   navigation: PropTypes.object,
-  onChangeCurrentOpenRow: PropTypes.func,
   onChangeWallet: PropTypes.func,
   onCloseEditProfileModal: PropTypes.func,
   onCloseModal: PropTypes.func,
@@ -123,10 +119,6 @@ export default compose(
   withState('profiles', 'setProfiles', undefined),
   withState('currentOpenRow', 'setCurrentOpenRow', undefined),
   withHandlers({
-    onChangeCurrentOpenRow: ({ setCurrentOpenRow }) => async (address) => {
-      console.log(address);
-      setCurrentOpenRow(address);
-    },
     onChangeWallet: ({ initializeWalletWithProfile, navigation, setIsWalletImporting }) => async (profile) => {
       navigation.navigate('WalletScreen');
       setIsWalletImporting(true);
@@ -172,17 +164,12 @@ export default compose(
   }),
   lifecycle({
     componentDidMount() {
-      loadUsersInfo()
-        .then((response) => {
-          if (response && response.length > 0) {
-            this.props.setProfiles(response);
-          } else {
-            saveCurrentUserInfo();
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      const profiles = this.props.navigation.getParam('profiles', []);
+      this.props.setProfiles(profiles);
+    },
+    componentWillUnmount() {
+      const onCloseModal = this.props.navigation.getParam('onCloseModal', () => null);
+      onCloseModal(this.props.profiles);
     },
   }),
 )(ChangeWalletModal);
