@@ -273,12 +273,14 @@ export default class ButtonPressAnimation extends PureComponent {
                   // else if
                   cond(
                     eq(this.gestureState, END),
-                    cond(eq(this.isLongPress, FALSE),
-                      [
-                        call([], this.handleHaptic),
-                        call([], this.handleRunInteraction),
-                      ],
-                      set(this.isLongPress, FALSE)),
+                    [
+                      cond(eq(this.isLongPress, FALSE),
+                        [
+                          call([], this.handleHaptic),
+                          call([], this.handleRunInteraction),
+                        ]),
+                      set(this.isLongPress, FALSE),
+                    ],
                   ),
                 ),
               ),
@@ -287,6 +289,7 @@ export default class ButtonPressAnimation extends PureComponent {
                 cond(
                   eq(this.gestureState, ACTIVE),
                   call([], this.handleLongPress),
+                  set(this.isLongPress, FALSE),
                 ),
               ),
               cond(
