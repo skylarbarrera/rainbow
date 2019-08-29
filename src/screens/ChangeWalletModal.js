@@ -167,9 +167,5 @@ export default compose(
       const profiles = this.props.navigation.getParam('profiles', []);
       this.props.setProfiles(profiles);
     },
-    componentWillUnmount() {
-      const onCloseModal = this.props.navigation.getParam('onCloseModal', () => null);
-      onCloseModal(this.props.profiles);
-    },
   }),
 )(ChangeWalletModal);

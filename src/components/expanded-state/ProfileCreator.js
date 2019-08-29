@@ -31,6 +31,7 @@ import { showActionSheetWithOptions } from '../../utils/actionsheet';
 import { deleteUserInfo, editUserInfo } from '../../model/wallet';
 import store from '../../redux/store';
 import { settingsUpdateAccountName } from '../../redux/settings';
+import { makeSpaceAfterFirstEmoji } from '../../helpers/emojiHandler';
 
 const TopMenu = styled(View)`
   justify-content: center;
@@ -130,15 +131,15 @@ class ProfileCreator extends React.PureComponent {
     let newColor = this.state.color;
     newColor = ++newColor > colors.avatarColor.length - 1 ? 0 : newColor++;
     this.setState({ color: newColor });
-    this.props.onUnmountModal(this.state.value, newColor, true);
+    this.props.onUnmountModal(makeSpaceAfterFirstEmoji(this.state.value), newColor, true);
   }
 
   editProfile = async () => {
     if (this.state.value.length > 0) {
       const { address, privateKey, seedPhrase } = this.props.profile;
-      await editUserInfo(this.state.value, seedPhrase, privateKey, address);
+      await editUserInfo(makeSpaceAfterFirstEmoji(this.state.value), seedPhrase, privateKey, address);
       if (this.props.isCurrentProfile) {
-        store.dispatch(settingsUpdateAccountName(this.state.value));
+        store.dispatch(settingsUpdateAccountName(makeSpaceAfterFirstEmoji(this.state.value)));
       }
       this.props.onCloseModal();
       this.props.navigation.goBack();
@@ -147,7 +148,7 @@ class ProfileCreator extends React.PureComponent {
 
   addProfileInfo = async () => {
     if (this.state.value.length > 0) {
-      await store.dispatch(settingsUpdateAccountName(this.state.value));
+      await store.dispatch(settingsUpdateAccountName(makeSpaceAfterFirstEmoji(this.state.value)));
     }
     this.props.onCloseModal();
     this.props.navigation.goBack();

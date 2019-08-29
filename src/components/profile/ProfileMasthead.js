@@ -65,7 +65,7 @@ const ProfileMasthead = ({
   <Container>
     <AvatarCircle style={{ backgroundColor: colors.purple }} >
       <FirstLetter>
-        {new GraphemeSplitter().splitGraphemes(displayName)[0]}
+        {displayName && (new GraphemeSplitter().splitGraphemes(displayName)[0])}
       </FirstLetter>
     </AvatarCircle>
     <CopyTooltip textToCopy={accountAddress} tooltipText="Copy Address">
@@ -119,5 +119,5 @@ export default compose(
     },
     onPressReceive: ({ navigation }) => () => navigation.navigate('ReceiveModal'),
   }),
-  onlyUpdateForKeys(['accountAddress', 'emojiCount', 'showBottomDivider']),
+  onlyUpdateForKeys(['accountAddress', 'displayName', 'emojiCount', 'showBottomDivider']),
 )(ProfileMasthead);

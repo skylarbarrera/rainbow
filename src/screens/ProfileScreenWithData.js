@@ -28,28 +28,15 @@ export default compose(
   withState('profiles', 'setProfiles', undefined),
   withHandlers({
     onPressBackButton: ({ navigation }) => () => navigation.navigate('WalletScreen'),
-    onPressProfileHeader: ({ navigation, profiles, setProfiles }) => () => navigation.navigate('ChangeWalletModal', { 
-      onCloseModal: (newProfiles) => setProfiles(newProfiles),
-      profiles,
-    }),
+    onPressProfileHeader: ({ navigation, setProfiles }) => async () => {
+      const profiles = await loadUsersInfo();
+      navigation.navigate('ChangeWalletModal', {
+        profiles,
+      });
+    },
     onPressSettings: ({ navigation }) => () => navigation.navigate('SettingsModal'),
   }),
   withProps(({ isWalletEmpty, transactionsCount }) => ({
     isEmpty: isWalletEmpty && !transactionsCount,
   })),
-  lifecycle({
-    componentDidMount() {
-      loadUsersInfo()
-        .then((response) => {
-          if (response && response.length > 0) {
-            this.props.setProfiles(response);
-          } else {
-            saveCurrentUserInfo();
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-  }),
 )(ProfileScreen);

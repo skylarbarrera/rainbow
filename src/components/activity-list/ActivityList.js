@@ -23,6 +23,7 @@ const ActivityList = ({ header, isEmpty, sections }) => (
 );
 
 ActivityList.propTypes = {
+  accountName: PropTypes.string,
   header: PropTypes.node,
   isEmpty: PropTypes.bool,
   sections: PropTypes.arrayOf(PropTypes.shape({
@@ -59,6 +60,7 @@ export default compose(
     };
   }),
   onlyUpdateForKeys([
+    'accountName',
     'isEmpty',
     'nativeCurrency',
     'pendingTransactionsCount',

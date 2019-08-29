@@ -51,6 +51,7 @@ const ProfileScreen = ({
           displayName={accountName}
         />
       )}
+      accountName={accountName}
       isEmpty={isEmpty}
       nativeCurrency={nativeCurrency}
       requests={requests}
