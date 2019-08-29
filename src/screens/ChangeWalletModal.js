@@ -66,7 +66,7 @@ const ChangeWalletModal = ({
       accountName={currentProfile.name}
       accountAddress={accountAddress}
       isHeader
-      onPress={() => navigation.navigate('WalletScreen')}
+      onPress={() => navigation.goBack()}
       onEditWallet={() => navigation.navigate('ExpandedAssetScreen', {
         address: accountAddress,
         asset: [],

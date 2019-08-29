@@ -58,11 +58,6 @@ const ProfileScreen = ({
       transactionsCount={transactionsCount}
     />
     {isEmpty && <AddFundsInterstitial />}
-    <BlurOverlay
-      // backgroundColor={colors.alpha(colors.blueGreyDarker, 0.4)}
-      blurType="light"
-      intensity={blurIntensity}
-    />
   </Page>
 );
 

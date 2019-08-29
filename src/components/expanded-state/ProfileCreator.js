@@ -96,6 +96,7 @@ class ProfileCreator extends React.PureComponent {
     super(props);
 
     this.state = {
+      color: 0,
       value: '',
     };
   }
@@ -125,6 +126,13 @@ class ProfileCreator extends React.PureComponent {
     this.setState({ value });
   }
 
+  onChangeColor = async () => {
+    let newColor = this.state.color;
+    newColor = ++newColor > colors.avatarColor.length - 1 ? 0 : newColor++;
+    this.setState({ color: newColor });
+    this.props.onUnmountModal(this.state.value, newColor, true);
+  }
+
   editProfile = async () => {
     if (this.state.value.length > 0) {
       const { address, privateKey, seedPhrase } = this.props.profile;
@@ -143,10 +151,6 @@ class ProfileCreator extends React.PureComponent {
     }
     this.props.onCloseModal();
     this.props.navigation.goBack();
-  }
-
-  onChangeAvatar = async () => {
-
   }
 
   onDeleteProfile = () => {
@@ -182,8 +186,8 @@ class ProfileCreator extends React.PureComponent {
               <TouchableWithoutFeedback>
                 <AssetPanel>
                   <TopMenu>
-                    <ButtonPressAnimation onPress={this.onChangeAvatar} scaleTo={0.96}>
-                      <NameCircle style={{ backgroundColor: colors.purple }}>
+                    <ButtonPressAnimation onPress={this.onChangeColor} scaleTo={0.96}>
+                      <NameCircle style={{ backgroundColor: colors.avatarColor[this.state.color] }}>
                         <FirstLetter>
                           {new GraphemeSplitter().splitGraphemes(this.state.value)[0]}
                         </FirstLetter>
@@ -208,10 +212,9 @@ class ProfileCreator extends React.PureComponent {
                       returnKeyType={'done'}
                     />
                     <CopyTooltip textToCopy={this.props.address} tooltipText="Copy Address" waitForKeyboard>
-                      <ButtonPressAnimation scaleTo={1} onPress={() => Keyboard.dismiss()}>
-                        {!this.props.isNewProfile && <AddressAbbreviation address={this.props.address} />
-                        }
-                      </ButtonPressAnimation>
+                      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+                        {!this.props.isNewProfile && <AddressAbbreviation address={this.props.address} />}
+                      </TouchableWithoutFeedback>
                     </CopyTooltip>
                     <Divider />
                     <Button

@@ -194,7 +194,7 @@ export const walletChangePreset = {
   cardStyleInterpolator: changeWalletStyleInterpolator,
   cardTransparent: true,
   gestureDirection: 'vertical-inverted',
-  gestureResponseDistance,
+  gestureResponseDistance: { vertical: 1 }, // disable gesture for now
   transitionSpec: { close: walletModalCloseSpec, open: walletModalOpenSpec },
 };
 
