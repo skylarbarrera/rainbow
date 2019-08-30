@@ -23,6 +23,7 @@ const ActivityList = ({ header, isEmpty, sections }) => (
 );
 
 ActivityList.propTypes = {
+  accountColor: PropTypes.number,
   accountName: PropTypes.string,
   header: PropTypes.node,
   isEmpty: PropTypes.bool,
@@ -61,6 +62,7 @@ export default compose(
   }),
   onlyUpdateForKeys([
     'accountName',
+    'accountColor',
     'isEmpty',
     'nativeCurrency',
     'pendingTransactionsCount',

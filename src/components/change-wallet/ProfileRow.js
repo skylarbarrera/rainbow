@@ -135,6 +135,7 @@ export default class ProfileRow extends Component {
     const {
       accountAddress,
       accountName,
+      accountColor,
       isHeader,
       onPress,
     } = this.props;
@@ -150,7 +151,7 @@ export default class ProfileRow extends Component {
         <ButtonPressAnimation scaleTo={0.96} onPress={onPress} onLongPress={this.onLongPress}>
           <Container style={{ padding: isHeader ? 15 : 10 }}>
             <LeftSide>
-              <AvatarCircle style={{ backgroundColor: colors.purple, height: avatarSize, width: avatarSize }} >
+              <AvatarCircle style={{ backgroundColor: colors.avatarColor[accountColor], height: avatarSize, width: avatarSize }} >
                 <FirstLetter style={{ fontSize: isHeader ? 18 : 15, lineHeight: isHeader ? 31 : 29 }}>
                   {new GraphemeSplitter().splitGraphemes(accountName)[0]}
                 </FirstLetter>
@@ -162,11 +163,11 @@ export default class ProfileRow extends Component {
                 <AddressAbbreviation address={accountAddress} />
               </View>
             </LeftSide>
-            <MoneyAmountWrapper>
+            {/* <MoneyAmountWrapper>
               <MoneyAmount>
                 $829.24
               </MoneyAmount>
-            </MoneyAmountWrapper>
+            </MoneyAmountWrapper> */}
           </Container>
         </ButtonPressAnimation>
       </Swipeable>
@@ -176,6 +177,7 @@ export default class ProfileRow extends Component {
 
 ProfileRow.propTypes = {
   accountAddress: PropTypes.string.isRequired,
+  accountColor: PropTypes.number.isRequired,
   accountName: PropTypes.string.isRequired,
   isHeader: PropTypes.bool,
   onEditWallet: PropTypes.func,

@@ -14,6 +14,7 @@ const SETTINGS_UPDATE_NETWORK = 'settings/SETTINGS_UPDATE_NETWORK';
 const SETTINGS_UPDATE_CHAIN_ID = 'settings/SETTINGS_UPDATE_CHAIN_ID';
 const SETTINGS_UPDATE_SETTINGS_ADDRESS = 'settings/SETTINGS_UPDATE_SETTINGS_ADDRESS';
 const SETTINGS_UPDATE_SETTINGS_NAME = 'settings/SETTINGS_UPDATE_SETTINGS_NAME';
+const SETTINGS_UPDATE_SETTINGS_COLOR = 'settings/SETTINGS_UPDATE_SETTINGS_COLOR';
 
 const SETTINGS_UPDATE_NATIVE_CURRENCY_SUCCESS = 'settings/SETTINGS_UPDATE_NATIVE_CURRENCY_SUCCESS';
 const SETTINGS_UPDATE_NATIVE_CURRENCY_FAILURE = 'settings/SETTINGS_UPDATE_NATIVE_CURRENCY_FAILURE';
@@ -60,6 +61,16 @@ export const settingsUpdateAccountName = (accountName) => (
   dispatch({
     payload: { accountName },
     type: SETTINGS_UPDATE_SETTINGS_NAME,
+  });
+};
+
+export const settingsUpdateAccountColor = (accountColor) => (
+  dispatch,
+  getState,
+) => {
+  dispatch({
+    payload: { accountColor },
+    type: SETTINGS_UPDATE_SETTINGS_COLOR,
   });
 };
 
@@ -115,6 +126,7 @@ export const settingsChangeNativeCurrency = nativeCurrency => (
 // -- Reducer --------------------------------------------------------------- //
 export const INITIAL_STATE = {
   accountAddress: '',
+  accountColor: 0,
   accountName: '',
   accountType: '',
   chainId: 1,
@@ -135,6 +147,11 @@ export default (state = INITIAL_STATE, action) => {
     return {
       ...state,
       accountName: action.payload.accountName,
+    };
+  case SETTINGS_UPDATE_SETTINGS_COLOR:
+    return {
+      ...state,
+      accountColor: action.payload.accountColor,
     };
   case SETTINGS_UPDATE_NATIVE_CURRENCY_SUCCESS:
     return {

@@ -56,16 +56,17 @@ const FirstLetter = styled(Text)`
 
 const ProfileMasthead = ({
   accountAddress,
-  displayName,
+  accountColor,
+  accountName,
   emojiCount,
   onPressCopy,
   onPressReceive,
   showBottomDivider,
 }) => (
   <Container>
-    <AvatarCircle style={{ backgroundColor: colors.purple }} >
+    <AvatarCircle style={{ backgroundColor: colors.avatarColor[accountColor] }} >
       <FirstLetter>
-        {displayName && (new GraphemeSplitter().splitGraphemes(displayName)[0])}
+        {accountName && (new GraphemeSplitter().splitGraphemes(accountName)[0])}
       </FirstLetter>
     </AvatarCircle>
     <CopyTooltip textToCopy={accountAddress} tooltipText="Copy Address">
@@ -99,7 +100,8 @@ const ProfileMasthead = ({
 
 ProfileMasthead.propTypes = {
   accountAddress: PropTypes.string,
-  displayName: PropTypes.string,
+  accountColor: PropTypes.number,
+  accountName: PropTypes.string,
   emojiCount: PropTypes.number,
   onPressCopy: PropTypes.func,
   onPressReceive: PropTypes.func,
@@ -119,5 +121,5 @@ export default compose(
     },
     onPressReceive: ({ navigation }) => () => navigation.navigate('ReceiveModal'),
   }),
-  onlyUpdateForKeys(['accountAddress', 'displayName', 'emojiCount', 'showBottomDivider']),
+  onlyUpdateForKeys(['accountAddress', 'accountColor', 'accountName', 'emojiCount', 'showBottomDivider']),
 )(ProfileMasthead);

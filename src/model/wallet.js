@@ -27,12 +27,12 @@ export function generateSeedPhrase() {
   return ethers.utils.HDNode.entropyToMnemonic(ethers.utils.randomBytes(16));
 }
 
-export const walletInit = async (seedPhrase = null, accountName = null) => {
+export const walletInit = async (seedPhrase = null, accountName = null, color = null) => {
   let walletAddress = null;
   let isImported = false;
   let isNew = false;
   if (!isEmpty(seedPhrase)) {
-    walletAddress = await createWallet(seedPhrase, accountName);
+    walletAddress = await createWallet(seedPhrase, accountName, color);
     isImported = !isNil(walletAddress);
     return { isImported, isNew, walletAddress };
   }
@@ -126,7 +126,7 @@ export const loadAddress = async () => {
   }
 };
 
-export const createWallet = async (seed, name) => {
+export const createWallet = async (seed, name, color) => {
   const walletSeed = seed || generateSeedPhrase();
   let wallet = null;
   try {
@@ -141,7 +141,7 @@ export const createWallet = async (seed, name) => {
       wallet = new ethers.Wallet(node.privateKey);
     }
     if (wallet) {
-      saveWalletDetails(name, walletSeed, wallet.privateKey, wallet.address);
+      saveWalletDetails(name, color, walletSeed, wallet.privateKey, wallet.address);
       return wallet.address;
     }
     return null;
@@ -150,7 +150,7 @@ export const createWallet = async (seed, name) => {
   }
 };
 
-export const saveWalletDetails = async (name, seedPhrase, privateKey, address) => {
+export const saveWalletDetails = async (name, color, seedPhrase, privateKey, address) => {
   const canAuthenticate = await canImplyAuthentication({ authenticationType: AUTHENTICATION_TYPE.DEVICE_PASSCODE_OR_BIOMETRICS });
   let accessControlOptions = {};
   if (canAuthenticate) {
@@ -159,7 +159,10 @@ export const saveWalletDetails = async (name, seedPhrase, privateKey, address) =
   if (!name) {
     name = 'My Wallet';
   }
-  saveUserInfo(name, seedPhrase, privateKey, address, accessControlOptions);
+  if (!color) {
+    color = 0;
+  }
+  saveUserInfo(name, color, seedPhrase, privateKey, address, accessControlOptions);
   saveSeedPhrase(seedPhrase, accessControlOptions);
   savePrivateKey(privateKey, accessControlOptions);
   saveAddress(address);
@@ -200,9 +203,10 @@ const saveAddress = async (address) => {
   await keychain.saveString(addressKey, address);
 };
 
-export const saveUserInfo = async (name, seedPhrase, privateKey, address, accessControlOptions = {}) => {
+export const saveUserInfo = async (name, color, seedPhrase, privateKey, address, accessControlOptions = {}) => {
   const newProfile = {
     address,
+    color,
     name,
     privateKey,
     seedPhrase,
@@ -246,9 +250,10 @@ export const deleteUserInfo = async (address, accessControlOptions = {}) => {
   return false;
 };
 
-export const editUserInfo = async (name, seedPhrase, privateKey, address, accessControlOptions = {}) => {
+export const editUserInfo = async (name, color, seedPhrase, privateKey, address, accessControlOptions = {}) => {
   const newProfile = {
     address,
+    color,
     name,
     privateKey,
     seedPhrase,
@@ -272,17 +277,19 @@ export const editUserInfo = async (name, seedPhrase, privateKey, address, access
   return false;
 };
 
-export const loadUserNameForAddress = async (address, accessControlOptions = {}) => {
+export const loadUserDataForAddress = async (address, accessControlOptions = {}) => {
   let searchedName;
+  let searchedColor;
   const usersInfo = await loadUsersInfo();
   if (usersInfo) {
     for (let i = 0; i < usersInfo.length; i++) {
       if (usersInfo[i].address === address) {
         searchedName = usersInfo[i].name;
+        searchedColor = usersInfo[i].color;
       }
     }
   }
-  return searchedName;
+  return { searchedColor, searchedName };
 };
 
 export const loadUsersInfo = async () => {

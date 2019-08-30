@@ -12,6 +12,7 @@ import HeaderProfileInfo from '../components/header/HeaderProfileInfo';
 
 const ProfileScreen = ({
   accountAddress,
+  accountColor,
   accountName,
   blurIntensity,
   isEmpty,
@@ -30,9 +31,10 @@ const ProfileScreen = ({
         <Icon name="gear" />
       </HeaderButton>
       <HeaderProfileInfo
-        displayName={accountName}
-        onPress={onPressProfileHeader}
         accountAddress={accountAddress}
+        accountColor={accountColor}
+        accountName={accountName}
+        onPress={onPressProfileHeader}
       >
         <Icon name="gear" />
       </HeaderProfileInfo>
@@ -43,15 +45,17 @@ const ProfileScreen = ({
     </Header>
     <ActivityList
       accountAddress={accountAddress}
+      accountColor={accountColor}
+      accountName={accountName}
       header={(
         <ProfileMasthead
           accountAddress={accountAddress}
+          accountColor={accountColor}
+          accountName={accountName}
           navigation={navigation}
           showBottomDivider={!isEmpty}
-          displayName={accountName}
         />
       )}
-      accountName={accountName}
       isEmpty={isEmpty}
       nativeCurrency={nativeCurrency}
       requests={requests}
@@ -64,6 +68,7 @@ const ProfileScreen = ({
 
 ProfileScreen.propTypes = {
   accountAddress: PropTypes.string,
+  accountColor: PropTypes.number,
   accountName: PropTypes.string,
   blurIntensity: PropTypes.object,
   isEmpty: PropTypes.bool,

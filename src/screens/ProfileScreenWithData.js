@@ -3,7 +3,6 @@ import {
   withHandlers,
   withProps,
   withState,
-  lifecycle,
 } from 'recompact';
 import { setDisplayName } from 'recompose';
 import {
@@ -15,7 +14,7 @@ import {
   withRequests,
 } from '../hoc';
 import ProfileScreen from './ProfileScreen';
-import { loadUsersInfo, saveCurrentUserInfo } from '../model/wallet';
+import { loadUsersInfo } from '../model/wallet';
 
 export default compose(
   setDisplayName('ProfileScreen'),

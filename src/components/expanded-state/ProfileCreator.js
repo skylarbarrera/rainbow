@@ -30,8 +30,9 @@ import CopyTooltip from '../CopyTooltip';
 import { showActionSheetWithOptions } from '../../utils/actionsheet';
 import { deleteUserInfo, editUserInfo } from '../../model/wallet';
 import store from '../../redux/store';
-import { settingsUpdateAccountName } from '../../redux/settings';
+import { settingsUpdateAccountName, settingsUpdateAccountColor } from '../../redux/settings';
 import { makeSpaceAfterFirstEmoji } from '../../helpers/emojiHandler';
+import { LoadingOverlay } from '../modal';
 
 const TopMenu = styled(View)`
   justify-content: center;
@@ -98,12 +99,14 @@ class ProfileCreator extends React.PureComponent {
 
     this.state = {
       color: 0,
+      isCreatingWallet: false,
       value: '',
     };
   }
 
   componentDidMount = () => {
     const newState = {
+      color: this.props.isNewProfile ? Math.floor(Math.random() * colors.avatarColor.length) : this.props.profile.color,
       value: '',
     };
     if (this.props.profile.name) {
@@ -137,9 +140,10 @@ class ProfileCreator extends React.PureComponent {
   editProfile = async () => {
     if (this.state.value.length > 0) {
       const { address, privateKey, seedPhrase } = this.props.profile;
-      await editUserInfo(makeSpaceAfterFirstEmoji(this.state.value), seedPhrase, privateKey, address);
+      await editUserInfo(makeSpaceAfterFirstEmoji(this.state.value), this.state.color, seedPhrase, privateKey, address);
       if (this.props.isCurrentProfile) {
         store.dispatch(settingsUpdateAccountName(makeSpaceAfterFirstEmoji(this.state.value)));
+        store.dispatch(settingsUpdateAccountColor(this.state.color));
       }
       this.props.onCloseModal();
       this.props.navigation.goBack();
@@ -148,10 +152,14 @@ class ProfileCreator extends React.PureComponent {
 
   addProfileInfo = async () => {
     if (this.state.value.length > 0) {
-      await store.dispatch(settingsUpdateAccountName(makeSpaceAfterFirstEmoji(this.state.value)));
+      this.setState({ isCreatingWallet: true });
+      setTimeout(async () => {
+        await store.dispatch(settingsUpdateAccountName(makeSpaceAfterFirstEmoji(this.state.value)));
+        await store.dispatch(settingsUpdateAccountColor(this.state.color));
+        this.props.onCloseModal();
+        this.props.navigation.goBack();
+      }, 10);
     }
-    this.props.onCloseModal();
-    this.props.navigation.goBack();
   }
 
   onDeleteProfile = () => {
@@ -181,6 +189,9 @@ class ProfileCreator extends React.PureComponent {
         style={{ width: deviceUtils.dimensions.width }}
         onPress={this.editProfile}
       >
+        {this.state.isCreatingWallet && (
+          <LoadingOverlay title="Creating Wallet..." />
+        )}
         <KeyboardAvoidingView behavior="padding">
           <FloatingPanels>
             <Container>

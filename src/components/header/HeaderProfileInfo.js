@@ -83,17 +83,18 @@ const FirstLetter = styled(Text)`
 
 const HeaderProfileInfo = ({
   accountAddress,
-  displayName,
+  accountColor,
+  accountName,
   onPress,
 }) => {
-  const name = displayName ? removeFirstEmojiFromString(displayName) : '';
+  const name = accountName ? removeFirstEmojiFromString(accountName) : '';
 
   return (
     <ButtonPressAnimation onPress={onPress} scaleTo={0.90}>
       <Container>
-        <AvatarCircle style={{ backgroundColor: colors.purple }} >
+        <AvatarCircle style={{ backgroundColor: colors.avatarColor[accountColor] }} >
           <FirstLetter>
-            {new GraphemeSplitter().splitGraphemes(displayName)[0]}
+            {new GraphemeSplitter().splitGraphemes(accountName)[0]}
           </FirstLetter>
         </AvatarCircle>
         <RightSide>
@@ -114,7 +115,8 @@ const HeaderProfileInfo = ({
 
 HeaderProfileInfo.propTypes = {
   accountAddress: PropTypes.string,
-  displayName: PropTypes.string,
+  accountColor: PropTypes.number,
+  accountName: PropTypes.string,
   onPress: PropTypes.func.isRequired,
 };
 

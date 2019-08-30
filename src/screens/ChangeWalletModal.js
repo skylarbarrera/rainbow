@@ -45,6 +45,7 @@ const ChangeWalletModal = ({
           <ProfileRow
             key={profile.address}
             accountName={profile.name}
+            accountColor={profile.color}
             accountAddress={profile.address}
             onPress={() => onChangeWallet(profile)}
             onEditWallet={() => navigation.navigate('ExpandedAssetScreen', {
@@ -64,6 +65,7 @@ const ChangeWalletModal = ({
   if (currentProfile) {
     renderCurrentProfile = <ProfileRow
       accountName={currentProfile.name}
+      accountColor={currentProfile.color}
       accountAddress={accountAddress}
       isHeader
       onPress={() => navigation.goBack()}
@@ -151,9 +153,7 @@ export default compose(
     },
     onPressImportSeedPhrase: ({ navigation, setSafeTimeout }) => () => {
       navigation.goBack();
-      InteractionManager.runAfterInteractions(() => {
-        navigation.navigate('ImportSeedPhraseSheet');
-      });
+      navigation.navigate('ImportSeedPhraseSheet');
     },
     setCurrentProfile: ({ setCurrentProfile }) => (currentProfile) => {
       setCurrentProfile(currentProfile);

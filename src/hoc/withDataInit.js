@@ -21,6 +21,7 @@ import {
 import {
   settingsLoadState,
   settingsUpdateAccountAddress,
+  settingsUpdateAccountColor,
   settingsUpdateAccountName,
 } from '../redux/settings';
 import {
@@ -33,7 +34,7 @@ import {
   uniqueTokensLoadState,
   uniqueTokensRefreshState,
 } from '../redux/uniqueTokens';
-import { walletInit, saveWalletDetails, saveName, loadUserNameForAddress, createWallet } from '../model/wallet';
+import { walletInit, saveWalletDetails, saveName, loadUserDataForAddress, createWallet } from '../model/wallet';
 import {
   walletConnectLoadState,
   walletConnectClearState,
@@ -90,6 +91,7 @@ export default Component => compose(
     setIsWalletEthZero,
     settingsLoadState,
     settingsUpdateAccountAddress,
+    settingsUpdateAccountColor,
     settingsUpdateAccountName,
     uniqueTokensClearState,
     uniqueTokensLoadState,
@@ -159,8 +161,10 @@ export default Component => compose(
     createNewWallet: (ownProps) => async () => {
       try {
         const name = ownProps.accountName || 'My Wallet';
-        const walletAddress = await createWallet(false, name);
+        const color = ownProps.accountColor || 0;
+        const walletAddress = await createWallet(false, name, color);
         ownProps.settingsUpdateAccountName(name);
+        ownProps.settingsUpdateAccountColor(color);
         return await walletInitialization(false, true, walletAddress, ownProps);
       } catch (error) {
         // TODO specify error states more granular
@@ -171,15 +175,20 @@ export default Component => compose(
     },
     initializeWallet: (ownProps) => async (seedPhrase) => {
       try {
-        const { isImported, isNew, walletAddress } = await walletInit(seedPhrase, ownProps.accountName);
+        const { isImported, isNew, walletAddress } = await walletInit(seedPhrase, ownProps.accountName, ownProps.accountColor);
         let name = ownProps.accountName ? ownProps.accountName : 'My Wallet';
-        if (!ownProps.accountName) {
-          const localName = await loadUserNameForAddress(walletAddress);
-          if (localName) {
-            name = localName;
+        let color = ownProps.accountColor ? ownProps.accountColor : 0;
+
+        if (!ownProps.accountName && !ownProps.accountColor) {
+          const localData = await loadUserDataForAddress(walletAddress);
+          if (localData) {
+            name = localData.searchedName;
+            color = localData.searchedColor;
           }
         }
+
         ownProps.settingsUpdateAccountName(name);
+        ownProps.settingsUpdateAccountColor(color);
         return await walletInitialization(isImported, isNew, walletAddress, ownProps);
       } catch (error) {
         // TODO specify error states more granular
@@ -190,8 +199,9 @@ export default Component => compose(
     },
     initializeWalletWithProfile: (ownProps) => async (isImported, isNew, profile) => {
       try {
-        saveWalletDetails(profile.name, profile.seedPhrase, profile.privateKey, profile.address);
+        saveWalletDetails(profile.name, profile.color, profile.seedPhrase, profile.privateKey, profile.address);
         ownProps.settingsUpdateAccountName(profile.name);
+        ownProps.settingsUpdateAccountColor(profile.color);
         saveName(profile.name);
         return await walletInitialization(isImported, isNew, profile.address, ownProps);
       } catch (error) {

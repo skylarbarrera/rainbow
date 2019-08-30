@@ -47,7 +47,10 @@ const LoadingState = ({ children }) => (
 );
 
 const hasRowChanged = (r1, r2) => {
-  if (r1.hash === '_header' && (isNewValueForPath(r1, r2, 'header.props.accountAddress') || isNewValueForPath(r1, r2, 'header.props.displayName'))) {
+  if (r1.hash === '_header' && (
+    isNewValueForPath(r1, r2, 'header.props.accountAddress')
+    || isNewValueForPath(r1, r2, 'header.props.accountName')
+    || isNewValueForPath(r1, r2, 'header.props.accountColor'))) {
     return true;
   }
 
