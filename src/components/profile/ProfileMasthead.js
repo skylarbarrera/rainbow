@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Clipboard, View, Text } from 'react-native';
-import FastImage from 'react-native-fast-image';
 import {
   compose,
   onlyUpdateForKeys,
@@ -10,8 +9,7 @@ import {
 } from 'recompact';
 import GraphemeSplitter from 'grapheme-splitter';
 import styled from 'styled-components/primitives';
-import AvatarImageSource from '../../assets/avatar.png';
-import { borders, margin, colors } from '../../styles';
+import { margin, colors } from '../../styles';
 import { abbreviations } from '../../utils';
 import CopyTooltip from '../CopyTooltip';
 import Divider from '../Divider';
@@ -62,41 +60,46 @@ const ProfileMasthead = ({
   onPressCopy,
   onPressReceive,
   showBottomDivider,
-}) => (
-  <Container>
-    <AvatarCircle style={{ backgroundColor: colors.avatarColor[accountColor] }} >
-      <FirstLetter>
-        {accountName && (new GraphemeSplitter().splitGraphemes(accountName)[0])}
-      </FirstLetter>
-    </AvatarCircle>
-    <CopyTooltip textToCopy={accountAddress} tooltipText="Copy Address">
-      <AddressAbbreviation address={accountAddress} />
-    </CopyTooltip>
-    <RowWithMargins align="center" margin={1}>
-      <Column>
+}) => {
+  const name = accountName || 'My Wallet';
+  const color = accountColor || 0;
+
+  return (
+    <Container>
+      <AvatarCircle style={{ backgroundColor: colors.avatarColor[color] }} >
+        <FirstLetter>
+          {new GraphemeSplitter().splitGraphemes(name)[0]}
+        </FirstLetter>
+      </AvatarCircle>
+      <CopyTooltip textToCopy={accountAddress} tooltipText="Copy Address">
+        <AddressAbbreviation address={accountAddress} />
+      </CopyTooltip>
+      <RowWithMargins align="center" margin={1}>
+        <Column>
+          <ProfileAction
+            icon="copy"
+            onPress={onPressCopy}
+            scaleTo={0.82}
+            text="Copy"
+          />
+          <FloatingEmojis
+            count={emojiCount}
+            distance={130}
+            emoji="+1"
+            size="h2"
+          />
+        </Column>
         <ProfileAction
-          icon="copy"
-          onPress={onPressCopy}
+          icon="inbox"
+          onPress={onPressReceive}
           scaleTo={0.82}
-          text="Copy"
+          text="Receive"
         />
-        <FloatingEmojis
-          count={emojiCount}
-          distance={130}
-          emoji="+1"
-          size="h2"
-        />
-      </Column>
-      <ProfileAction
-        icon="inbox"
-        onPress={onPressReceive}
-        scaleTo={0.82}
-        text="Receive"
-      />
-    </RowWithMargins>
-    {showBottomDivider && <Divider style={{ bottom: 0, position: 'absolute' }} />}
-  </Container>
-);
+      </RowWithMargins>
+      {showBottomDivider && <Divider style={{ bottom: 0, position: 'absolute' }} />}
+    </Container>
+  );
+};
 
 ProfileMasthead.propTypes = {
   accountAddress: PropTypes.string,

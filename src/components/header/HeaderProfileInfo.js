@@ -87,20 +87,21 @@ const HeaderProfileInfo = ({
   accountName,
   onPress,
 }) => {
-  const name = accountName ? removeFirstEmojiFromString(accountName) : '';
+  const name = accountName || 'My Wallet';
+  const color = accountColor || 0;
 
   return (
     <ButtonPressAnimation onPress={onPress} scaleTo={0.90}>
       <Container>
-        <AvatarCircle style={{ backgroundColor: colors.avatarColor[accountColor] }} >
+        <AvatarCircle style={{ backgroundColor: colors.avatarColor[color] }} >
           <FirstLetter>
-            {new GraphemeSplitter().splitGraphemes(accountName)[0]}
+            {new GraphemeSplitter().splitGraphemes(name)[0]}
           </FirstLetter>
         </AvatarCircle>
         <RightSide>
           <TopRow>
             <Nickname numberOfLines={1}>
-              {name}
+              {removeFirstEmojiFromString(name)}
             </Nickname>
             <ArrowWrapper>
               <SettingIcon source={Caret} />
