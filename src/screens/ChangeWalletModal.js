@@ -15,6 +15,7 @@ import ProfileDivider from '../components/change-wallet/ProfileDivider';
 import ProfileOption from '../components/change-wallet/ProfileOption';
 import { withDataInit, withIsWalletImporting, withAccountAddress } from '../hoc';
 import { loadUsersInfo } from '../model/wallet';
+import ProfileList from '../components/change-wallet/ProfileList';
 
 const Container = styled.View`
   padding-top: 2px;
@@ -36,51 +37,19 @@ const ChangeWalletModal = ({
   onPressSection,
   profiles,
 }) => {
-  let renderProfiles = null;
-  let renderCurrentProfile = null;
-  let currentProfile;
+  let currentProfile = false;
   if (profiles) {
-    renderProfiles = profiles.map((profile) => {
-      if (profile.address.toLowerCase() !== accountAddress) {
-        return (
-          <ProfileRow
-            key={profile.address}
-            accountName={profile.name}
-            accountColor={profile.color}
-            accountAddress={profile.address}
-            onPress={() => onChangeWallet(profile)}
-            onEditWallet={() => navigation.navigate('ExpandedAssetScreen', {
-              address: profile.address,
-              asset: [],
-              isCurrentProfile: false,
-              onCloseModal: () => onCloseEditProfileModal(),
-              profile,
-              type: 'profile_creator',
-            })}
-          />);
+    for (let i = 0; i < profiles.length; i++) {
+      if (profiles[i].address.toLowerCase() === accountAddress) {
+        currentProfile = profiles[i];
       }
-      currentProfile = profile;
-      return null;
-    });
-  }
-  if (currentProfile) {
-    renderCurrentProfile = <ProfileRow
-      accountName={currentProfile.name}
-      accountColor={currentProfile.color}
-      accountAddress={accountAddress}
-      isHeader
-      onPress={() => navigation.goBack()}
-      onEditWallet={() => navigation.navigate('ExpandedAssetScreen', {
-        address: accountAddress,
-        asset: [],
-        isCurrentProfile: true,
-        onCloseModal: () => onCloseEditProfileModal(true),
-        profile: currentProfile,
-        type: 'profile_creator',
-      })}
-    />;
+    }
   }
   const size = profiles ? profiles.length - 1 : 0;
+  let listHeight = (profileRowHeight * 2) + (profileRowHeight * size);
+  if (listHeight > 258) {
+    listHeight = 258;
+  }
   return (
     <View>
       {isCreatingWallet && (
@@ -88,16 +57,36 @@ const ChangeWalletModal = ({
       )}
       <Modal
         fixedToTop
-        height={headerHeight + (profileRowHeight * 2) + (profileRowHeight * size)}
+        height={headerHeight + listHeight}
         onCloseModal={onCloseModal}
         style={{ borderRadius: 18 }}
       >
         <Container>
-          {renderCurrentProfile}
+          {currentProfile && <ProfileRow
+            accountName={currentProfile.name}
+            accountColor={currentProfile.color}
+            accountAddress={accountAddress}
+            isHeader
+            onPress={() => navigation.goBack()}
+            onEditWallet={() => navigation.navigate('ExpandedAssetScreen', {
+              address: accountAddress,
+              asset: [],
+              isCurrentProfile: true,
+              onCloseModal: () => onCloseEditProfileModal(true),
+              profile: currentProfile,
+              type: 'profile_creator',
+            })}
+          />}
           <ProfileDivider />
-          {renderProfiles}
-          <ProfileOption icon={'plus'} label={'Create a Wallet'} onPress={onPressCreateWallet}/>
-          <ProfileOption icon={'gear'} label={'Import a Wallet'} onPress={onPressImportSeedPhrase}/>
+          <ProfileList
+            accountAddress={accountAddress}
+            allAssets={profiles}
+            height={listHeight}
+            onChangeWallet={onChangeWallet}
+            onCloseEditProfileModal={onCloseEditProfileModal}
+            onPressCreateWallet={onPressCreateWallet}
+            onPressImportSeedPhrase={onPressImportSeedPhrase}
+          />
         </Container>
       </Modal>
     </View>

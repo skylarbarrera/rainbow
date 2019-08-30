@@ -148,7 +148,7 @@ export default class ProfileRow extends Component {
         rightThreshold={20}
         renderRightActions={this.renderRightActions}
       >
-        <ButtonPressAnimation scaleTo={0.96} onPress={onPress} onLongPress={this.onLongPress}>
+        <ButtonPressAnimation scaleTo={0.96} onPress={onPress} onPressStart={this.props.onTouch} onLongPress={this.onLongPress}>
           <Container style={{ padding: isHeader ? 15 : 10 }}>
             <LeftSide>
               <AvatarCircle style={{ backgroundColor: colors.avatarColor[accountColor], height: avatarSize, width: avatarSize }} >
@@ -183,6 +183,7 @@ ProfileRow.propTypes = {
   onEditWallet: PropTypes.func,
   onPress: PropTypes.func,
   onSwipeOpen: PropTypes.func,
+  onTouch: PropTypes.func,
 };
 
 ProfileRow.defaultProps = {

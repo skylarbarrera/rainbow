@@ -4,7 +4,6 @@ import { colors } from '../../styles';
 
 const DividerWrapper = styled.View`
   padding-top: 2px;
-  padding-bottom: 4px;
 `;
 
 const Divider = styled.View`
