@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components/primitives';
-import { InteractionManager } from 'react-native';
+import { View } from 'react-native';
 import {
   compose,
   lifecycle,
@@ -82,23 +82,25 @@ const ChangeWalletModal = ({
   }
   const size = profiles ? profiles.length - 1 : 0;
   return (
-    <Modal
-      fixedToTop
-      height={headerHeight + (profileRowHeight * 2) + (profileRowHeight * size)}
-      onCloseModal={onCloseModal}
-      style={{ borderRadius: 18 }}
-    >
+    <View>
       {isCreatingWallet && (
         <LoadingOverlay title="Creating Wallet..." />
       )}
-      <Container>
-        {renderCurrentProfile}
-        <ProfileDivider />
-        {renderProfiles}
-        <ProfileOption icon={'plus'} label={'Create a Wallet'} onPress={onPressCreateWallet}/>
-        <ProfileOption icon={'gear'} label={'Import a Wallet'} onPress={onPressImportSeedPhrase}/>
-      </Container>
-    </Modal>
+      <Modal
+        fixedToTop
+        height={headerHeight + (profileRowHeight * 2) + (profileRowHeight * size)}
+        onCloseModal={onCloseModal}
+        style={{ borderRadius: 18 }}
+      >
+        <Container>
+          {renderCurrentProfile}
+          <ProfileDivider />
+          {renderProfiles}
+          <ProfileOption icon={'plus'} label={'Create a Wallet'} onPress={onPressCreateWallet}/>
+          <ProfileOption icon={'gear'} label={'Import a Wallet'} onPress={onPressImportSeedPhrase}/>
+        </Container>
+      </Modal>
+    </View>
   );
 };
 
