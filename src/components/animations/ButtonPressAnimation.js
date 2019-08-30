@@ -98,7 +98,7 @@ export default class ButtonPressAnimation extends PureComponent {
     easing: Easing.bezier(0.25, 0.46, 0.45, 0.94),
     enableHapticFeedback: true,
     exclusive: true,
-    longPressDuration: 1000,
+    longPressDuration: 500,
     scaleTo: animations.keyframes.button.to.scale,
   }
 

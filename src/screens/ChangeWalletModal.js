@@ -9,7 +9,7 @@ import {
   withState,
 } from 'recompact';
 import { withNavigation } from 'react-navigation';
-import { Modal } from '../components/modal';
+import { Modal, LoadingOverlay } from '../components/modal';
 import ProfileRow from '../components/change-wallet/ProfileRow';
 import ProfileDivider from '../components/change-wallet/ProfileDivider';
 import ProfileOption from '../components/change-wallet/ProfileOption';
@@ -25,6 +25,7 @@ const profileRowHeight = 54;
 
 const ChangeWalletModal = ({
   accountAddress,
+  isCreatingWallet,
   navigation,
   onChangeWallet,
   onCloseEditProfileModal,
@@ -87,6 +88,9 @@ const ChangeWalletModal = ({
       onCloseModal={onCloseModal}
       style={{ borderRadius: 18 }}
     >
+      {isCreatingWallet && (
+        <LoadingOverlay title="Creating Wallet..." />
+      )}
       <Container>
         {renderCurrentProfile}
         <ProfileDivider />
@@ -101,6 +105,7 @@ const ChangeWalletModal = ({
 ChangeWalletModal.propTypes = {
   accountAddress: PropTypes.string,
   currentProfile: PropTypes.object,
+  isCreatingWallet: PropTypes.bool,
   navigation: PropTypes.object,
   onChangeWallet: PropTypes.func,
   onCloseEditProfileModal: PropTypes.func,
@@ -119,7 +124,7 @@ export default compose(
   withIsWalletImporting,
   withState('currentProfile', 'setCurrentProfile', undefined),
   withState('profiles', 'setProfiles', undefined),
-  withState('currentOpenRow', 'setCurrentOpenRow', undefined),
+  withState('isCreatingWallet', 'setIsCreatingWallet', false),
   withHandlers({
     onChangeWallet: ({ initializeWalletWithProfile, navigation, setIsWalletImporting }) => async (profile) => {
       navigation.navigate('WalletScreen');
@@ -132,19 +137,22 @@ export default compose(
       setProfiles(newProfiles);
     },
     onCloseModal: ({ navigation }) => () => navigation.goBack(),
-    onPressCreateWallet: ({ createNewWallet, navigation, clearAccountData }) => () => {
+    onPressCreateWallet: ({ createNewWallet, navigation, clearAccountData, setIsCreatingWallet }) => () => {
       navigation.navigate('ExpandedAssetScreen', {
         actionType: 'Create',
         address: undefined,
         asset: [],
         isCurrentProfile: false,
         isNewProfile: true,
-        onCloseModal: async (isCanceled) => {
+        onCloseModal: (isCanceled) => {
           if (!isCanceled) {
-            await clearAccountData();
-            await createNewWallet();
-            navigation.goBack();
-            navigation.navigate('WalletScreen');
+            setIsCreatingWallet(true);
+            setTimeout(async () => {
+              await clearAccountData();
+              await createNewWallet();
+              navigation.goBack();
+              navigation.navigate('WalletScreen');
+            }, 20);
           }
         },
         profile: {},

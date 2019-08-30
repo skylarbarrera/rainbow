@@ -213,14 +213,21 @@ export const saveUserInfo = async (name, color, seedPhrase, privateKey, address,
   };
   let newProfilesTable = [];
   let userAlreadyInProfiles = false;
+  let userIndex = 0;
   const usersInfo = await loadUsersInfo();
   if (usersInfo) {
     newProfilesTable = usersInfo;
     for (let i = 0; i < newProfilesTable.length; i++) {
       if (usersInfo[i].address === address) {
         userAlreadyInProfiles = true;
+        userIndex = i;
       }
     }
+  }
+  if (userAlreadyInProfiles) {
+    newProfilesTable.splice(userIndex, 1, newProfile);
+    await keychain.saveObject(profiles, newProfilesTable);
+    return true;
   }
   if (!userAlreadyInProfiles) {
     newProfilesTable.push(newProfile);
@@ -230,7 +237,7 @@ export const saveUserInfo = async (name, color, seedPhrase, privateKey, address,
   return false;
 };
 
-export const deleteUserInfo = async (address, accessControlOptions = {}) => {
+export const deleteUserInfo = async (address) => {
   let newProfilesTable = [];
   let searchedUserIndex;
   const usersInfo = await loadUsersInfo();
@@ -244,13 +251,13 @@ export const deleteUserInfo = async (address, accessControlOptions = {}) => {
   }
   if (searchedUserIndex >= 0) {
     newProfilesTable.splice(searchedUserIndex, 1);
-    await keychain.saveString(profiles, JSON.stringify(newProfilesTable), accessControlOptions);
+    await keychain.saveObject(profiles, newProfilesTable);
     return true;
   }
   return false;
 };
 
-export const editUserInfo = async (name, color, seedPhrase, privateKey, address, accessControlOptions = {}) => {
+export const editUserInfo = async (name, color, seedPhrase, privateKey, address) => {
   const newProfile = {
     address,
     color,
@@ -271,7 +278,7 @@ export const editUserInfo = async (name, color, seedPhrase, privateKey, address,
   }
   if (searchedUserIndex >= 0) {
     newProfilesTable.splice(searchedUserIndex, 1, newProfile);
-    await keychain.saveString(profiles, JSON.stringify(newProfilesTable), accessControlOptions);
+    await keychain.saveObject(profiles, newProfilesTable);
     return true;
   }
   return false;

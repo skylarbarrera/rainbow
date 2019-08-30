@@ -152,13 +152,11 @@ class ProfileCreator extends React.PureComponent {
 
   addProfileInfo = async () => {
     if (this.state.value.length > 0) {
-      this.setState({ isCreatingWallet: true });
-      setTimeout(async () => {
-        await store.dispatch(settingsUpdateAccountName(makeSpaceAfterFirstEmoji(this.state.value)));
-        await store.dispatch(settingsUpdateAccountColor(this.state.color));
-        this.props.onCloseModal();
-        this.props.navigation.goBack();
-      }, 10);
+      await store.dispatch(settingsUpdateAccountName(makeSpaceAfterFirstEmoji(this.state.value)));
+      await store.dispatch(settingsUpdateAccountColor(this.state.color));
+      Keyboard.dismiss();
+      this.props.onCloseModal();
+      this.props.navigation.goBack();
     }
   }
 
@@ -189,9 +187,6 @@ class ProfileCreator extends React.PureComponent {
         style={{ width: deviceUtils.dimensions.width }}
         onPress={this.editProfile}
       >
-        {this.state.isCreatingWallet && (
-          <LoadingOverlay title="Creating Wallet..." />
-        )}
         <KeyboardAvoidingView behavior="padding">
           <FloatingPanels>
             <Container>
