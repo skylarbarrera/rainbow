@@ -10,10 +10,12 @@ import ProfileRow from './ProfileRow';
 import ProfileOption from './ProfileOption';
 
 const rowHeight = 50;
+const lastRowPadding = 10;
 
 let position = 0;
 
 const WALLET_ROW = 1;
+const WALLET_LAST_ROW = 2;
 
 class ProfileList extends React.Component {
   changeCurrentlyUsedContact = (address) => {
@@ -28,7 +30,12 @@ class ProfileList extends React.Component {
 
   balancesRenderItem = profile => (
     profile.isOption
-      ? <ProfileOption icon={profile.icon} label={profile.label} onPress={profile.onPress}/>
+      ? <ProfileOption
+        icon={profile.icon}
+        label={profile.label}
+        onPress={profile.onPress}
+        isInitializationOver={this.props.isInitializationOver}
+      />
       : <ProfileRow
         key={profile.address}
         accountName={profile.name}
@@ -43,11 +50,10 @@ class ProfileList extends React.Component {
           profile,
           type: 'profile_creator',
         })}
-
-
         onTouch={this.closeAllDifferentContacts}
         onTransitionEnd={this.changeCurrentlyUsedContact}
         currentlyOpenProfile={this.touchedContact}
+        isInitializationOver={this.props.isInitializationOver}
       />
   );
 
@@ -59,11 +65,17 @@ class ProfileList extends React.Component {
     };
 
     this._layoutProvider = new LayoutProvider((i) => {
-      return WALLET_ROW;
+      if (i < this.props.allAssets.length) {
+        return WALLET_ROW;
+      }
+      return WALLET_LAST_ROW;
     }, (type, dim) => {
       if (type === WALLET_ROW) {
         dim.width = deviceUtils.dimensions.width;
         dim.height = rowHeight;
+      } else if (type === WALLET_LAST_ROW) {
+        dim.width = deviceUtils.dimensions.width;
+        dim.height = rowHeight + lastRowPadding;
       } else {
         dim.width = 0;
         dim.height = 0;
@@ -80,6 +92,9 @@ class ProfileList extends React.Component {
   }
 
   componentWillReceiveProps = (props) => {
+    if (this.props.isInitializationOver !== props.isInitializationOver) {
+      this.isInitalized = true;
+    }
     const newAssets = Object.assign([], props.allAssets);
     for (let i = 0; i < newAssets.length; i++) {
       if (this.props.accountAddress === newAssets[i].address.toLowerCase()) {
@@ -140,7 +155,21 @@ class ProfileList extends React.Component {
           rowRenderer={this._renderRow}
           dataProvider={
             new DataProvider((r1, r2) => {
-
+              if (this.isInitalized) {
+                if (r2 === this.state.profiles[this.state.profiles.length - 2]) {
+                  this.isInitalized = false;
+                }
+                return true;
+              }
+              if (this.touchedContact !== r2.address
+                && this.currentlyOpenProfile
+                && this.touchedContact !== this.currentlyOpenProfile
+                && !this.recentlyRendered) {
+                if (r2 === this.state.profiles[this.state.profiles.length - 2]) {
+                  this.recentlyRendered = true;
+                }
+                return true;
+              }
               if (r1 !== r2) {
                 return true;
               }
@@ -161,6 +190,8 @@ class ProfileList extends React.Component {
 ProfileList.propTypes = {
   accountAddress: PropTypes.string,
   allAssets: PropTypes.array,
+  height: PropTypes.number,
+  isInitializationOver: PropTypes.bool,
   navigation: PropTypes.object,
   onChangeWallet: PropTypes.func,
   onCloseEditProfileModal: PropTypes.func,

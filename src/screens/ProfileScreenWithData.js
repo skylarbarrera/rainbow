@@ -24,10 +24,9 @@ export default compose(
   withBlurTransitionProps,
   withIsWalletEmpty,
   withRequests,
-  withState('profiles', 'setProfiles', undefined),
   withHandlers({
     onPressBackButton: ({ navigation }) => () => navigation.navigate('WalletScreen'),
-    onPressProfileHeader: ({ navigation, setProfiles }) => async () => {
+    onPressProfileHeader: ({ navigation }) => async () => {
       const profiles = await loadUsersInfo();
       navigation.navigate('ChangeWalletModal', {
         profiles,

@@ -1,11 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import styled from 'styled-components/primitives';
-import {
-  View,
-  Animated,
-  Text,
-} from 'react-native';
+import { View, Animated, Text } from 'react-native';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import GraphemeSplitter from 'grapheme-splitter';
 import { abbreviations } from '../../utils';
@@ -37,6 +33,15 @@ const AddressAbbreviation = styled(TruncatedAddress).attrs({
   weight: 'medium',
 })`
   font-family: ${fonts.family.SFProText};
+  width: 100%;
+  opacity: 0.5;
+  text-transform: lowercase;
+`;
+
+const Address = styled(Text)`
+  font-family: ${fonts.family.SFProText};
+  font-size: ${fonts.size.smaller}
+  font-weight: ${fonts.weight.medium}
   width: 100%;
   opacity: 0.5;
   text-transform: lowercase;
@@ -84,17 +89,19 @@ const MoneyAmount = styled(Text)`
 
 export default class ProfileRow extends Component {
   componentWillReceiveProps = () => {
-    this.close();
-  }
+    if (this.props.isInitializationOver) {
+      this.close();
+    }
+  };
 
   onPress = () => {
     this.close();
     this.props.onEditWallet();
-  }
+  };
 
   onLongPress = () => {
     this._swipeableRow.openRight();
-  }
+  };
 
   renderRightAction = (x, progress, onPress) => {
     const trans = progress.interpolate({
@@ -102,7 +109,13 @@ export default class ProfileRow extends Component {
       outputRange: [x, 0],
     });
     return (
-      <Animated.View style={{ flex: 1, justifyContent: 'center', transform: [{ translateX: trans }] }}>
+      <Animated.View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          transform: [{ translateX: trans }],
+        }}
+      >
         <ButtonPressAnimation onPress={onPress} scaleTo={0.9}>
           <IconWrapper>
             <Icon
@@ -141,18 +154,35 @@ export default class ProfileRow extends Component {
     } = this.props;
     const avatarSize = isHeader ? 32 : 30;
     const name = accountName ? removeFirstEmojiFromString(accountName) : '';
-    return (
+    return this.props.isInitializationOver ? (
       <Swipeable
         ref={this.updateRef}
         friction={2}
         rightThreshold={20}
         renderRightActions={this.renderRightActions}
+        onSwipeableWillOpen={() => this.props.onTransitionEnd(accountAddress)}
       >
-        <ButtonPressAnimation scaleTo={0.96} onPress={onPress} onPressStart={this.props.onTouch} onLongPress={this.onLongPress}>
+        <ButtonPressAnimation
+          scaleTo={0.96}
+          onPress={onPress}
+          onPressStart={() => this.props.onTouch(accountAddress)}
+          onLongPress={this.onLongPress}
+        >
           <Container style={{ padding: isHeader ? 15 : 10 }}>
             <LeftSide>
-              <AvatarCircle style={{ backgroundColor: colors.avatarColor[accountColor], height: avatarSize, width: avatarSize }} >
-                <FirstLetter style={{ fontSize: isHeader ? 18 : 15, lineHeight: isHeader ? 31 : 29 }}>
+              <AvatarCircle
+                style={{
+                  backgroundColor: colors.avatarColor[accountColor],
+                  height: avatarSize,
+                  width: avatarSize,
+                }}
+              >
+                <FirstLetter
+                  style={{
+                    fontSize: isHeader ? 18 : 15,
+                    lineHeight: isHeader ? 31 : 29,
+                  }}
+                >
                   {new GraphemeSplitter().splitGraphemes(accountName)[0]}
                 </FirstLetter>
               </AvatarCircle>
@@ -171,6 +201,31 @@ export default class ProfileRow extends Component {
           </Container>
         </ButtonPressAnimation>
       </Swipeable>
+    ) : (
+      <Container style={{ padding: isHeader ? 15 : 10 }}>
+        <LeftSide>
+          <AvatarCircle
+            style={{
+              backgroundColor: colors.avatarColor[accountColor],
+              height: avatarSize,
+              width: avatarSize,
+            }}
+          >
+            <FirstLetter
+              style={{
+                fontSize: isHeader ? 18 : 15,
+                lineHeight: isHeader ? 31 : 29,
+              }}
+            >
+              {new GraphemeSplitter().splitGraphemes(accountName)[0]}
+            </FirstLetter>
+          </AvatarCircle>
+          <View>
+            <Nickname>{name}</Nickname>
+            <Address>{abbreviations.address(accountAddress, 4, abbreviations.defaultNumCharsPerSection)}</Address>
+          </View>
+        </LeftSide>
+      </Container>
     );
   }
 }
@@ -180,10 +235,12 @@ ProfileRow.propTypes = {
   accountColor: PropTypes.number.isRequired,
   accountName: PropTypes.string.isRequired,
   isHeader: PropTypes.bool,
+  isInitializationOver: PropTypes.bool,
   onEditWallet: PropTypes.func,
   onPress: PropTypes.func,
   onSwipeOpen: PropTypes.func,
   onTouch: PropTypes.func,
+  onTransitionEnd: PropTypes.func,
 };
 
 ProfileRow.defaultProps = {

@@ -12,7 +12,6 @@ import { withNavigation } from 'react-navigation';
 import { Modal, LoadingOverlay } from '../components/modal';
 import ProfileRow from '../components/change-wallet/ProfileRow';
 import ProfileDivider from '../components/change-wallet/ProfileDivider';
-import ProfileOption from '../components/change-wallet/ProfileOption';
 import { withDataInit, withIsWalletImporting, withAccountAddress } from '../hoc';
 import { loadUsersInfo } from '../model/wallet';
 import ProfileList from '../components/change-wallet/ProfileList';
@@ -27,6 +26,7 @@ const profileRowHeight = 54;
 const ChangeWalletModal = ({
   accountAddress,
   isCreatingWallet,
+  isInitializationOver,
   navigation,
   onChangeWallet,
   onCloseEditProfileModal,
@@ -76,6 +76,9 @@ const ChangeWalletModal = ({
               profile: currentProfile,
               type: 'profile_creator',
             })}
+            onTouch={() => null}
+            onTransitionEnd={() => null}
+            isInitializationOver={true}
           />}
           <ProfileDivider />
           <ProfileList
@@ -86,6 +89,7 @@ const ChangeWalletModal = ({
             onCloseEditProfileModal={onCloseEditProfileModal}
             onPressCreateWallet={onPressCreateWallet}
             onPressImportSeedPhrase={onPressImportSeedPhrase}
+            isInitializationOver={isInitializationOver}
           />
         </Container>
       </Modal>
@@ -97,6 +101,7 @@ ChangeWalletModal.propTypes = {
   accountAddress: PropTypes.string,
   currentProfile: PropTypes.object,
   isCreatingWallet: PropTypes.bool,
+  isInitializationOver: PropTypes.bool,
   navigation: PropTypes.object,
   onChangeWallet: PropTypes.func,
   onCloseEditProfileModal: PropTypes.func,
@@ -116,6 +121,7 @@ export default compose(
   withState('currentProfile', 'setCurrentProfile', undefined),
   withState('profiles', 'setProfiles', undefined),
   withState('isCreatingWallet', 'setIsCreatingWallet', false),
+  withState('isInitializationOver', 'setIsInitializationOver', false),
   withHandlers({
     onChangeWallet: ({ initializeWalletWithProfile, navigation, setIsWalletImporting }) => async (profile) => {
       navigation.navigate('WalletScreen');
@@ -165,6 +171,9 @@ export default compose(
     componentDidMount() {
       const profiles = this.props.navigation.getParam('profiles', []);
       this.props.setProfiles(profiles);
+      setTimeout(() => {
+        this.props.setIsInitializationOver(true);
+      }, 500);
     },
   }),
 )(ChangeWalletModal);

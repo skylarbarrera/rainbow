@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import lang from 'i18n-js';
-import { get, isEmpty, isNil } from 'lodash';
+import { get, isEmpty, isNil, orderBy } from 'lodash';
 import { Alert } from 'react-native';
 import {
   ACCESS_CONTROL,
@@ -16,6 +16,7 @@ import {
   isValidMnemonic,
   web3Provider,
 } from '../handlers/web3';
+import { removeFirstEmojiFromString } from '../helpers/emojiHandler';
 
 const profiles = 'rainbowProfiles';
 const walletName = 'rainbowWalletName';
@@ -226,15 +227,20 @@ export const saveUserInfo = async (name, color, seedPhrase, privateKey, address,
   }
   if (userAlreadyInProfiles) {
     newProfilesTable.splice(userIndex, 1, newProfile);
-    await keychain.saveObject(profiles, newProfilesTable);
-    return true;
-  }
-  if (!userAlreadyInProfiles) {
+  } else {
     newProfilesTable.push(newProfile);
-    await keychain.saveObject(profiles, newProfilesTable);
-    return true;
   }
-  return false;
+  const newProfilesTableSorted = orderBy(
+    newProfilesTable,
+    [profile => {
+      let editedProfile = profile.name.toLowerCase();
+      editedProfile = removeFirstEmojiFromString(editedProfile);
+      return editedProfile;
+    }],
+    ['asc'],
+  );
+  await keychain.saveObject(profiles, newProfilesTableSorted);
+  return true;
 };
 
 export const deleteUserInfo = async (address) => {
@@ -278,7 +284,16 @@ export const editUserInfo = async (name, color, seedPhrase, privateKey, address)
   }
   if (searchedUserIndex >= 0) {
     newProfilesTable.splice(searchedUserIndex, 1, newProfile);
-    await keychain.saveObject(profiles, newProfilesTable);
+    const newProfilesTableSorted = orderBy(
+      newProfilesTable,
+      [profile => {
+        let editedProfile = profile.name.toLowerCase();
+        editedProfile = removeFirstEmojiFromString(editedProfile);
+        return editedProfile;
+      }],
+      ['asc'],
+    );
+    await keychain.saveObject(profiles, newProfilesTableSorted);
     return true;
   }
   return false;
