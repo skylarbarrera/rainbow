@@ -25,6 +25,7 @@ const profileRowHeight = 54;
 
 const ChangeWalletModal = ({
   accountAddress,
+  isChangingWallet,
   isCreatingWallet,
   isInitializationOver,
   navigation,
@@ -52,6 +53,9 @@ const ChangeWalletModal = ({
   }
   return (
     <View>
+      {isChangingWallet && (
+        <LoadingOverlay title="Changing Wallet..." />
+      )}
       {isCreatingWallet && (
         <LoadingOverlay title="Creating Wallet..." />
       )}
@@ -100,6 +104,7 @@ const ChangeWalletModal = ({
 ChangeWalletModal.propTypes = {
   accountAddress: PropTypes.string,
   currentProfile: PropTypes.object,
+  isChangingWallet: PropTypes.bool,
   isCreatingWallet: PropTypes.bool,
   isInitializationOver: PropTypes.bool,
   navigation: PropTypes.object,
@@ -121,13 +126,15 @@ export default compose(
   withState('currentProfile', 'setCurrentProfile', undefined),
   withState('profiles', 'setProfiles', undefined),
   withState('isCreatingWallet', 'setIsCreatingWallet', false),
+  withState('isChangingWallet', 'setIsChangingWallet', false),
   withState('isInitializationOver', 'setIsInitializationOver', false),
   withHandlers({
-    onChangeWallet: ({ initializeWalletWithProfile, navigation, setIsWalletImporting }) => async (profile) => {
-      navigation.navigate('WalletScreen');
-      setIsWalletImporting(true);
-      await initializeWalletWithProfile(true, false, profile);
-      setIsWalletImporting(false);
+    onChangeWallet: ({ initializeWalletWithProfile, navigation, setIsWalletImporting, setIsChangingWallet }) => async (profile) => {
+      await setIsChangingWallet(true);
+      setTimeout(async () => {
+        navigation.navigate('WalletScreen');
+        await initializeWalletWithProfile(true, false, profile);
+      }, 20);
     },
     onCloseEditProfileModal: ({ setProfiles }) => async () => {
       const newProfiles = await loadUsersInfo();

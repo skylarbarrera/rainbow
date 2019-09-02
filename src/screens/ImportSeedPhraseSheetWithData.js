@@ -116,7 +116,9 @@ const ImportSeedPhraseSheetWithData = compose(
       }
 
       if (!prevProps.isImporting && isImporting) {
-        InteractionManager.runAfterInteractions(importSeedPhrase);
+        setTimeout(() => {
+          importSeedPhrase();
+        }, 20);
       }
     },
   }),
