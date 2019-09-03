@@ -114,15 +114,14 @@ export default Component => compose(
       }
     },
     clearAccountData: (ownProps) => async () => {
-      const p1 = ownProps.dataClearState();
-      const p2 = ownProps.clearIsWalletEmpty();
-      const p3 = ownProps.uniqueTokensClearState();
-      const p4 = ownProps.clearOpenFamilyTab();
-      const p5 = ownProps.walletConnectClearState();
-      const p6 = ownProps.nonceClearState();
-      const p7 = ownProps.requestsClearState();
-      const p8 = ownProps.uniswapClearState();
-      return PromiseAllWithFails([p1, p2, p3, p4, p5, p6, p7, p8]);
+      const p1 = ownProps.clearIsWalletEmpty();
+      const p2 = ownProps.uniqueTokensClearState();
+      const p3 = ownProps.clearOpenFamilyTab();
+      const p4 = ownProps.walletConnectClearState();
+      const p5 = ownProps.nonceClearState();
+      const p6 = ownProps.requestsClearState();
+      const p7 = ownProps.uniswapClearState();
+      return PromiseAllWithFails([p1, p2, p3, p4, p5, p6, p7]);
     },
     initializeAccountData: (ownProps) => async () => {
       try {
@@ -199,10 +198,12 @@ export default Component => compose(
     },
     initializeWalletWithProfile: (ownProps) => async (isImported, isNew, profile) => {
       try {
+        ownProps.clearAccountData();
         saveWalletDetails(profile.name, profile.color, profile.seedPhrase, profile.privateKey, profile.address);
         ownProps.settingsUpdateAccountName(profile.name);
         ownProps.settingsUpdateAccountColor(profile.color);
         saveName(profile.name);
+        await ownProps.dataLoadState(profile.address);
         return await walletInitialization(isImported, isNew, profile.address, ownProps);
       } catch (error) {
         // TODO specify error states more granular

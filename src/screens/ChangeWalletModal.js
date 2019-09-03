@@ -180,7 +180,7 @@ export default compose(
       this.props.setProfiles(profiles);
       setTimeout(() => {
         this.props.setIsInitializationOver(true);
-      }, 500);
+      }, 300);
     },
   }),
 )(ChangeWalletModal);
