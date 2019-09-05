@@ -124,5 +124,4 @@ export default compose(
     },
     onPressReceive: ({ navigation }) => () => navigation.navigate('ReceiveModal'),
   }),
-  onlyUpdateForKeys(['accountAddress', 'accountColor', 'accountName', 'emojiCount', 'showBottomDivider']),
 )(ProfileMasthead);

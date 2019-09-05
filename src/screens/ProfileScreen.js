@@ -22,6 +22,7 @@ const ProfileScreen = ({
   onPressProfileHeader,
   onPressSettings,
   requests,
+  shouldUpdate,
   transactions,
   transactionsCount,
 }) => (
@@ -35,6 +36,7 @@ const ProfileScreen = ({
         accountColor={accountColor}
         accountName={accountName}
         onPress={onPressProfileHeader}
+        shouldUpdate={shouldUpdate}
       >
         <Icon name="gear" />
       </HeaderProfileInfo>
@@ -61,6 +63,7 @@ const ProfileScreen = ({
       requests={requests}
       transactions={transactions}
       transactionsCount={transactionsCount}
+      shouldUpdate={shouldUpdate}
     />
     {isEmpty && <AddFundsInterstitial />}
   </Page>
@@ -78,6 +81,7 @@ ProfileScreen.propTypes = {
   onPressProfileHeader: PropTypes.func,
   onPressSettings: PropTypes.func,
   requests: PropTypes.array,
+  shouldUpdate: PropTypes.bool,
   transactions: PropTypes.array,
   transactionsCount: PropTypes.number,
 };

@@ -25,6 +25,7 @@ const profileRowHeight = 54;
 
 const ChangeWalletModal = ({
   accountAddress,
+  currentProfile,
   isChangingWallet,
   isCreatingWallet,
   isInitializationOver,
@@ -38,14 +39,6 @@ const ChangeWalletModal = ({
   onPressSection,
   profiles,
 }) => {
-  let currentProfile = false;
-  if (profiles) {
-    for (let i = 0; i < profiles.length; i++) {
-      if (profiles[i].address.toLowerCase() === accountAddress) {
-        currentProfile = profiles[i];
-      }
-    }
-  }
   const size = profiles ? profiles.length - 1 : 0;
   let listHeight = (profileRowHeight * 2) + (profileRowHeight * size);
   if (listHeight > 258) {
@@ -69,11 +62,11 @@ const ChangeWalletModal = ({
           {currentProfile && <ProfileRow
             accountName={currentProfile.name}
             accountColor={currentProfile.color}
-            accountAddress={accountAddress}
+            accountAddress={currentProfile.address}
             isHeader
             onPress={() => navigation.goBack()}
             onEditWallet={() => navigation.navigate('ExpandedAssetScreen', {
-              address: accountAddress,
+              address: currentProfile.address,
               asset: [],
               isCurrentProfile: true,
               onCloseModal: () => onCloseEditProfileModal(true),
@@ -130,14 +123,29 @@ export default compose(
   withState('isInitializationOver', 'setIsInitializationOver', false),
   withHandlers({
     onChangeWallet: ({ initializeWalletWithProfile, navigation, setIsWalletImporting, setIsChangingWallet }) => async (profile) => {
+      const setIsLoading = navigation.getParam('setIsLoading', () => null);
+      setIsLoading(false);
       await setIsChangingWallet(true);
       setTimeout(async () => {
-        navigation.navigate('WalletScreen');
         await initializeWalletWithProfile(true, false, profile);
+        // timeout that prevent ugly tansition of avatar during page transition
+        setTimeout(() => {
+          setIsLoading(true);
+        }, 100);
+        navigation.navigate('WalletScreen');
       }, 20);
     },
-    onCloseEditProfileModal: ({ setProfiles }) => async () => {
+    onCloseEditProfileModal: ({ setCurrentProfile, setProfiles, accountAddress }) => async (isCurrentProfile) => {
       const newProfiles = await loadUsersInfo();
+      let currentProfile = false;
+      if (newProfiles) {
+        for (let i = 0; i < newProfiles.length; i++) {
+          if (newProfiles[i].address.toLowerCase() === accountAddress) {
+            currentProfile = newProfiles[i];
+          }
+        }
+      }
+      setCurrentProfile(currentProfile);
       setProfiles(newProfiles);
     },
     onCloseModal: ({ navigation }) => () => navigation.goBack(),
@@ -150,11 +158,15 @@ export default compose(
         isNewProfile: true,
         onCloseModal: (isCanceled) => {
           if (!isCanceled) {
+            const setIsLoading = navigation.getParam('setIsLoading', () => null);
+            setIsLoading(false);
             setIsCreatingWallet(true);
             setTimeout(async () => {
               await clearAccountData();
               await createNewWallet();
-              navigation.goBack();
+              setTimeout(() => {
+                setIsLoading(true);
+              }, 100);
               navigation.navigate('WalletScreen');
             }, 20);
           }
@@ -178,6 +190,15 @@ export default compose(
     componentDidMount() {
       const profiles = this.props.navigation.getParam('profiles', []);
       this.props.setProfiles(profiles);
+      let currentProfile = false;
+      if (profiles) {
+        for (let i = 0; i < profiles.length; i++) {
+          if (profiles[i].address.toLowerCase() === this.props.accountAddress) {
+            currentProfile = profiles[i];
+          }
+        }
+      }
+      this.props.setCurrentProfile(currentProfile);
       setTimeout(() => {
         this.props.setIsInitializationOver(true);
       }, 300);

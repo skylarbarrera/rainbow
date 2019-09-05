@@ -24,12 +24,14 @@ export default compose(
   withBlurTransitionProps,
   withIsWalletEmpty,
   withRequests,
+  withState('shouldUpdate', 'setShouldUpdate', true),
   withHandlers({
     onPressBackButton: ({ navigation }) => () => navigation.navigate('WalletScreen'),
-    onPressProfileHeader: ({ navigation }) => async () => {
+    onPressProfileHeader: ({ navigation, setShouldUpdate }) => async () => {
       const profiles = await loadUsersInfo();
       navigation.navigate('ChangeWalletModal', {
         profiles,
+        setIsLoading: (payload) => setShouldUpdate(payload),
       });
     },
     onPressSettings: ({ navigation }) => () => navigation.navigate('SettingsModal'),

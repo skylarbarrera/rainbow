@@ -5,6 +5,7 @@ import {
   mapProps,
   onlyUpdateForKeys,
   withProps,
+  lifecycle,
 } from 'recompact';
 import { buildTransactionsSectionsSelector } from '../../helpers/transactions';
 import {
@@ -14,7 +15,11 @@ import {
 } from '../../hoc';
 import RecyclerActivityList from './RecyclerActivityList';
 
-const ActivityList = ({ header, isEmpty, sections }) => (
+const ActivityList = ({
+  header,
+  isEmpty,
+  sections,
+}) => (
   <RecyclerActivityList
     header={header}
     isLoading={!isEmpty && !sections.length}
@@ -60,12 +65,9 @@ export default compose(
       sections,
     };
   }),
-  onlyUpdateForKeys([
-    'accountName',
-    'accountColor',
-    'isEmpty',
-    'nativeCurrency',
-    'pendingTransactionsCount',
-    'sections',
-  ]),
+  lifecycle({
+    shouldComponentUpdate(nextProps) {
+      return nextProps.shouldUpdate;
+    },
+  }),
 )(ActivityList);

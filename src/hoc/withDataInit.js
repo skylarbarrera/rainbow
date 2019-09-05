@@ -198,7 +198,6 @@ export default Component => compose(
     },
     initializeWalletWithProfile: (ownProps) => async (isImported, isNew, profile) => {
       try {
-        ownProps.clearAccountData();
         saveWalletDetails(profile.name, profile.color, profile.seedPhrase, profile.privateKey, profile.address);
         ownProps.settingsUpdateAccountName(profile.name);
         ownProps.settingsUpdateAccountColor(profile.color);
