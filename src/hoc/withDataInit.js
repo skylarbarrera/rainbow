@@ -164,6 +164,7 @@ export default Component => compose(
         const walletAddress = await createWallet(false, name, color);
         ownProps.settingsUpdateAccountName(name);
         ownProps.settingsUpdateAccountColor(color);
+        await ownProps.dataLoadState(walletAddress);
         return await walletInitialization(false, true, walletAddress, ownProps);
       } catch (error) {
         // TODO specify error states more granular
@@ -188,6 +189,7 @@ export default Component => compose(
 
         ownProps.settingsUpdateAccountName(name);
         ownProps.settingsUpdateAccountColor(color);
+        await ownProps.dataLoadState(walletAddress);
         return await walletInitialization(isImported, isNew, walletAddress, ownProps);
       } catch (error) {
         // TODO specify error states more granular
