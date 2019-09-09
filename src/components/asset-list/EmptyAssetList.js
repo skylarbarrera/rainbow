@@ -32,7 +32,10 @@ const EmptyAssetList = ({
       <Column style={position.coverAsObject}>
         {times(skeletonCount, index => renderSkeleton(index, isWalletEthZero))}
       </Column>
-      {isWalletEthZero && (<AddFundsInterstitial offsetY={InterstitialOffset * -1} />)}
+      <AddFundsInterstitial
+        offsetY={InterstitialOffset * -1}
+        isEmpty={isWalletEthZero}
+      />
     </Centered>
   </Column>
 );

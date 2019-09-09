@@ -65,7 +65,10 @@ const ProfileScreen = ({
       transactionsCount={transactionsCount}
       shouldUpdate={shouldUpdate}
     />
-    {isEmpty && <AddFundsInterstitial />}
+    <AddFundsInterstitial
+      isEmpty={isEmpty}
+      shouldUpdate={shouldUpdate}
+    />
   </Page>
 );
 

@@ -1,7 +1,12 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { withNavigation } from 'react-navigation';
-import { compose, pure, withHandlers } from 'recompact';
+import {
+  compose,
+  pure,
+  withHandlers,
+  lifecycle,
+} from 'recompact';
 import styled from 'styled-components/primitives';
 import { colors, margin } from '../styles';
 import { Button } from './buttons';
@@ -46,29 +51,33 @@ const buildInterstitialTransform = offsetY => ({
 });
 
 const AddFundsInterstitial = ({
+  isEmpty,
   offsetY,
   onPressAddFunds,
   onPressImportWallet,
 }) => (
-  <Container style={buildInterstitialTransform(offsetY)}>
-    <ButtonContainer>
-      <Button backgroundColor={colors.appleBlue} onPress={onPressAddFunds}>
-        Add Funds
-      </Button>
-      <DividerContainer>
-        <Divider inset={false} />
-      </DividerContainer>
-      <Button backgroundColor="#5D9DF6" onPress={onPressImportWallet}>
-        Import Wallet
-      </Button>
-      <Paragraph>
-        Use your private key or 12 to 24 word seed phrase from an existing wallet.
-      </Paragraph>
-    </ButtonContainer>
-  </Container>
+  isEmpty
+    ? (<Container style={buildInterstitialTransform(offsetY)}>
+      <ButtonContainer>
+        <Button backgroundColor={colors.appleBlue} onPress={onPressAddFunds}>
+          Add Funds
+        </Button>
+        <DividerContainer>
+          <Divider inset={false} />
+        </DividerContainer>
+        <Button backgroundColor="#5D9DF6" onPress={onPressImportWallet}>
+          Import Wallet
+        </Button>
+        <Paragraph>
+          Use your private key or 12 to 24 word seed phrase from an existing wallet.
+        </Paragraph>
+      </ButtonContainer>
+    </Container>)
+    : null
 );
 
 AddFundsInterstitial.propTypes = {
+  isEmpty: PropTypes.bool,
   offsetY: PropTypes.number,
   onPressAddFunds: PropTypes.func.isRequired,
   onPressImportWallet: PropTypes.func.isRequired,
@@ -84,5 +93,10 @@ export default compose(
   withHandlers({
     onPressAddFunds: ({ navigation }) => () => navigation.navigate('ReceiveModal'),
     onPressImportWallet: ({ navigation }) => () => navigation.navigate('ImportSeedPhraseSheet'),
+  }),
+  lifecycle({
+    shouldComponentUpdate(nextProps) {
+      return nextProps.shouldUpdate;
+    },
   }),
 )(AddFundsInterstitial);
