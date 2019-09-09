@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { View } from 'react-native';
+import { orderBy } from 'lodash';
 import {
   compose,
   lifecycle,
@@ -12,6 +13,7 @@ import { Modal, LoadingOverlay } from '../components/modal';
 import { withDataInit, withIsWalletImporting, withAccountAddress } from '../hoc';
 import { loadUsersInfo } from '../model/wallet';
 import ProfileList from '../components/change-wallet/ProfileList';
+import { removeFirstEmojiFromString } from '../helpers/emojiHandler';
 
 const headerHeight = 68;
 const profileRowHeight = 54;
@@ -122,7 +124,15 @@ export default compose(
         }
       }
       setCurrentProfile(currentProfile);
-      setProfiles(profiles);
+      setProfiles(orderBy(
+        newProfiles,
+        [profile => {
+          const newEditedProfile = profile.name.toLowerCase();
+          editedProfile = removeFirstEmojiFromString(newEditedProfile);
+          return editedProfile;
+        }],
+        ['asc'],
+      ));
     },
     onCloseModal: ({ navigation }) => () => navigation.goBack(),
     onPressCreateWallet: ({ createNewWallet, navigation, clearAccountData, setIsCreatingWallet, uniswapClearState, uniqueTokensClearState }) => () => {
