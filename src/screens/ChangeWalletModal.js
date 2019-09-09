@@ -113,15 +113,23 @@ export default compose(
     onCloseEditProfileModal: ({ setCurrentProfile, setProfiles, accountAddress, profiles }) => async (editedProfile) => {
       let currentProfile = false;
       const newProfiles = profiles;
+      let deleteIndex;
       if (newProfiles) {
         for (let i = 0; i < newProfiles.length; i++) {
           if (newProfiles[i].address === editedProfile.address) {
-            newProfiles[i] = editedProfile;
+            if (editedProfile.isDeleted) {
+              deleteIndex = i;
+            } else {
+              newProfiles[i] = editedProfile;
+            }
           }
           if (newProfiles[i].address.toLowerCase() === accountAddress) {
             currentProfile = newProfiles[i];
           }
         }
+      }
+      if (editedProfile.isDeleted) {
+        newProfiles.splice(deleteIndex, 1);
       }
       setCurrentProfile(currentProfile);
       setProfiles(orderBy(

@@ -195,7 +195,11 @@ class ProfileCreator extends React.PureComponent {
     }, async (buttonIndex) => {
       if (buttonIndex === 0) {
         await deleteUserInfo(this.props.address);
-        this.props.onCloseModal();
+        const { address } = this.props.profile;
+        this.props.onCloseModal({
+          address,
+          isDeleted: true,
+        });
         this.props.navigation.goBack();
       }
     });
