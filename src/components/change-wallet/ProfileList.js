@@ -29,6 +29,7 @@ class ProfileList extends React.Component {
   }
 
   closeAllDifferentContacts = (address) => {
+    this.lastTouchedContact = this.touchedContact;
     this.touchedContact = address;
     this.recentlyRendered = false;
     this.setState({ touchedContact: address });
@@ -195,12 +196,14 @@ class ProfileList extends React.Component {
                   return true;
                 }
                 if (this.touchedContact !== r2.address
+                  && this.lastTouchedContact === r2.address
                   && this.currentlyOpenProfile
                   && this.touchedContact !== this.currentlyOpenProfile
                   && !this.recentlyRendered) {
                   if (r2 === this.state.profiles[this.state.profiles.length - 2]) {
                     this.recentlyRendered = true;
                   }
+                  console.log(this.lastTouchedContact);
                   return true;
                 }
                 if (r1 !== r2) {
