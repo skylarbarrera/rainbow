@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import styled from 'styled-components/primitives';
 import { View } from 'react-native';
 import {
   compose,
@@ -10,15 +9,9 @@ import {
 } from 'recompact';
 import { withNavigation } from 'react-navigation';
 import { Modal, LoadingOverlay } from '../components/modal';
-import ProfileRow from '../components/change-wallet/ProfileRow';
-import ProfileDivider from '../components/change-wallet/ProfileDivider';
 import { withDataInit, withIsWalletImporting, withAccountAddress } from '../hoc';
 import { loadUsersInfo } from '../model/wallet';
 import ProfileList from '../components/change-wallet/ProfileList';
-
-const Container = styled.View`
-  padding-top: 2px;
-`;
 
 const headerHeight = 68;
 const profileRowHeight = 54;
@@ -58,37 +51,17 @@ const ChangeWalletModal = ({
         onCloseModal={onCloseModal}
         style={{ borderRadius: 18 }}
       >
-        <Container>
-          {currentProfile && <ProfileRow
-            accountName={currentProfile.name}
-            accountColor={currentProfile.color}
-            accountAddress={currentProfile.address}
-            isHeader
-            onPress={() => navigation.goBack()}
-            onEditWallet={() => navigation.navigate('ExpandedAssetScreen', {
-              address: currentProfile.address,
-              asset: [],
-              isCurrentProfile: true,
-              onCloseModal: () => onCloseEditProfileModal(true),
-              profile: currentProfile,
-              type: 'profile_creator',
-            })}
-            onTouch={() => null}
-            onTransitionEnd={() => null}
-            isInitializationOver={true}
-          />}
-          <ProfileDivider />
-          <ProfileList
-            accountAddress={accountAddress}
-            allAssets={profiles}
-            height={listHeight}
-            onChangeWallet={onChangeWallet}
-            onCloseEditProfileModal={onCloseEditProfileModal}
-            onPressCreateWallet={onPressCreateWallet}
-            onPressImportSeedPhrase={onPressImportSeedPhrase}
-            isInitializationOver={isInitializationOver}
-          />
-        </Container>
+        <ProfileList
+          currentProfile={currentProfile}
+          accountAddress={accountAddress}
+          allAssets={profiles}
+          height={listHeight}
+          onChangeWallet={onChangeWallet}
+          onCloseEditProfileModal={onCloseEditProfileModal}
+          onPressCreateWallet={onPressCreateWallet}
+          onPressImportSeedPhrase={onPressImportSeedPhrase}
+          isInitializationOver={isInitializationOver}
+        />
       </Modal>
     </View>
   );

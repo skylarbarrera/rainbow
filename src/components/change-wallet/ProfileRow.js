@@ -87,9 +87,12 @@ const MoneyAmount = styled(Text)`
   font-weight: ${fonts.weight.semibold};
 `;
 
+
 export default class ProfileRow extends Component {
+  isTouched = false;
+
   componentWillReceiveProps = () => {
-    if (this.props.isInitializationOver) {
+    if (this.props.isInitializationOver && !this.isTouched) {
       this.close();
     }
   };
@@ -160,12 +163,18 @@ export default class ProfileRow extends Component {
         friction={2}
         rightThreshold={20}
         renderRightActions={this.renderRightActions}
-        onSwipeableWillOpen={() => this.props.onTransitionEnd(accountAddress)}
+        onSwipeableWillOpen={() => {
+          this.props.onTransitionEnd(accountAddress);
+          this.isTouched = false;
+        }}
       >
         <ButtonPressAnimation
           scaleTo={0.96}
           onPress={onPress}
-          onPressStart={() => this.props.onTouch(accountAddress)}
+          onPressStart={() => {
+            this.isTouched = true;
+            this.props.onTouch(accountAddress);
+          }}
           onLongPress={this.onLongPress}
         >
           <Container style={{ padding: isHeader ? 15 : 10 }}>

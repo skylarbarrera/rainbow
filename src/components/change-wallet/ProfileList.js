@@ -4,10 +4,12 @@ import { View } from 'react-native';
 import { RecyclerListView, LayoutProvider, DataProvider } from 'recyclerlistview';
 import { withNavigation } from 'react-navigation';
 import { compose } from 'recompact';
+import styled from 'styled-components/primitives';
 import { deviceUtils } from '../../utils';
 import { removeFirstEmojiFromString } from '../../helpers/emojiHandler';
 import ProfileRow from './ProfileRow';
 import ProfileOption from './ProfileOption';
+import ProfileDivider from './ProfileDivider';
 
 const rowHeight = 50;
 const lastRowPadding = 10;
@@ -16,6 +18,10 @@ let position = 0;
 
 const WALLET_ROW = 1;
 const WALLET_LAST_ROW = 2;
+
+const Container = styled.View`
+  padding-top: 2px;
+`;
 
 class ProfileList extends React.Component {
   changeCurrentlyUsedContact = (address) => {
@@ -149,40 +155,68 @@ class ProfileList extends React.Component {
   }
 
   render() {
+    const {
+      currentProfile,
+      height,
+      navigation,
+      onCloseEditProfileModal,
+      isInitializationOver,
+    } = this.props;
     return (
-      <View style={{ height: this.props.height }}>
-        <RecyclerListView
-          rowRenderer={this._renderRow}
-          dataProvider={
-            new DataProvider((r1, r2) => {
-              if (this.isInitalized) {
-                if (r2 === this.state.profiles[this.state.profiles.length - 2]) {
-                  this.isInitalized = false;
+      <Container>
+        {currentProfile && <ProfileRow
+          accountName={currentProfile.name}
+          accountColor={currentProfile.color}
+          accountAddress={currentProfile.address}
+          isHeader
+          onPress={() => navigation.goBack()}
+          onEditWallet={() => navigation.navigate('ExpandedAssetScreen', {
+            address: currentProfile.address,
+            asset: [],
+            isCurrentProfile: true,
+            onCloseModal: () => onCloseEditProfileModal(true),
+            profile: currentProfile,
+            type: 'profile_creator',
+          })}
+          onTouch={this.closeAllDifferentContacts}
+          onTransitionEnd={this.changeCurrentlyUsedContact}
+          isInitializationOver={isInitializationOver}
+        />}
+        <ProfileDivider />
+        <View style={{ height }}>
+          <RecyclerListView
+            rowRenderer={this._renderRow}
+            dataProvider={
+              new DataProvider((r1, r2) => {
+                if (this.isInitalized) {
+                  if (r2 === this.state.profiles[this.state.profiles.length - 2]) {
+                    this.isInitalized = false;
+                  }
+                  return true;
                 }
-                return true;
-              }
-              if (this.touchedContact !== r2.address
-                && this.currentlyOpenProfile
-                && this.touchedContact !== this.currentlyOpenProfile
-                && !this.recentlyRendered) {
-                if (r2 === this.state.profiles[this.state.profiles.length - 2]) {
-                  this.recentlyRendered = true;
+                if (this.touchedContact !== r2.address
+                  && this.currentlyOpenProfile
+                  && this.touchedContact !== this.currentlyOpenProfile
+                  && !this.recentlyRendered) {
+                  if (r2 === this.state.profiles[this.state.profiles.length - 2]) {
+                    this.recentlyRendered = true;
+                  }
+                  return true;
                 }
-                return true;
-              }
-              if (r1 !== r2) {
-                return true;
-              }
-              return false;
-            }).cloneWithRows(this.state.profiles)
-          }
-          layoutProvider={this._layoutProvider}
-          onScroll={(event, _offsetX, offsetY) => {
-            position = offsetY;
-          }}
-          optimizeForInsertDeleteAnimations
-        />
-      </View>
+                if (r1 !== r2) {
+                  return true;
+                }
+                return false;
+              }).cloneWithRows(this.state.profiles)
+            }
+            layoutProvider={this._layoutProvider}
+            onScroll={(event, _offsetX, offsetY) => {
+              position = offsetY;
+            }}
+            optimizeForInsertDeleteAnimations
+          />
+        </View>
+      </Container>
     );
   }
 }
@@ -190,6 +224,7 @@ class ProfileList extends React.Component {
 ProfileList.propTypes = {
   accountAddress: PropTypes.string,
   allAssets: PropTypes.array,
+  currentProfile: PropTypes.object,
   height: PropTypes.number,
   isInitializationOver: PropTypes.bool,
   navigation: PropTypes.object,
