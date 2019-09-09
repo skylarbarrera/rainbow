@@ -28,8 +28,11 @@ const UNISWAP_UPDATE_LIQUIDITY_TOKENS = 'uniswap/UNISWAP_UPDATE_LIQUIDITY_TOKENS
 const UNISWAP_CLEAR_STATE = 'uniswap/UNISWAP_CLEAR_STATE';
 
 // -- Actions --------------------------------------------------------------- //
-export const uniswapLoadState = () => async (dispatch, getState) => {
-  const { accountAddress, network } = getState().settings;
+export const uniswapLoadState = (address = null) => async (dispatch, getState) => {
+  let { accountAddress, network } = getState().settings;
+  if (address) {
+    accountAddress = address;
+  }
   dispatch({ type: UNISWAP_LOAD_REQUEST });
   try {
     const uniswap = await getUniswap(accountAddress, network);

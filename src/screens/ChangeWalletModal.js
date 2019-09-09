@@ -174,7 +174,7 @@ export default compose(
       this.props.setCurrentProfile(currentProfile);
       setTimeout(() => {
         this.props.setIsInitializationOver(true);
-      }, 300);
+      }, 130);
     },
   }),
 )(ChangeWalletModal);

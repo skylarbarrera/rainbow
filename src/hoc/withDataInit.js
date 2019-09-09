@@ -114,13 +114,12 @@ export default Component => compose(
       }
     },
     clearAccountData: (ownProps) => async () => {
-      const p1 = ownProps.clearIsWalletEmpty();
-      const p3 = ownProps.clearOpenFamilyTab();
-      const p4 = ownProps.walletConnectClearState();
-      const p5 = ownProps.nonceClearState();
-      const p6 = ownProps.requestsClearState();
-      const p7 = ownProps.uniswapClearState();
-      return PromiseAllWithFails([p1, p3, p4, p5, p6, p7]);
+      const p0 = ownProps.clearIsWalletEmpty();
+      const p1 = ownProps.clearOpenFamilyTab();
+      const p2 = ownProps.walletConnectClearState();
+      const p3 = ownProps.nonceClearState();
+      const p4 = ownProps.requestsClearState();
+      return PromiseAllWithFails([p0, p1, p2, p3, p4]);
     },
     initializeAccountData: (ownProps) => async () => {
       try {
@@ -163,8 +162,11 @@ export default Component => compose(
         const walletAddress = await createWallet(false, name, color);
         ownProps.settingsUpdateAccountName(name);
         ownProps.settingsUpdateAccountColor(color);
+
         await ownProps.uniqueTokensLoadState(walletAddress);
         await ownProps.dataLoadState(walletAddress);
+        await ownProps.uniswapLoadState(walletAddress);
+
         return await walletInitialization(false, true, walletAddress, ownProps);
       } catch (error) {
         // TODO specify error states more granular
@@ -189,8 +191,11 @@ export default Component => compose(
 
         ownProps.settingsUpdateAccountName(name);
         ownProps.settingsUpdateAccountColor(color);
+
         await ownProps.uniqueTokensLoadState(walletAddress);
         await ownProps.dataLoadState(walletAddress);
+        await ownProps.uniswapLoadState(walletAddress);
+
         return await walletInitialization(isImported, isNew, walletAddress, ownProps);
       } catch (error) {
         // TODO specify error states more granular
@@ -205,8 +210,11 @@ export default Component => compose(
         ownProps.settingsUpdateAccountName(profile.name);
         ownProps.settingsUpdateAccountColor(profile.color);
         saveName(profile.name);
+
         await ownProps.uniqueTokensLoadState(profile.address);
         await ownProps.dataLoadState(profile.address);
+        await ownProps.uniswapLoadState(profile.address);
+
         return await walletInitialization(isImported, isNew, profile.address, ownProps);
       } catch (error) {
         // TODO specify error states more granular
