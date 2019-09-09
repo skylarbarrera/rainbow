@@ -116,7 +116,7 @@ class ProfileList extends React.Component {
       onPress: this.props.onPressCreateWallet,
     });
     newAssets.push({
-      icon: 'gear',
+      icon: 'arrowBack',
       isOption: true,
       label: 'Import a Wallet',
       onPress: this.props.onPressImportSeedPhrase,

@@ -4,6 +4,7 @@ import Flex from '../layout/Flex';
 
 import ArrowCircledIcon from './svg/ArrowCircledIcon';
 import ArrowIcon from './svg/ArrowIcon';
+import ArrowBackIcon from './svg/ArrowBack';
 import AvatarIcon from './svg/AvatarIcon';
 import CameraIcon from './svg/CameraIcon';
 import CaretIcon from './svg/CaretIcon';
@@ -44,6 +45,7 @@ const Icon = ({ name, ...props }) => createElement(Icon.IconTypes[name] || Flex,
 
 Icon.IconTypes = {
   arrow: ArrowIcon,
+  arrowBack: ArrowBackIcon,
   arrowCircled: ArrowCircledIcon,
   avatar: AvatarIcon,
   camera: CameraIcon,
