@@ -108,21 +108,24 @@ export default compose(
         navigation.navigate('WalletScreen');
       }, 20);
     },
-    onCloseEditProfileModal: ({ setCurrentProfile, setProfiles, accountAddress }) => async (isCurrentProfile) => {
-      const newProfiles = await loadUsersInfo();
+    onCloseEditProfileModal: ({ setCurrentProfile, setProfiles, accountAddress, profiles }) => async (editedProfile) => {
       let currentProfile = false;
+      const newProfiles = profiles;
       if (newProfiles) {
         for (let i = 0; i < newProfiles.length; i++) {
+          if (newProfiles[i].address === editedProfile.address) {
+            newProfiles[i] = editedProfile;
+          }
           if (newProfiles[i].address.toLowerCase() === accountAddress) {
             currentProfile = newProfiles[i];
           }
         }
       }
       setCurrentProfile(currentProfile);
-      setProfiles(newProfiles);
+      setProfiles(profiles);
     },
     onCloseModal: ({ navigation }) => () => navigation.goBack(),
-    onPressCreateWallet: ({ createNewWallet, navigation, clearAccountData, setIsCreatingWallet }) => () => {
+    onPressCreateWallet: ({ createNewWallet, navigation, clearAccountData, setIsCreatingWallet, uniswapClearState, uniqueTokensClearState }) => () => {
       navigation.navigate('ExpandedAssetScreen', {
         actionType: 'Create',
         address: undefined,
@@ -136,6 +139,8 @@ export default compose(
             setIsCreatingWallet(true);
             setTimeout(async () => {
               await clearAccountData();
+              await uniswapClearState();
+              await uniqueTokensClearState();
               await createNewWallet();
               setTimeout(() => {
                 setIsLoading(true);

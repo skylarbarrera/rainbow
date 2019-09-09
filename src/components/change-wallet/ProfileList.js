@@ -53,7 +53,7 @@ class ProfileList extends React.Component {
           address: profile.address,
           asset: [],
           isCurrentProfile: false,
-          onCloseModal: () => this.props.onCloseEditProfileModal(),
+          onCloseModal: (editedProfile) => this.props.onCloseEditProfileModal(editedProfile),
           profile,
           type: 'profile_creator',
         })}
@@ -175,7 +175,7 @@ class ProfileList extends React.Component {
             address: currentProfile.address,
             asset: [],
             isCurrentProfile: true,
-            onCloseModal: () => onCloseEditProfileModal(true),
+            onCloseModal: (editedProfile) => onCloseEditProfileModal(editedProfile),
             profile: currentProfile,
             type: 'profile_creator',
           })}

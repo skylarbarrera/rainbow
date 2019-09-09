@@ -121,20 +121,41 @@ class ProfileCreator extends React.PureComponent {
       : string
   )
 
-  onChange = (event) => {
+  onChange = async (event) => {
     const { nativeEvent } = event;
     let value = nativeEvent.text;
     if (value.charCodeAt(0) === 32) {
       value = value.substring(1);
     }
     this.setState({ value });
+    const { address, privateKey, seedPhrase } = this.props.profile;
+    this.props.onCloseModal({
+      address,
+      color: this.state.color,
+      name: makeSpaceAfterFirstEmoji(value),
+      privateKey,
+      seedPhrase,
+    });
+    if (this.props.isCurrentProfile) {
+      store.dispatch(settingsUpdateAccountName(makeSpaceAfterFirstEmoji(value)));
+    }
   }
 
   onChangeColor = async () => {
     let newColor = this.state.color;
     newColor = ++newColor > colors.avatarColor.length - 1 ? 0 : newColor++;
     this.setState({ color: newColor });
-    this.props.onUnmountModal(makeSpaceAfterFirstEmoji(this.state.value), newColor, true);
+    const { address, privateKey, seedPhrase } = this.props.profile;
+    this.props.onCloseModal({
+      address,
+      color: newColor,
+      name: makeSpaceAfterFirstEmoji(this.state.value),
+      privateKey,
+      seedPhrase,
+    });
+    if (this.props.isCurrentProfile) {
+      store.dispatch(settingsUpdateAccountColor(newColor));
+    }
   }
 
   editProfile = async () => {
@@ -145,7 +166,13 @@ class ProfileCreator extends React.PureComponent {
         store.dispatch(settingsUpdateAccountName(makeSpaceAfterFirstEmoji(this.state.value)));
         store.dispatch(settingsUpdateAccountColor(this.state.color));
       }
-      this.props.onCloseModal();
+      this.props.onCloseModal({
+        address,
+        color: this.state.color,
+        name: makeSpaceAfterFirstEmoji(this.state.value),
+        privateKey,
+        seedPhrase,
+      });
       this.props.navigation.goBack();
     }
   }
@@ -175,7 +202,7 @@ class ProfileCreator extends React.PureComponent {
   }
 
   onCancel = () => {
-    this.props.onCloseModal(true);
+    this.props.onCloseModal(false);
     this.props.navigation.goBack();
   }
 
