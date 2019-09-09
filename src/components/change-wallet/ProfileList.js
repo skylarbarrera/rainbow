@@ -203,7 +203,6 @@ class ProfileList extends React.Component {
                   if (r2 === this.state.profiles[this.state.profiles.length - 2]) {
                     this.recentlyRendered = true;
                   }
-                  console.log(this.lastTouchedContact);
                   return true;
                 }
                 if (r1 !== r2) {
