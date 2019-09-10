@@ -28,6 +28,7 @@ const propTypes = {
   iconMargin: PropTypes.number,
   label: PropTypes.string.isRequired,
   onPress: PropTypes.func,
+  scaleTo: PropTypes.number,
 };
 
 const enhance = compose(
@@ -48,13 +49,14 @@ const ListItem = enhance(({
   iconMargin,
   label,
   onPress,
+  scaleTo,
   ...props
 }) => (
   <ButtonPressAnimation
     activeOpacity={activeOpacity}
     enableHapticFeedback={false}
     onPress={onPress}
-    scaleTo={1}
+    scaleTo={scaleTo}
   >
     <Row
       align="center"
@@ -89,6 +91,7 @@ ListItem.height = ListItemHeight;
 ListItem.defaultProps = {
   activeOpacity: 0.3,
   iconMargin: 9,
+  scaleTo: 0.999,
 };
 
 export default ListItem;

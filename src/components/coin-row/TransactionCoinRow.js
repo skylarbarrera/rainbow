@@ -99,6 +99,7 @@ export default compose(
       hash,
       native,
       pending,
+      status,
       ...item
     },
     ...props
@@ -107,6 +108,7 @@ export default compose(
     item,
     native,
     pending,
+    status,
     ...props,
   })),
   withHandlers({
@@ -124,5 +126,5 @@ export default compose(
       }
     },
   }),
-  onlyUpdateForKeys(['hash', 'native', 'pending']),
+  onlyUpdateForKeys(['hash', 'native', 'pending', 'status']),
 )(TransactionCoinRow);
