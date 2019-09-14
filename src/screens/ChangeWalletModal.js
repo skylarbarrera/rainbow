@@ -11,7 +11,6 @@ import {
 import { withNavigation } from 'react-navigation';
 import { Modal, LoadingOverlay } from '../components/modal';
 import { withDataInit, withIsWalletImporting, withAccountAddress } from '../hoc';
-import { loadUsersInfo } from '../model/wallet';
 import ProfileList from '../components/change-wallet/ProfileList';
 import { removeFirstEmojiFromString } from '../helpers/emojiHandler';
 

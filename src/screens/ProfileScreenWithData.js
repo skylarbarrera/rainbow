@@ -14,7 +14,7 @@ import {
   withRequests,
 } from '../hoc';
 import ProfileScreen from './ProfileScreen';
-import { loadUsersInfo } from '../model/wallet';
+import { loadUsersInfo, saveWalletDetails, loadCurrentUserInfo } from '../model/wallet';
 
 export default compose(
   setDisplayName('ProfileScreen'),
@@ -28,7 +28,19 @@ export default compose(
   withHandlers({
     onPressBackButton: ({ navigation }) => () => navigation.navigate('WalletScreen'),
     onPressProfileHeader: ({ navigation, setShouldUpdate }) => async () => {
-      const profiles = await loadUsersInfo();
+      let profiles = await loadUsersInfo();
+      console.log(profiles);
+      if (!profiles) {
+        const wallet = await loadCurrentUserInfo();
+        await saveWalletDetails(
+          'My Wallet',
+          Math.floor(Math.random() * 7),
+          wallet.seedPhrase,
+          wallet.privateKey,
+          wallet.address,
+        );
+        profiles = await loadUsersInfo();
+      }
       navigation.navigate('ChangeWalletModal', {
         profiles,
         setIsLoading: (payload) => setShouldUpdate(payload),
