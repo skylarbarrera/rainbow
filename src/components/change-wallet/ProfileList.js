@@ -72,7 +72,7 @@ class ProfileList extends React.Component {
     };
 
     this._layoutProvider = new LayoutProvider((i) => {
-      if (i < this.props.allAssets.length) {
+      if (this.props.allAssets && i < this.props.allAssets.length) {
         return WALLET_ROW;
       }
       return WALLET_LAST_ROW;
@@ -102,7 +102,7 @@ class ProfileList extends React.Component {
     if (this.props.isInitializationOver !== props.isInitializationOver) {
       this.isInitalized = true;
     }
-    const newAssets = Object.assign([], props.allAssets);
+    const newAssets = Object.assign([], props.allAssets || []);
     for (let i = 0; i < newAssets.length; i++) {
       if (this.props.accountAddress === newAssets[i].address.toLowerCase()) {
         newAssets.splice(i, 1);
