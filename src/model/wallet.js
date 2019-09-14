@@ -327,10 +327,12 @@ export const loadCurrentUserInfo = async (authenticationPrompt = lang.t('wallet.
   try {
     const address = await keychain.loadString(addressKey, { authenticationPrompt });
     const seedPhrase = await keychain.loadString(seedPhraseKey, { authenticationPrompt });
+    const privateKey = await keychain.loadString(privateKeyKey, { authenticationPrompt });
     const name = await keychain.loadString(walletName, { authenticationPrompt });
     return {
       address,
       name,
+      privateKey,
       seedPhrase,
     };
   } catch (error) {
