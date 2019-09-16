@@ -29,17 +29,25 @@ export default compose(
     onPressBackButton: ({ navigation }) => () => navigation.navigate('WalletScreen'),
     onPressProfileHeader: ({ navigation, setShouldUpdate }) => async () => {
       let profiles = await loadUsersInfo();
-      console.log(profiles);
       if (!profiles) {
         const wallet = await loadCurrentUserInfo();
+        const currentWallet = {
+          address: wallet.address,
+          color: 0,
+          name: 'My Wallet',
+          privateKey: wallet.privateKey,
+          seedPhrase: wallet.seedPhrase,
+        };
+
         await saveWalletDetails(
-          'My Wallet',
-          Math.floor(Math.random() * 7),
-          wallet.seedPhrase,
-          wallet.privateKey,
-          wallet.address,
+          currentWallet.name,
+          currentWallet.color,
+          currentWallet.seedPhrase,
+          currentWallet.privateKey,
+          currentWallet.address,
         );
-        profiles = await loadUsersInfo();
+        
+        profiles = [currentWallet];
       }
       navigation.navigate('ChangeWalletModal', {
         profiles,
