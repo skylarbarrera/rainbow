@@ -89,6 +89,23 @@ const MoneyAmount = styled(Text)`
 
 
 export default class ProfileRow extends Component {
+  static propTypes = {
+    accountAddress: PropTypes.string.isRequired,
+    accountColor: PropTypes.number.isRequired,
+    accountName: PropTypes.string.isRequired,
+    isHeader: PropTypes.bool,
+    isInitializationOver: PropTypes.bool,
+    onEditWallet: PropTypes.func,
+    onPress: PropTypes.func,
+    onSwipeOpen: PropTypes.func,
+    onTouch: PropTypes.func,
+    onTransitionEnd: PropTypes.func,
+  };
+
+  static defaultProps = {
+    isHeader: false,
+  };
+
   isTouched = false;
 
   componentWillReceiveProps = () => {
@@ -238,20 +255,3 @@ export default class ProfileRow extends Component {
     );
   }
 }
-
-ProfileRow.propTypes = {
-  accountAddress: PropTypes.string.isRequired,
-  accountColor: PropTypes.number.isRequired,
-  accountName: PropTypes.string.isRequired,
-  isHeader: PropTypes.bool,
-  isInitializationOver: PropTypes.bool,
-  onEditWallet: PropTypes.func,
-  onPress: PropTypes.func,
-  onSwipeOpen: PropTypes.func,
-  onTouch: PropTypes.func,
-  onTransitionEnd: PropTypes.func,
-};
-
-ProfileRow.defaultProps = {
-  isHeader: false,
-};

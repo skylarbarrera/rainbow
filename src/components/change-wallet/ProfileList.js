@@ -24,6 +24,19 @@ const Container = styled.View`
 `;
 
 class ProfileList extends React.Component {
+  static propTypes = {
+    accountAddress: PropTypes.string,
+    allAssets: PropTypes.array,
+    currentProfile: PropTypes.object,
+    height: PropTypes.number,
+    isInitializationOver: PropTypes.bool,
+    navigation: PropTypes.object,
+    onChangeWallet: PropTypes.func,
+    onCloseEditProfileModal: PropTypes.func,
+    onPressCreateWallet: PropTypes.func,
+    onPressImportSeedPhrase: PropTypes.func,
+  };
+
   changeCurrentlyUsedContact = (address) => {
     this.currentlyOpenProfile = address;
   }
@@ -222,18 +235,5 @@ class ProfileList extends React.Component {
     );
   }
 }
-
-ProfileList.propTypes = {
-  accountAddress: PropTypes.string,
-  allAssets: PropTypes.array,
-  currentProfile: PropTypes.object,
-  height: PropTypes.number,
-  isInitializationOver: PropTypes.bool,
-  navigation: PropTypes.object,
-  onChangeWallet: PropTypes.func,
-  onCloseEditProfileModal: PropTypes.func,
-  onPressCreateWallet: PropTypes.func,
-  onPressImportSeedPhrase: PropTypes.func,
-};
 
 export default compose(withNavigation)(ProfileList);

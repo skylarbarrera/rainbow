@@ -10,7 +10,6 @@ import {
   compose,
   onlyUpdateForKeys,
   withHandlers,
-  withProps,
 } from 'recompact';
 import GraphemeSplitter from 'grapheme-splitter';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
@@ -32,7 +31,6 @@ import { deleteUserInfo, editUserInfo } from '../../model/wallet';
 import store from '../../redux/store';
 import { settingsUpdateAccountName, settingsUpdateAccountColor } from '../../redux/settings';
 import { makeSpaceAfterFirstEmoji } from '../../helpers/emojiHandler';
-import { LoadingOverlay } from '../modal';
 
 const TopMenu = styled(View)`
   justify-content: center;
@@ -94,6 +92,23 @@ const FirstLetter = styled(Text)`
 `;
 
 class ProfileCreator extends React.PureComponent {
+  static propTypes = {
+    actionType: PropTypes.string,
+    address: PropTypes.string,
+    color: PropTypes.number,
+    format: PropTypes.func,
+    isCurrentProfile: PropTypes.bool,
+    isNewProfile: PropTypes.bool,
+    navigation: PropTypes.object,
+    onCloseModal: PropTypes.func,
+    onPressSend: PropTypes.func,
+    onUnmountModal: PropTypes.func,
+    price: PropTypes.string,
+    profile: PropTypes.object,
+    subtitle: PropTypes.string,
+    title: PropTypes.string,
+  };
+
   constructor(props) {
     super(props);
 
@@ -286,23 +301,6 @@ class ProfileCreator extends React.PureComponent {
     );
   }
 }
-
-ProfileCreator.propTypes = {
-  actionType: PropTypes.string,
-  address: PropTypes.string,
-  color: PropTypes.number,
-  format: PropTypes.func,
-  isCurrentProfile: PropTypes.bool,
-  isNewProfile: PropTypes.bool,
-  navigation: PropTypes.object,
-  onCloseModal: PropTypes.func,
-  onPressSend: PropTypes.func,
-  onUnmountModal: PropTypes.func,
-  price: PropTypes.string,
-  profile: PropTypes.object,
-  subtitle: PropTypes.string,
-  title: PropTypes.string,
-};
 
 export default compose(
   withAccountData,
