@@ -189,12 +189,17 @@ export const onTransitionStart = props => {
   }
 };
 
+export const onTransitionStartDark = props => {
+    StatusBar.setBarStyle('dark-content');
+};
+
 export const walletChangePreset = {
   cardShadowEnabled: true,
   cardStyleInterpolator: changeWalletStyleInterpolator,
   cardTransparent: true,
   gestureDirection: 'vertical-inverted',
   gestureResponseDistance: { vertical: 1 }, // disable gesture for now
+  onTransitionStart: onTransitionStartDark,
   transitionSpec: { close: walletModalCloseSpec, open: walletModalOpenSpec },
 };
 
