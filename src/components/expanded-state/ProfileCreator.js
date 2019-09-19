@@ -87,7 +87,7 @@ const FirstLetter = styled(Text)`
   line-height: 58px;
   font-size: 28px;
   color: #fff;
-  padding-left: 1px;
+  padding-left: 0.5px;
   font-weight: 600;
 `;
 

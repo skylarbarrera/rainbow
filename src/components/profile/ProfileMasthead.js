@@ -50,7 +50,7 @@ const FirstLetter = styled(Text)`
   font-weight: 600;
   fontSize: 32.5;
   lineHeight: 64;
-  margin-left: 0.5px;
+  padding-left: 0.5px;
 `;
 
 const ProfileMasthead = ({
