@@ -79,6 +79,7 @@ const FirstLetter = styled(Text)`
   font-weight: 600;
   fontSize: 18;
   lineHeight: 31;
+  margin-left: 0.5px;
 `;
 
 const HeaderProfileInfo = ({

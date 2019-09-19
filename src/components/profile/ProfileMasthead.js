@@ -48,8 +48,9 @@ const FirstLetter = styled(Text)`
   text-align: center;
   color: #fff;
   font-weight: 600;
-  fontSize: 30;
+  fontSize: 32.5;
   lineHeight: 64;
+  margin-left: 0.5px;
 `;
 
 const ProfileMasthead = ({

@@ -40,9 +40,6 @@ const ChangeWalletModal = ({
   }
   return (
     <View>
-      {isChangingWallet && (
-        <LoadingOverlay title="Changing Wallet..." />
-      )}
       {isCreatingWallet && (
         <LoadingOverlay title="Creating Wallet..." />
       )}
@@ -150,6 +147,7 @@ export default compose(
         isCurrentProfile: false,
         isNewProfile: true,
         onCloseModal: (isCanceled) => {
+          console.log(isCanceled);
           if (!isCanceled) {
             const setIsLoading = navigation.getParam('setIsLoading', () => null);
             setIsLoading(false);

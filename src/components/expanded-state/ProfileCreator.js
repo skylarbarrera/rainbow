@@ -85,7 +85,7 @@ const FirstLetter = styled(Text)`
   width: 100%;
   text-align: center;
   line-height: 58px;
-  font-size: 27px;
+  font-size: 28px;
   color: #fff;
   padding-left: 1px;
   font-weight: 600;
@@ -143,34 +143,12 @@ class ProfileCreator extends React.PureComponent {
       value = value.substring(1);
     }
     this.setState({ value });
-    const { address, privateKey, seedPhrase } = this.props.profile;
-    this.props.onCloseModal({
-      address,
-      color: this.state.color,
-      name: makeSpaceAfterFirstEmoji(value),
-      privateKey,
-      seedPhrase,
-    });
-    if (this.props.isCurrentProfile) {
-      store.dispatch(settingsUpdateAccountName(makeSpaceAfterFirstEmoji(value)));
-    }
   }
 
   onChangeColor = async () => {
     let newColor = this.state.color;
     newColor = ++newColor > colors.avatarColor.length - 1 ? 0 : newColor++;
     this.setState({ color: newColor });
-    const { address, privateKey, seedPhrase } = this.props.profile;
-    this.props.onCloseModal({
-      address,
-      color: newColor,
-      name: makeSpaceAfterFirstEmoji(this.state.value),
-      privateKey,
-      seedPhrase,
-    });
-    if (this.props.isCurrentProfile) {
-      store.dispatch(settingsUpdateAccountColor(newColor));
-    }
   }
 
   editProfile = async () => {
@@ -221,7 +199,6 @@ class ProfileCreator extends React.PureComponent {
   }
 
   onCancel = () => {
-    this.props.onCloseModal(false);
     this.props.navigation.goBack();
   }
 

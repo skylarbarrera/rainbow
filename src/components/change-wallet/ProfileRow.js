@@ -59,12 +59,13 @@ const IconWrapper = styled.View`
 
 const AvatarCircle = styled(View)`
   border-radius: 20px;
-  margin-left: 8;
+  margin-left: 8px;
   margin-right: 9px;
+  justify-content: center;
+  align-items: center;
 `;
 
 const FirstLetter = styled(Text)`
-  width: 100%;
   text-align: center;
   color: #fff;
   font-weight: 600;
@@ -205,8 +206,9 @@ export default class ProfileRow extends Component {
               >
                 <FirstLetter
                   style={{
-                    fontSize: isHeader ? 18 : 15,
-                    lineHeight: isHeader ? 31 : 29,
+                    fontSize: isHeader ? 18 : 16,
+                    lineHeight: isHeader ? 31 : 30.5,
+                    marginLeft: isHeader ? 0.5 : 0.2,
                   }}
                 >
                   {new GraphemeSplitter().splitGraphemes(accountName)[0]}
@@ -239,8 +241,9 @@ export default class ProfileRow extends Component {
           >
             <FirstLetter
               style={{
-                fontSize: isHeader ? 18 : 15,
-                lineHeight: isHeader ? 31 : 29,
+                fontSize: isHeader ? 18 : 16,
+                lineHeight: isHeader ? 31 : 30.5,
+                marginLeft: isHeader ? 0.5 : 0.2,
               }}
             >
               {new GraphemeSplitter().splitGraphemes(accountName)[0]}
