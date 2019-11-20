@@ -1,3 +1,5 @@
+import { ApolloProvider } from '@apollo/react-hooks';
+import { client } from './apollo/client';
 // eslint-disable-next-line import/default
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import analytics from '@segment/analytics-react-native';
@@ -158,12 +160,14 @@ class App extends Component {
 
   render = () => (
     <SafeAreaProvider>
-      <Provider store={store}>
-        <FlexItem>
-          <Routes ref={this.handleNavigatorRef} />
-          <OfflineBadge />
-        </FlexItem>
-      </Provider>
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <FlexItem>
+            <OfflineBadge />
+            <Routes ref={this.handleNavigatorRef} />
+          </FlexItem>
+        </Provider>
+      </ApolloProvider>
     </SafeAreaProvider>
   );
 }
