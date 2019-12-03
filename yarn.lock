@@ -1160,9 +1160,9 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-4.6.1.tgz#09960b49217d555e54144f54e63485fe55d673ad"
   integrity sha512-RIcrNzVnkes6/d5jFprce8i6ruUO9+/FVZZgejlu/TSnysyFXHNJKgcIqxbKx+7XfQxfjrCGeCvsfYxrFrU0zw==
 
-"@react-native-community/viewpager@react-native-community/react-native-viewpager":
+"@react-native-community/viewpager@react-native-community/react-native-viewpager#25c02f909e7cb7853a3347edd4b3c9b42d0d7852":
   version "3.1.0"
-  resolved "https://codeload.github.com/react-native-community/react-native-viewpager/tar.gz/e70c315e16a547f448402eee70529ec73c5a3f88"
+  resolved "https://codeload.github.com/react-native-community/react-native-viewpager/tar.gz/25c02f909e7cb7853a3347edd4b3c9b42d0d7852"
 
 "@react-navigation/core@^3.5.1":
   version "3.5.1"
