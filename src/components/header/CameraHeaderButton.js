@@ -11,8 +11,8 @@ const CameraHeaderButton = ({ onPress }) => (
   <HeaderButton
     onPress={onPress}
     shouldRasterizeIOS
-    transformOrigin="right"
     testID="goToCamera"
+    transformOrigin="right"
   >
     <ShadowStack
       {...borders.buildCircleAsObject(34)}
@@ -27,6 +27,7 @@ const CameraHeaderButton = ({ onPress }) => (
           color={colors.white}
           name="camera"
           style={{ marginBottom: 1, maxWidth: 18 }}
+          testID="cameraHeaderButton"
         />
       </Centered>
     </ShadowStack>

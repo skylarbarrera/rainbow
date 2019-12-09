@@ -52,16 +52,24 @@ const AddFundsInterstitial = ({
 }) => (
   <Container style={buildInterstitialTransform(offsetY)}>
     <ButtonContainer>
-      <Button backgroundColor={colors.appleBlue} onPress={onPressAddFunds}>
+      <Button
+        backgroundColor={colors.appleBlue}
+        onPress={onPressAddFunds}
+        testID="AddFundsButton"
+      >
         Add Funds
       </Button>
       <DividerContainer>
         <Divider inset={false} />
       </DividerContainer>
-      <Button backgroundColor="#5D9DF6" onPress={onPressImportWallet}>
+      <Button
+        backgroundColor="#5D9DF6"
+        onPress={onPressImportWallet}
+        testID="ImportWalletButton"
+      >
         Import Wallet
       </Button>
-      <Paragraph>
+      <Paragraph testID="ImportWalletHelperText">
         Use your private key or 12 to 24 word seed phrase from an existing
         wallet.
       </Paragraph>

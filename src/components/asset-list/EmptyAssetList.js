@@ -21,7 +21,7 @@ const EmptyAssetList = ({
 }) => (
   <Column {...props} style={[position.sizeAsObject('100%'), style]}>
     {hideHeader && <AssetListHeader title={lang.t('account.tab_balances')} />}
-    <Centered flex={1}>
+    <Centered flex={1} testID="EmptyAssetList">
       <Column style={position.coverAsObject}>
         {times(skeletonCount, index => (
           <AssetListItemSkeleton

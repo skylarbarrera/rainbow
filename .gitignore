@@ -63,3 +63,6 @@ buck-out/
 
 # Development Templates
 src/screens/ExamplePage.js
+
+# Detox artifacts
+artifacts

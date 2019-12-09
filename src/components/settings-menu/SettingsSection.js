@@ -67,6 +67,7 @@ const SettingsSection = ({
         icon={<SettingIcon source={BackupIcon} />}
         onPress={onPressBackup}
         label="Backup"
+        testID="BackupSetting"
       >
         <ListItemArrowGroup>
           {/*
@@ -88,6 +89,7 @@ const SettingsSection = ({
         icon={<SettingIcon source={NetworkIcon} />}
         onPress={onPressNetwork}
         label="Network"
+        testID="NetworkSetting"
       >
         <ListItemArrowGroup>{upperFirst(network) || ''}</ListItemArrowGroup>
       </ListItem>
@@ -95,6 +97,7 @@ const SettingsSection = ({
         icon={<SettingIcon source={CurrencyIcon} />}
         onPress={onPressCurrency}
         label="Currency"
+        testID="CurrencySetting"
       >
         <ListItemArrowGroup>{nativeCurrency || ''}</ListItemArrowGroup>
       </ListItem>
@@ -102,6 +105,7 @@ const SettingsSection = ({
         icon={<SettingIcon source={LanguageIcon} />}
         onPress={onPressLanguage}
         label="Language"
+        testID="LanguageSetting"
       >
         <ListItemArrowGroup>
           {supportedLanguages[language] || ''}
@@ -124,22 +128,26 @@ const SettingsSection = ({
         icon={<Emoji name="seedling" />}
         label="Replace Wallet"
         onPress={onPressImportSeedPhrase}
+        testID="SettingsImportWallet"
       />
       <ListItem
         icon={<Emoji name="rainbow" />}
         label="Follow Us"
         onPress={onPressTwitter}
         value={SettingsExternalURLs.twitter}
+        testID="FollowUs"
       />
       <ListItem
         icon={<Emoji name="speech_balloon" />}
         label="Leave Feedback️"
         onPress={onSendFeedback}
+        testID="LeaveFeedback"
       />
       <ListItem
         icon={<Emoji name="heart" />}
         label="Review Rainbow"
         onPress={onPressReview}
+        testID="ReviewRainbow"
       />
     </ColumnWithDividers>
     <Column align="center" flex={1} justify="end" paddingBottom={24}>

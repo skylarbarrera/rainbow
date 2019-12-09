@@ -55,7 +55,12 @@ const ModalHeader = ({
       </TruncatedText>
     </TitleContainer>
     {showDoneButton && (
-      <ModalHeaderButton label="Done" onPress={onPressClose} side="right" />
+      <ModalHeaderButton
+        label="Done"
+        onPress={onPressClose}
+        side="right"
+        testID="ModalDoneButton"
+      />
     )}
   </Container>
 );

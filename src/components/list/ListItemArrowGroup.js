@@ -15,7 +15,11 @@ const ListItemArrowGroup = ({ children }) => (
     opacity={0.6}
   >
     {typeof children === 'string' ? (
-      <Text color="blueGreyDark" size="bmedium">
+      <Text
+        color="blueGreyDark"
+        size="bmedium"
+        testID="ListItemArrowGroupStringValue"
+      >
         {children}
       </Text>
     ) : (

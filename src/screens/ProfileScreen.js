@@ -19,15 +19,20 @@ const ProfileScreen = ({
   transactions,
   transactionsCount,
 }) => (
-  <Page component={FlexItem} style={position.sizeAsObject('100%')}>
+  <Page
+    component={FlexItem}
+    style={position.sizeAsObject('100%')}
+    testID="ProfileScreen"
+  >
     <Header justify="space-between">
-      <HeaderButton onPress={onPressSettings}>
+      <HeaderButton onPress={onPressSettings} testID="goToSettings">
         <Icon color={colors.black} name="gear" />
       </HeaderButton>
       <BackButton
         color={colors.black}
         direction="right"
         onPress={onPressBackButton}
+        testID="goToWalletFromProfile"
       />
     </Header>
     <ActivityList

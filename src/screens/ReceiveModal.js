@@ -55,7 +55,7 @@ const ReceiveScreen = ({
   onPressCopyAddress,
   onPressShareAddress,
 }) => (
-  <Modal height={472} onCloseModal={onCloseModal}>
+  <Modal height={472} onCloseModal={onCloseModal} testID="ReceiveModal">
     <ModalHeader onPressClose={onCloseModal} title="Receive" />
     <Divider inset={[0, 16]} />
     <Content>

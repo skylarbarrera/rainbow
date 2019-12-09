@@ -37,7 +37,7 @@ const ProfileMasthead = ({
   onPressReceive,
   showBottomDivider,
 }) => (
-  <Container>
+  <Container testID="ProfileMasthead">
     <FastImage
       source={AvatarImageSource}
       style={{
@@ -45,8 +45,15 @@ const ProfileMasthead = ({
         marginBottom: 3,
       }}
     />
-    <CopyTooltip textToCopy={accountAddress} tooltipText="Copy Address">
-      <AddressAbbreviation address={accountAddress} />
+    <CopyTooltip
+      testID="CopyTooltip"
+      textToCopy={accountAddress}
+      tooltipText="Copy Address"
+    >
+      <AddressAbbreviation
+        address={accountAddress}
+        testID="AddressAbbreviation"
+      />
     </CopyTooltip>
     <RowWithMargins align="center" margin={1}>
       <Column>
@@ -55,6 +62,7 @@ const ProfileMasthead = ({
           onPress={onPressCopy}
           scaleTo={0.88}
           text="Copy Address"
+          testID="CopyAddress"
         />
         <FloatingEmojis
           count={emojiCount}
@@ -67,6 +75,7 @@ const ProfileMasthead = ({
         icon="inbox"
         onPress={onPressReceive}
         scaleTo={0.88}
+        testID="ReceiveButton"
         text="Receive"
       />
     </RowWithMargins>
