@@ -76,12 +76,12 @@ const gradientPoints = [gradientXPoint, 53.5];
 
 const Container = styled(Column)`
   background-color: ${colors.transparent};
-  height: 100%;
+  height: ${sheetHeight};
 `;
 
 const SheetContainer = styled(Column)`
   background-color: ${colors.white};
-  height: ${sheetHeight};
+  height: ${deviceUtils.dimensions.height};
 `;
 
 class AddCashSheet extends Component {
