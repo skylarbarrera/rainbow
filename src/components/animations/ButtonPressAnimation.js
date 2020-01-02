@@ -10,7 +10,7 @@ import Animated, { Easing } from 'react-native-reanimated';
 import stylePropType from 'react-style-proptype';
 import { animations } from '../../styles';
 import { directionPropType } from '../../utils';
-import { transformOrigin as transformOriginUtil } from './procs';
+import { transformOrigin as transformOriginUtil } from 'react-native-redash';
 
 const {
   neq,
