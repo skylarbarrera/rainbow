@@ -20,7 +20,6 @@ matrix:
     - brew tap wix/brew
     - brew install applesimutils
     - brew update
-    - brew install watchman
     - nvm install $NODE_VERSION
     - nvm use $NODE_VERSION
     - nvm alias default $NODE_VERSION
