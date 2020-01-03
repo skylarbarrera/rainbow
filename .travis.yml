@@ -24,6 +24,8 @@ matrix:
     - nvm use $NODE_VERSION
     - nvm alias default $NODE_VERSION
     - brew install yarn
+    - yarn cache clean
+    - yarn install --network-concurrency 1
     - yarn global add react-native-cli
     - yarn global add detox-cli
     - yarn
