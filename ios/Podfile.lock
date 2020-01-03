@@ -285,13 +285,13 @@ PODS:
   - React-jsinspector (1000.0.0)
   - react-native-blur (0.8.0):
     - React
-  - react-native-camera (3.15.0):
+  - react-native-camera (3.15.1):
     - React
-    - react-native-camera/RCT (= 3.15.0)
-    - react-native-camera/RN (= 3.15.0)
-  - react-native-camera/RCT (3.15.0):
+    - react-native-camera/RCT (= 3.15.1)
+    - react-native-camera/RN (= 3.15.1)
+  - react-native-camera/RCT (3.15.1):
     - React
-  - react-native-camera/RN (3.15.0):
+  - react-native-camera/RN (3.15.1):
     - React
   - react-native-mail (4.1.0):
     - React
@@ -334,7 +334,9 @@ PODS:
     - React-RCTNetwork (= 1000.0.0)
     - ReactCommon/turbomodule/core (= 1000.0.0)
   - React-RCTLinking (1000.0.0):
+    - FBReactNativeSpec (= 1000.0.0)
     - React-Core/RCTLinkingHeaders (= 1000.0.0)
+    - ReactCommon/turbomodule/core (= 1000.0.0)
   - React-RCTNetwork (1000.0.0):
     - FBReactNativeSpec (= 1000.0.0)
     - Folly (= 2018.10.22.00)
@@ -670,10 +672,10 @@ SPEC CHECKSUMS:
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   CodePush: d2e54ad42df82a8db65b2d23d8191b950ba945e1
   Crashlytics: 07fb167b1694128c1c9a5a5cc319b0e9c3ca0933
-  DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
+  DoubleConversion: cde416483dac037923206447da6e1454df403714
   Fabric: f988e33c97f08930a413e08123064d2e5f68d655
-  FBLazyVector: 4335830c229c50dd9c321143a5546de54e943cf2
-  FBReactNativeSpec: b8eef76e2d9fa288f17932cf34af62d52ca8d1c1
+  FBLazyVector: b16e93c8bf46171fa8f2be6d4666bdde60b4e434
+  FBReactNativeSpec: f0f54d1548c6eaadc61ac13cf40c6010ea20688f
   Firebase: 458d109512200d1aca2e1b9b6cf7d68a869a4a46
   FirebaseAnalytics: 45f36d9c429fc91d206283900ab75390cd05ee8a
   FirebaseAnalyticsInterop: d48b6ab67bcf016a05e55b71fc39c61c0cb6b7f3
@@ -683,8 +685,8 @@ SPEC CHECKSUMS:
   FirebaseInstanceID: ebd2ea79ee38db0cb5f5167b17a0d387e1cc7b6e
   FirebaseMessaging: 089b7a4991425783384acc8bcefcd78c0af913bd
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
-  Folly: b2427069843176349f3568e9cdeb95f6de24d0fb
-  glog: 1f3da668190260b06b429bb211bfbee5cd790c28
+  Folly: f1c65c1bdabb35617432cac9cf17d0cad310ce6f
+  glog: 40a13f7840415b9a77023fbcae0f1e6f43192af3
   GoogleAppMeasurement: dfe55efa543e899d906309eaaac6ca26d249862f
   GoogleDataTransport: 8e9b210c97d55fbff306cc5468ff91b9cb32dcf5
   GoogleDataTransportCCTSupport: 202d7cdf9c4a7d81a2bb7f7e7e1ba6faa421b1f2
@@ -693,17 +695,17 @@ SPEC CHECKSUMS:
   libwebp: 057912d6d0abfb6357d8bb05c0ea470301f5d61e
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   Protobuf: dd1aaea7140debfe4dd0683fb8ef208e527ae153
-  RCTRequired: fd9dd492fcd396c3bb97991e816f5d952dfe61ed
-  RCTTypeSafety: cf05afd120ac68c423c5cb373026824db1c65984
-  React: 86c2e4b20c900281f6c9cdccb8781b6b909f4f83
-  React-Core: 8fe03b4c02dda114b36d0748f901e62195731902
-  React-CoreModules: d92fd8216e26063eac2c8e8789aa93dbb6ee6a24
-  React-cxxreact: eb570b3dbba49b9cc66be0ce2d8adc9d257620d0
-  React-jsi: db026dea95cf3b2c6732cbc9094defe919cf9043
-  React-jsiexecutor: 765f4d454da8b5d60d8c0daf1304115f587810a0
-  React-jsinspector: de402c98a4cf578fbd87f7883b71fbb769ea3947
+  RCTRequired: 433b320d10ca740c9804588aa4656dedeca8beb6
+  RCTTypeSafety: 05ebbc5cc8215b13b452b1fadce80db51997f460
+  React: a7a938ccde2f381b4ebaf8181ad8e6af8d77980a
+  React-Core: 5a2ad67d66aa874af3ead5149ffe8477573dd192
+  React-CoreModules: 8f023e5d58b728f76b668d2fbf16c3cf6b0a6473
+  React-cxxreact: 96384cd1f1727e1084c0c1eadf9ddd3cff60a372
+  React-jsi: d3bf469150f01b9551cb13d8de52f6cb1236f0cb
+  React-jsiexecutor: de33da6fbc0116efc73fc0bb6be462be287ff9dc
+  React-jsinspector: dab74c9bfa7c212bed62612313d0781a3489480c
   react-native-blur: cad4d93b364f91e7b7931b3fa935455487e5c33c
-  react-native-camera: 52114c432860b89986c9ee4919d00a48a6ba7abb
+  react-native-camera: 1ba3e7f2375a6b44ae09ce9be70268e0b225bc10
   react-native-mail: a864fb211feaa5845c6c478a3266de725afdce89
   react-native-netinfo: ddaca8bbb9e6e914b1a23787ccb879bc642931c9
   react-native-randombytes: 3638d24759d67c68f6ccba60c52a7a8a8faa6a23
@@ -712,16 +714,16 @@ SPEC CHECKSUMS:
   react-native-text-input-mask: 07227297075f9653315f43b0424d596423a01736
   react-native-udp: 54a1aa9bf5c0824f930b1ba6dbfb3fd3e733bba9
   react-native-version-number: b415bbec6a13f2df62bf978e85bc0d699462f37f
-  React-RCTActionSheet: bdace0eef8efad946dfc6f4f628cf1770a64c41a
-  React-RCTAnimation: 49bfdf80eab2e5e727614c66e7ad9e778096981e
-  React-RCTBlob: 51036e0d11d277089572fc6770de8b38401077ea
-  React-RCTImage: 84f36a19455fff01cb3b69982b649a40e377c1f4
-  React-RCTLinking: 525b52132442f54efa1be1997a72569da5c4424b
-  React-RCTNetwork: b46f3ee9ea53a3c40a7255c270bb8b24cdea0dfa
-  React-RCTSettings: 837833bd1566f30efa960adaa0ca2b709298996c
-  React-RCTText: d5cc948872e048147fa2e449d03722897a1cdb2a
-  React-RCTVibration: 05d55768a744f7dfb4e437ae94ae7d0218bc142a
-  ReactCommon: 7b5df1a71aee6567353f7539ff1166ca8a3bbd16
+  React-RCTActionSheet: 00a18a267d6843f53c7d2bf4345f1be58961cb43
+  React-RCTAnimation: 7b49110180fd99bceeeb0e410675cb2d1752e9af
+  React-RCTBlob: 0e66e0843104c686f359c95559a30266b1d4ccab
+  React-RCTImage: 927c203a4ad2261714b3e07f112d450b94e75659
+  React-RCTLinking: b184f24fd9f746d1734a200d36e58d1c92d83cfb
+  React-RCTNetwork: 1b1116ddfcd31d23f8bd4e5a5a708941bbb216fa
+  React-RCTSettings: 8bd4fa2ab3463f6dfb951f720cb912560023143c
+  React-RCTText: 2e7e3e59bae4a3d3bf9e6e598816f2b5e9d6441e
+  React-RCTVibration: 50cc58c6a54c303501d7b0716112408f63053966
+  ReactCommon: ae0c66e6dfc441b64e80de2ee5e9a369797febb1
   ReactNativePermissions: 7cfad56d13c8961cd2a1005b4955b1400c79ef3e
   RNAnalytics: 35a54cb740c472a0a6a3de765176b82cccc2d1ef
   RNCAsyncStorage: 60a80e72d95bf02a01cace55d3697d9724f0d77f
@@ -749,9 +751,9 @@ SPEC CHECKSUMS:
   SRSRadialGradient: 77bcb1ae812d0c77560e54ed9e52166df032db1d
   SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23
   TcpSockets: 14306fb79f9750ea7d2ddd02d8bed182abb01797
-  ToolTipMenu: ad9f45c5ef375418275c81a667c2805bcac8692a
+  ToolTipMenu: 8ac61aded0fbc4acfe7e84a7d0c9479d15a9a382
   TouchID: ba4c656d849cceabc2e4eef722dea5e55959ecf4
-  Yoga: 3c98ecfff35a937c4ce5e0958e3cceba70dd6ada
+  Yoga: 0b65fad601a72cb5a057ba8af22bd2e8b85bdc13
 
 PODFILE CHECKSUM: 858ea85d96dddb4fec76530e24f48c8339e93c76
 
