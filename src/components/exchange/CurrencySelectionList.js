@@ -32,7 +32,7 @@ const NoResultMessage = withNeverRerender(() => (
 const skeletonTransition = (
   <Transition.Sequence>
     <Transition.Out interpolation="easeOut" type="fade" />
-    <Transition.Change durationMs={0.001} interpolation="easeOut" />
+    {/* <Transition.Change durationMs={0.001} interpolation="easeOut" /> */}
     <Transition.In durationMs={0.001} interpolation="easeOut" type="fade" />
   </Transition.Sequence>
 );
