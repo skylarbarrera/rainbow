@@ -192,7 +192,7 @@
     "configurations": {
       "ios.sim.release": {
         "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/Rainbow.app",
-        "build": "xcodebuild -workspace ios/Rainbow.xcworkspace/ -scheme Rainbow -configuration Release -sdk iphonesimulator -derivedDataPath ios/build -UseModernBuildSystem=NO -quiet",
+        "build": "xcodebuild -workspace ios/Rainbow.xcworkspace/ -scheme Rainbow -configuration Release -sdk iphonesimulator -derivedDataPath ios/build",
         "type": "ios.simulator",
         "name": "iPhone 8"
       },
