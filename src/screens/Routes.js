@@ -162,7 +162,7 @@ const MainNavigator = createStackNavigator(
       onTransitionStart,
     },
     headerMode: 'none',
-    initialRouteName: 'ExampleScreen',
+    initialRouteName: 'SwipeLayout',
     mode: 'modal',
   }
 );

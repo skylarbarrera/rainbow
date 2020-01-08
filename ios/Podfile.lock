@@ -669,8 +669,13 @@ SPEC CHECKSUMS:
   Crashlytics: 07fb167b1694128c1c9a5a5cc319b0e9c3ca0933
   DoubleConversion: cde416483dac037923206447da6e1454df403714
   Fabric: f988e33c97f08930a413e08123064d2e5f68d655
+<<<<<<< HEAD
   FBLazyVector: 53167b294014d654ceb153a542586a3938ad2d8c
   FBReactNativeSpec: 0b325ec328819bead8d339a18dcfee775eecb47e
+=======
+  FBLazyVector: 6fae73d3e997609796c91f1a73e05e25d87b2ffa
+  FBReactNativeSpec: c9ee266029a304b2a0fd690dfcdc604f774a6a17
+>>>>>>> f97de77d... begin compound sheet
   Firebase: 458d109512200d1aca2e1b9b6cf7d68a869a4a46
   FirebaseAnalytics: 45f36d9c429fc91d206283900ab75390cd05ee8a
   FirebaseAnalyticsInterop: d48b6ab67bcf016a05e55b71fc39c61c0cb6b7f3
@@ -690,6 +695,7 @@ SPEC CHECKSUMS:
   libwebp: 946cb3063cea9236285f7e9a8505d806d30e07f3
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   Protobuf: dd1aaea7140debfe4dd0683fb8ef208e527ae153
+<<<<<<< HEAD
   RCTRequired: 7e91f49574d3891aec61a2d858d30fc260dd5116
   RCTTypeSafety: 8b637cf63f70d5b82204ddfa190655d1bc5b3a6f
   React: 4a9e8b3f9663e44313069767625e6ab242b5af81
@@ -699,6 +705,17 @@ SPEC CHECKSUMS:
   React-jsi: b8d2136add1a6a33a857822467617b0bd0853c7c
   React-jsiexecutor: 070339c3fdd9f65f1248183cd50e0c09ef0006b6
   React-jsinspector: 66993e7c415ffe4ce14f495c45ee066a6a6a6364
+=======
+  RCTRequired: 2ee052ab93d31fed26b2c517b4838c738a9f283c
+  RCTTypeSafety: 245c0516439c287e0206e72aebccb7e10ebbc6c6
+  React: ba41caa8c626c69634e818ffa545fe6be037873e
+  React-Core: 2caa3944b9a53589c76a38c5aa25c6581f5ee57b
+  React-CoreModules: 5938a39491498bef28bdb46d7f2c4e5c81ca481d
+  React-cxxreact: 298326a2b05d98b36dbcea6a09b33ed18ed096f5
+  React-jsi: 6544e6a4faa62051779cfa8d65b47e2e697258f6
+  React-jsiexecutor: d7b90d29bd42f19cf04be5763a54465263ad2357
+  React-jsinspector: 95715b42ffa75d5a61c2f2aa59130cd841eec622
+>>>>>>> f97de77d... begin compound sheet
   react-native-blur: cad4d93b364f91e7b7931b3fa935455487e5c33c
   react-native-camera: 1ba3e7f2375a6b44ae09ce9be70268e0b225bc10
   react-native-mail: a864fb211feaa5845c6c478a3266de725afdce89
@@ -709,6 +726,7 @@ SPEC CHECKSUMS:
   react-native-text-input-mask: 07227297075f9653315f43b0424d596423a01736
   react-native-udp: ff9d13e523f2b58e6bc5d4d32321ac60671b5dc9
   react-native-version-number: b415bbec6a13f2df62bf978e85bc0d699462f37f
+<<<<<<< HEAD
   React-RCTActionSheet: e12ebdae25bbde96c1b3ba608d5296f220e19219
   React-RCTAnimation: eca2426de5dc25c5e8c2c84088048275d1c1a53a
   React-RCTBlob: 66bdbb79ff0e19b644cdb44ce31acd69d5f0ba14
@@ -719,6 +737,18 @@ SPEC CHECKSUMS:
   React-RCTText: ff9576b516f098bec7ef4cff84784065a4a50ab9
   React-RCTVibration: d210ff110ccbccbc8a756e582154fe212e1622c1
   ReactCommon: 38ac2d55a4569f909759223da2ca1f717f7d0f27
+=======
+  React-RCTActionSheet: 7b485599f09cbb9d097d5ae3579e694eeef733eb
+  React-RCTAnimation: ee81ac8e7fbfcec38a0a0bd8698ab80a9736d53f
+  React-RCTBlob: 986c7cd840d399dfffa639dd0039d94144b45ff9
+  React-RCTImage: da32df4d00e3340a30868ec3d0789444a355bcd5
+  React-RCTLinking: ebb2817940e25b557026f43216d4788ffaabeb30
+  React-RCTNetwork: 544cca4d4119c7ed3f9a09138aec7eb9ed0f4567
+  React-RCTSettings: c401cf6dbbadd3003f2b8d9471ae7d3f66e47714
+  React-RCTText: d012f3876a8b24b21f80e366aafa640af1bf5174
+  React-RCTVibration: b7f21182d07223f460cccee6527298d4fdac85b7
+  ReactCommon: 97e4f5d3cb4617911f80a79aa64a3d984a542d3c
+>>>>>>> f97de77d... begin compound sheet
   ReactNativePermissions: 7cfad56d13c8961cd2a1005b4955b1400c79ef3e
   RNAnalytics: 35a54cb740c472a0a6a3de765176b82cccc2d1ef
   RNCAsyncStorage: 60a80e72d95bf02a01cace55d3697d9724f0d77f
@@ -747,7 +777,11 @@ SPEC CHECKSUMS:
   SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23
   TcpSockets: 14306fb79f9750ea7d2ddd02d8bed182abb01797
   ToolTipMenu: 8ac61aded0fbc4acfe7e84a7d0c9479d15a9a382
+<<<<<<< HEAD
   Yoga: de1d2924e4bda90a2004d0bd08f77883841aef2a
+=======
+  Yoga: 2b6c2efa93614feafca40fc4a66054c6fd29cd05
+>>>>>>> f97de77d... begin compound sheet
 
 PODFILE CHECKSUM: e38b8f3a80d4f969b2bd4796967957156faf7531
 
