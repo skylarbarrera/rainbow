@@ -29,3 +29,6 @@ matrix:
     - yarn nodeify
     - pod repo update
     - yarn install-pods
+    - detox build -c ios.sim.debug.local
+    script:
+    - detox test -c ios.sim.debug.local --no-color --headless --cleanup
