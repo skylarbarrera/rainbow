@@ -29,5 +29,4 @@ matrix:
     - yarn nodeify
     - pod repo update
     - yarn install-pods
-    script:
-    - detox test -c ios.sim.release --no-color --headless --cleanup
+    - FORCE_BUNDLING=1 detox build -c ios.sim.release
