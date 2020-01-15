@@ -25,7 +25,6 @@ import {
   sheetPreset,
   backgroundPreset,
   overlayExpandedPreset,
-  swapDetailsPreset,
 } from '../navigation/transitions/effects';
 
 const onTransitionEnd = () =>
@@ -140,10 +139,6 @@ const MainNavigator = createStackNavigator(
       screen: SettingsModal,
       transparentCard: true,
     },
-    SwapDetailsScreen: {
-      navigationOptions: swapDetailsPreset,
-      screen: ExpandedAssetScreenWithData,
-    },
     SwipeLayout: {
       navigationOptions: {
         ...backgroundPreset,
@@ -168,7 +163,6 @@ const MainNavigator = createStackNavigator(
     },
     headerMode: 'none',
     initialRouteName: 'SwipeLayout',
-    keyboardHandlingEnabled: false,
     mode: 'modal',
   }
 );

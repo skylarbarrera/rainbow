@@ -742,7 +742,7 @@ class ExchangeModal extends Component {
       outputNativePrice,
     } = this.state;
 
-    this.props.navigation.navigate('SwapDetailsScreen', {
+    this.props.navigation.navigate('OverlayExpandedAssetScreen', {
       inputCurrencySymbol: get(inputCurrency, 'symbol'),
       inputExecutionRate,
       inputNativePrice,
