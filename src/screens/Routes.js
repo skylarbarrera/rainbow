@@ -14,14 +14,16 @@ import ProfileScreenWithData from './ProfileScreenWithData';
 import QRScannerScreenWithData from './QRScannerScreenWithData';
 import ReceiveModal from './ReceiveModal';
 import ExampleScreen from './ExampleScreen';
-import WalletConnectConfirmationModal from './WalletConnectConfirmationModal';
+import SavingsSheet from './SavingsSheet';
 import SendSheetWithData from './SendSheetWithData';
 import SettingsModal from './SettingsModal';
 import TransactionConfirmationScreenWithData from './TransactionConfirmationScreenWithData';
 import WalletScreen from './WalletScreen';
+import WalletConnectConfirmationModal from './WalletConnectConfirmationModal';
 import {
   exchangePreset,
   expandedPreset,
+  savingsPreset,
   sheetPreset,
   backgroundPreset,
   overlayExpandedPreset,
@@ -116,6 +118,12 @@ const MainNavigator = createStackNavigator(
         },
       },
       screen: ReceiveModal,
+    },
+    SavingsSheet: {
+      navigationOptions: {
+        ...savingsPreset,
+      },
+      screen: SavingsSheet,
     },
     SendSheet: {
       navigationOptions: {

@@ -92,6 +92,7 @@ export default function ButtonPressAnimation({
   scaleTo,
   style,
   transformOrigin,
+  ...props
 }) {
   const [interactionHandle, createHandle, removeHandle] = useInteraction();
   const { onLayout, withTransformOrigin } = useTransformOrigin(transformOrigin);
@@ -244,6 +245,7 @@ export default function ButtonPressAnimation({
 
   return (
     <AnimatedRawButton
+      {...props}
       enabled={!disabled}
       onHandlerStateChange={onGestureEvent}
     >
