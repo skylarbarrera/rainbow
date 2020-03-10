@@ -7,11 +7,17 @@ import { withAccountSettings, withOpenBalances } from '../../hoc';
 import { colors } from '../../styles';
 import { isNewValueForPath } from '../../utils';
 import { ButtonPressAnimation } from '../animations';
+import { EmDash } from '../html-entities';
 import { FlexItem, Row } from '../layout';
 import BalanceText from './BalanceText';
 import BottomRowText from './BottomRowText';
 import CoinName from './CoinName';
 import CoinRow from './CoinRow';
+
+const BalanceCoinRowExpandedStyles = `
+  padding-bottom: 0;
+  padding-top: 0;
+`;
 
 const formatPercentageString = percentString =>
   percentString
@@ -30,7 +36,11 @@ const BottomRow = ({ balance, isExpandedState, native }) => {
   return (
     <Fragment>
       <BottomRowText>{get(balance, 'display')}</BottomRowText>
-      {!isExpandedState && (
+      {isExpandedState ? (
+        <BottomRowText>
+          <EmDash />
+        </BottomRowText>
+      ) : (
         <BottomRowText color={isPositive ? colors.limeGreen : null}>
           {percentageChangeDisplay}
         </BottomRowText>
@@ -73,6 +83,7 @@ TopRow.propTypes = {
 };
 
 const BalanceCoinRow = ({
+  containerStyles,
   isExpandedState,
   item,
   onPress,
@@ -86,6 +97,9 @@ const BalanceCoinRow = ({
   >
     <CoinRow
       bottomRowRender={BottomRow}
+      containerStyles={
+        isExpandedState ? BalanceCoinRowExpandedStyles : containerStyles
+      }
       isExpandedState={isExpandedState}
       onPress={onPress}
       onPressSend={onPressSend}
@@ -97,6 +111,7 @@ const BalanceCoinRow = ({
 );
 
 BalanceCoinRow.propTypes = {
+  containerStyles: PropTypes.string,
   isExpandedState: PropTypes.bool,
   item: PropTypes.object,
   nativeCurrency: PropTypes.string.isRequired,

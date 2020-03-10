@@ -1,38 +1,25 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Text, View } from 'react-primitives';
-import { colors, fonts } from '../../styles';
+import { colors } from '../../styles';
 import { Icon } from '../icons';
+import { RowWithMargins } from '../layout';
+import { Rounded } from '../text';
 
 const TrendIndicatorText = ({ children, direction }) => (
-  <View
-    style={{
-      flexDirection: 'row',
-    }}
-  >
-    <View
-      style={{
-        justifyContent: 'center',
-      }}
-    >
-      <Icon
-        color={direction ? colors.chartGreen : colors.red}
-        name="arrow"
-        direction={direction ? 'left' : 'right'}
-      />
-    </View>
-    <Text
-      style={{
-        color: direction ? colors.chartGreen : colors.red,
-        fontFamily: fonts.family.SFProRounded,
-        fontWeight: fonts.weight.semibold,
-        lineHeight: 17,
-        paddingLeft: 2,
-      }}
+  <RowWithMargins align="center" margin={2}>
+    <Icon
+      color={direction ? colors.chartGreen : colors.red}
+      direction={direction ? 'left' : 'right'}
+      name="arrow"
+    />
+    <Rounded
+      color={direction ? colors.chartGreen : colors.red}
+      lineHeight={17}
+      weight="semibold"
     >
       {children}
-    </Text>
-  </View>
+    </Rounded>
+  </RowWithMargins>
 );
 
 TrendIndicatorText.propTypes = {
@@ -40,4 +27,4 @@ TrendIndicatorText.propTypes = {
   direction: PropTypes.string,
 };
 
-export default TrendIndicatorText;
+export default React.memo(TrendIndicatorText);

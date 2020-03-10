@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { useWindowDimensions } from 'react-native';
 import stylePropType from 'react-style-proptype';
 import { useDimensions } from '../../hooks';
 import { colors, padding, position } from '../../styles';
@@ -23,14 +22,10 @@ const SheetActionButton = ({
 }) => {
   const { width } = useDimensions();
 
-  console.log('style', style);
-  console.log('props', props);
-
   return (
     <ButtonPressAnimation
       {...props}
       flex={1}
-      height={width >= 414 ? 44 : 40}
       onPress={onPress}
       scaleTo={0.96}
       style={[position.centeredAsObject, style]}
@@ -71,7 +66,6 @@ SheetActionButton.propTypes = {
 
 SheetActionButton.defaultProps = {
   borderRadius: 50,
-  // color: 'pink',
   shadows: [
     [0, 2, 5, colors.dark, 0.15],
     [0, 6, 10, colors.dark, 0.14],

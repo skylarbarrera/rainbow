@@ -1,26 +1,26 @@
-import PropTypes from 'prop-types';
 import React from 'react';
-import { Text } from 'react-primitives';
-import { colors, fonts } from '../../styles';
+import stylePropType from 'react-style-proptype';
+import { colors } from '../../styles';
+import { Rounded } from '../text';
 
-const TimestampText = ({ children, style }) => (
-  <Text
-    style={{
-      color: colors.blueGreyDark,
-      fontFamily: fonts.family.SFProRounded,
-      lineHeight: 17,
-      marginLeft: -15,
-      opacity: 0.5,
-      textAlign: 'center',
-      ...style,
-    }}
-  >
-    {children}
-  </Text>
+const TimestampText = ({ style, ...props }) => (
+  <Rounded
+    {...props}
+    align="center"
+    color={colors.blueGreyDark}
+    lineHeight={17}
+    style={[
+      style,
+      {
+        marginLeft: -15,
+        opacity: 0.5,
+      },
+    ]}
+  />
 );
 
 TimestampText.propTypes = {
-  children: PropTypes.string,
+  style: stylePropType,
 };
 
 export default TimestampText;
