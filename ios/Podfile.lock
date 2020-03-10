@@ -347,6 +347,7 @@ PODS:
     - React
   - react-native-blur (0.8.0):
     - React
+<<<<<<< HEAD
   - react-native-camera (3.23.0):
     - React
     - react-native-camera/RCT (= 3.23.0)
@@ -354,6 +355,15 @@ PODS:
   - react-native-camera/RCT (3.23.0):
     - React
   - react-native-camera/RN (3.23.0):
+=======
+  - react-native-camera (3.18.0):
+    - React
+    - react-native-camera/RCT (= 3.18.0)
+    - react-native-camera/RN (= 3.18.0)
+  - react-native-camera/RCT (3.18.0):
+    - React
+  - react-native-camera/RN (3.18.0):
+>>>>>>> 0ef7500a... WIP
     - React
   - react-native-mail (4.1.0):
     - React
@@ -445,10 +455,14 @@ PODS:
     - React
   - RNCMaskedView (0.1.9):
     - React
+<<<<<<< HEAD
   - RNCoolModals (0.0.7):
     - PanModal
     - React
   - RNCPushNotificationIOS (1.1.1):
+=======
+  - RNCPushNotificationIOS (1.0.6):
+>>>>>>> 0ef7500a... WIP
     - React
   - RNDeviceInfo (5.3.1):
     - React
@@ -487,7 +501,11 @@ PODS:
     - React
   - RNScreens (2.2.0):
     - React
+<<<<<<< HEAD
   - RNSentry (1.3.7):
+=======
+  - RNSentry (1.3.2):
+>>>>>>> 0ef7500a... WIP
     - React
     - Sentry (~> 4.4.0)
   - RNStoreReview (0.1.5):
@@ -858,7 +876,11 @@ SPEC CHECKSUMS:
   React-jsinspector: 512e560d0e985d0e8c479a54a4e5c147a9c83493
   react-native-background-timer: 1f7d560647b40e6a60b01c452ba29c54bf581fc4
   react-native-blur: cad4d93b364f91e7b7931b3fa935455487e5c33c
+<<<<<<< HEAD
   react-native-camera: fc44e91dcf7420f21a10e653adc811efd1e78158
+=======
+  react-native-camera: 3308898e1b09bf6211647c6e3e42d5f7aa02259e
+>>>>>>> 0ef7500a... WIP
   react-native-mail: a864fb211feaa5845c6c478a3266de725afdce89
   react-native-netinfo: 4fa023c153d582aeae8435df95c9a975c5986449
   react-native-randombytes: 3638d24759d67c68f6ccba60c52a7a8a8faa6a23
@@ -881,10 +903,15 @@ SPEC CHECKSUMS:
   ReactNativePayments: 40a266450628c05db440fe219b631210e4358a49
   RNAnalytics: 35a54cb740c472a0a6a3de765176b82cccc2d1ef
   RNCAsyncStorage: 44395cb9c7c1523104c2b499eb426ef7aff82bca
+<<<<<<< HEAD
   RNCClipboard: 8148e21ac347c51fd6cd4b683389094c216bb543
   RNCMaskedView: 71fc32d971f03b7f03d6ab6b86b730c4ee64f5b6
   RNCoolModals: 101e6048991c708be5f6486186ddbb8f23b20d78
   RNCPushNotificationIOS: a0b6894f4ad9b93d9dac467fdf4d055660ac8a0d
+=======
+  RNCMaskedView: a88953beefbd347a29072d9eba90e42945fe291e
+  RNCPushNotificationIOS: 05262c52fcfb861a2b79aa8e51cad66263c9ea52
+>>>>>>> 0ef7500a... WIP
   RNDeviceInfo: 6f20764111df002b4484f90cbe0a861be29bcc6c
   RNFastImage: 9b0c22643872bb7494c8d87bbbb66cc4c0d9e7a2
   RNFBApp: 69781cf10ce41f6f6db789e6264dd80119ef2fb7
@@ -898,8 +925,13 @@ SPEC CHECKSUMS:
   RNPermissions: 18cf517660d0247a4b66d21b6f85272fd1870cd2
   RNReactNativeHapticFeedback: 2566b468cc8d0e7bb2f84b23adc0f4614594d071
   RNReanimated: 031fe8d9ea93c2bd689a40f05320ef9d96f74d7f
+<<<<<<< HEAD
   RNScreens: 812b79d384e2bea7eebc4ec981469160d4948fd5
   RNSentry: 370623102247ebea20191b5fb549ecc7a275b324
+=======
+  RNScreens: ba539a5086136eb356e43699cb588a80369763ca
+  RNSentry: 2ec85f3e314c6a650b1c51b30ff764b6103ed7e2
+>>>>>>> 0ef7500a... WIP
   RNStoreReview: 62d6afd7c37db711a594bbffca6b0ea3a812b7a8
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   SDWebImage: a99471f452bdfa0ca52ddf5b1adf2b61cab1d1eb
@@ -912,6 +944,10 @@ SPEC CHECKSUMS:
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
+<<<<<<< HEAD
 PODFILE CHECKSUM: 83684de3969b44377a61e17ecbb99f936d354493
+=======
+PODFILE CHECKSUM: 056d676880e0903c906715772145882214dfb738
+>>>>>>> 0ef7500a... WIP
 
 COCOAPODS: 1.9.1

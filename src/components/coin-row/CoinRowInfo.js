@@ -5,7 +5,7 @@ import { compose } from 'recompact';
 import styled from 'styled-components/primitives';
 import { withCoinListEdited } from '../../hoc';
 import { colors, padding } from '../../styles';
-import { Row } from '../layout';
+import { Column } from '../layout';
 import BalanceText from './BalanceText';
 import BottomRowText from './BottomRowText';
 import CoinRow from './CoinRow';
@@ -13,35 +13,45 @@ import CoinRow from './CoinRow';
 const CoinRowPaddingTop = 9;
 const CoinRowPaddingBottom = 9;
 
-const Container = styled(Row)`
+const Container = styled(Column).attrs({
+  align: 'end',
+  justify: 'space-between',
+})`
   ${padding(CoinRowPaddingTop, 19, CoinRowPaddingBottom, 19)}
-  width: 100%;
-  flex-direction: column;
-  align-items: flex-end;
-  width: 130px;
   height: ${CoinRow.height};
-  justify-content: space-between;
+  opacity: ${({ isHidden }) => (isHidden ? 0.4 : 1)};
+  width: 130px;
 `;
 
-const spaceNegativePercentage = percentString =>
-  percentString ? percentString.split('-').join('- ') : null;
+const PercentageText = styled(BottomRowText).attrs({
+  align: 'right',
+})`
+  color: ${({ isPositive }) => (isPositive ? colors.green : null)};
+  margin-bottom: 0.5;
+`;
+
+const formatPercentageString = percentString =>
+  percentString
+    ? percentString
+        .split('-')
+        .join('- ')
+        .split('%')
+        .join(' %')
+    : '-';
 
 const CoinRowInfo = ({ isHidden, native }) => {
-  const nativeDisplay = get(native, 'balance.display');
-
   const percentChange = get(native, 'change');
-  const percentageChangeDisplay = spaceNegativePercentage(percentChange);
+  const percentageChangeDisplay = formatPercentageString(percentChange);
   const isPositive = percentChange && percentageChangeDisplay.charAt(0) !== '-';
+
   return (
-    <Container style={{ height: 59, opacity: isHidden ? 0.4 : 1 }}>
-      <BalanceText numberOfLines={1}>{nativeDisplay}</BalanceText>
-      <BottomRowText
-        align="right"
-        color={isPositive ? colors.green : null}
-        style={{ marginBottom: 0.5 }}
-      >
+    <Container isHidden={isHidden}>
+      <BalanceText numberOfLines={1}>
+        {get(native, 'balance.display')}
+      </BalanceText>
+      <PercentageText isPositive={isPositive}>
         {percentageChangeDisplay}
-      </BottomRowText>
+      </PercentageText>
     </Container>
   );
 };

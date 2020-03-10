@@ -10,9 +10,11 @@ import {
   withEditOptions,
   withOpenBalances,
 } from '../../hoc';
+import { colors } from '../../styles';
 import { deviceUtils, isNewValueForPath } from '../../utils';
 import { ButtonPressAnimation } from '../animations';
 import { Column, FlexItem, Row } from '../layout';
+import BalanceText from './BalanceText';
 import BottomRowText from './BottomRowText';
 import CoinCheckButton from './CoinCheckButton';
 import CoinName from './CoinName';
@@ -21,10 +23,28 @@ import CoinRowInfo from './CoinRowInfo';
 
 const editTranslateOffset = 32;
 
-const BottomRow = ({ balance }) => {
+const formatPercentageString = percentString =>
+  percentString
+    ? percentString
+        .split('-')
+        .join('- ')
+        .split('%')
+        .join(' %')
+    : '-';
+
+const BottomRow = ({ balance, isExpandedState, native }) => {
+  const percentChange = get(native, 'change');
+  const percentageChangeDisplay = formatPercentageString(percentChange);
+  const isPositive = percentChange && percentageChangeDisplay.charAt(0) !== '-';
+
   return (
     <Fragment>
       <BottomRowText>{get(balance, 'display', '')}</BottomRowText>
+      {!isExpandedState && (
+        <BottomRowText color={isPositive ? colors.limeGreen : null}>
+          {percentageChangeDisplay}
+        </BottomRowText>
+      )}
     </Fragment>
   );
 };
@@ -33,11 +53,23 @@ BottomRow.propTypes = {
   balance: PropTypes.shape({ display: PropTypes.string }),
 };
 
-const TopRow = ({ name }) => {
+const TopRow = ({ isExpandedState, name, native, nativeCurrencySymbol }) => {
+  const nativeDisplay = get(native, 'balance.display');
+
   return (
     <Row align="center" justify="space-between">
       <FlexItem flex={1}>
-        <CoinName>{name}</CoinName>
+        <CoinName weight={isExpandedState ? 'semibold' : 'regular'}>
+          {name}
+        </CoinName>
+      </FlexItem>
+      <FlexItem flex={0}>
+        <BalanceText
+          color={nativeDisplay ? null : colors.blueGreyLight}
+          weight={isExpandedState ? 'medium' : 'regular'}
+        >
+          {nativeDisplay || `${nativeCurrencySymbol}0.00`}
+        </BalanceText>
       </FlexItem>
     </Row>
   );
@@ -48,14 +80,15 @@ TopRow.propTypes = {
 };
 
 const BalanceCoinRow = ({
+  isCoinListEdited,
+  isExpandedState,
   isFirstCoinRow,
   item,
   onPress,
   onPressSend,
-  isCoinListEdited,
   pushSelectedCoin,
-  removeSelectedCoin,
   recentlyPinnedCount,
+  removeSelectedCoin,
   ...props
 }) => {
   const [toggle, setToggle] = useState(false);
@@ -89,6 +122,7 @@ const BalanceCoinRow = ({
   return item.isSmall ? (
     <View width={deviceUtils.dimensions.width}>
       <ButtonPressAnimation
+        disabled={isExpandedState}
         onPress={isCoinListEdited ? handlePress : onPressHandler}
         scaleTo={0.96}
       >
@@ -102,6 +136,7 @@ const BalanceCoinRow = ({
             }
           >
             <CoinRow
+              isExpandedState={isExpandedState}
               onPress={onPressHandler}
               onPressSend={onPressSendHandler}
               {...item}
@@ -122,6 +157,7 @@ const BalanceCoinRow = ({
   ) : (
     <Column flex={1} justify={isFirstCoinRow ? 'end' : 'start'}>
       <ButtonPressAnimation
+        disabled={isExpandedState}
         onPress={isCoinListEdited ? handlePress : onPressHandler}
         scaleTo={0.96}
       >
@@ -135,6 +171,7 @@ const BalanceCoinRow = ({
             }
           >
             <CoinRow
+              isExpandedState={isExpandedState}
               onPress={onPressHandler}
               onPressSend={onPressSendHandler}
               {...item}
@@ -156,6 +193,7 @@ const BalanceCoinRow = ({
 };
 
 BalanceCoinRow.propTypes = {
+  isExpandedState: PropTypes.bool,
   isFirstCoinRow: PropTypes.bool,
   item: PropTypes.object,
   onPress: PropTypes.func,
