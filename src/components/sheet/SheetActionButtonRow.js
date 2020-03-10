@@ -3,15 +3,13 @@ import React, { Children, cloneElement } from 'react';
 import { padding } from '../../styles';
 import { Row, FlexItem } from '../layout';
 
-const childProps = { marginHorizontal: 7.5 };
-//align="center" justify="center"
+const renderButton = c => (
+  <FlexItem marginHorizontal={7.5}>{cloneElement(c)}</FlexItem>
+);
+
 const SheetActionButtonRow = ({ children }) => (
   <Row css={padding(24, 7.5)} width="100%">
-    {Children.map(children, c => (
-      <FlexItem flex={1} {...childProps}>
-        {cloneElement(c)}
-      </FlexItem>
-    ))}
+    {Children.map(children, renderButton)}
   </Row>
 );
 

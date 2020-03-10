@@ -1,30 +1,18 @@
 import { get, isEmpty, reverse } from 'lodash';
 import PropTypes from 'prop-types';
-import React, { useCallback } from 'react';
+import React, { Fragment, useCallback, useMemo } from 'react';
 import { InteractionManager } from 'react-native';
-import {
-  compose,
-  onlyUpdateForKeys,
-  withHandlers,
-  withProps,
-  withState,
-} from 'recompact';
+import { useNavigation } from 'react-navigation-hooks';
 import styled from 'styled-components/primitives';
 import { chartExpandedAvailable } from '../../config/experimental';
-import { useCharts } from '../../hooks';
-import { useNavigation } from 'react-navigation-hooks';
-import { withAccountData, withAccountSettings } from '../../hoc';
+import { useAccountAssets, useCharts } from '../../hooks';
 import Routes from '../../screens/Routes/routesNames';
-import { ethereumUtils, deviceUtils } from '../../utils';
-import Chart from '../value-chart/Chart';
-import { BalanceCoinRow } from '../coin-row';
-import { Centered } from '../layout';
-import BottomSendButtons from '../value-chart/BottomSendButtons';
 import { colors } from '../../styles';
+import { deviceUtils, ethereumUtils } from '../../utils';
 import Divider from '../Divider';
-import { Icon } from '../icons';
+import { BalanceCoinRow } from '../coin-row';
 import { Sheet, SheetActionButton, SheetActionButtonRow } from '../sheet';
-import { SavingsSheetHeader } from '../savings';
+import Chart from '../value-chart/Chart';
 
 const ChartContainer = styled.View`
   align-items: center;
@@ -33,7 +21,8 @@ const ChartContainer = styled.View`
   padding-top: 18px;
 `;
 
-const ChartExpandedState = ({ asset, selectedAsset }) => {
+const ChartExpandedState = ({ asset }) => {
+  const { allAssets } = useAccountAssets();
   const { goBack, navigate } = useNavigation();
   const { charts } = useCharts();
 
@@ -41,25 +30,24 @@ const ChartExpandedState = ({ asset, selectedAsset }) => {
   const hasChart = chartExpandedAvailable || !isEmpty(chart);
   const change = get(asset, 'price.relative_change_24h', 0);
 
-  const handlePressSend = useCallback(() => {
-    goBack();
+  const selectedAsset = useMemo(
+    () => ethereumUtils.getAsset(allAssets, asset.address) || asset,
+    [allAssets, asset]
+  );
 
-    InteractionManager.runAfterInteractions(() => {
-      navigation.navigate(Routes.SEND_SHEET, { asset });
-    });
-  }, [asset, goBack, navigate]);
+  const handleNavigation = useCallback(
+    route => {
+      goBack();
 
-  const handlePressSwap = useCallback(() => {
-    goBack();
-
-    InteractionManager.runAfterInteractions(() => {
-      navigation.navigate(Routes.EXCHANGE_MODAL, { asset });
-    });
-  }, [asset, goBack, navigate]);
+      InteractionManager.runAfterInteractions(() => {
+        navigate(route, { asset: selectedAsset });
+      });
+    },
+    [goBack, navigate, selectedAsset]
+  );
 
   return (
     <Sheet>
-      <SavingsSheetHeader />
       <BalanceCoinRow
         {...selectedAsset}
         containerStyles={`
@@ -73,56 +61,29 @@ const ChartExpandedState = ({ asset, selectedAsset }) => {
           color={colors.dodgerBlue}
           icon="swap"
           label="Swap"
-          onPress={handlePressSwap}
+          onPress={() => handleNavigation(Routes.EXCHANGE_MODAL)}
         />
         <SheetActionButton
           color={colors.paleBlue}
           icon="send"
           label="Send"
-          onPress={handlePressSend}
+          onPress={() => handleNavigation(Routes.SEND_SHEET)}
         />
       </SheetActionButtonRow>
       {hasChart && (
-        <ChartContainer>
-          <Chart change={change} />
-        </ChartContainer>
+        <Fragment>
+          <Divider />
+          <ChartContainer>
+            <Chart change={change} />
+          </ChartContainer>
+        </Fragment>
       )}
     </Sheet>
   );
 };
 
-
-
-
-      // <Divider />
-      // <ChartContainer>
-      //   <Chart />
-      // </ChartContainer>
-
 ChartExpandedState.propTypes = {
-  change: PropTypes.string,
-  changeDirection: PropTypes.bool,
-  isOpen: PropTypes.bool,
-  onPressSend: PropTypes.func,
-  onPressSwap: PropTypes.func,
-  price: PropTypes.string,
-  selectedAsset: PropTypes.object,
-  subtitle: PropTypes.string,
-  title: PropTypes.string,
+  asset: PropTypes.object,
 };
 
-export default compose(
-  withAccountData,
-  withAccountSettings,
-  withProps(({ asset: { address, ...asset }, assets }) => {
-    let selectedAsset = ethereumUtils.getAsset(assets, address);
-    if (!selectedAsset) {
-      selectedAsset = asset;
-    }
-    return {
-      change: get(selectedAsset, 'native.change', '-'),
-      changeDirection: get(selectedAsset, 'price.relative_change_24h', 0) > 0,
-      selectedAsset,
-    };
-  })
-)(ChartExpandedState);
+export default React.memo(ChartExpandedState);

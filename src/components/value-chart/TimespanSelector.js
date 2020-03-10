@@ -1,10 +1,13 @@
 import PropTypes from 'prop-types';
-import React from 'react';
-import { View } from 'react-native';
-import Animated, { spring, Value } from 'react-native-reanimated';
+import React, { useCallback, useState } from 'react';
+import { StyleSheet } from 'react-native';
+import Animated, { spring } from 'react-native-reanimated';
+import { useValues } from 'react-native-redash';
 import ChartTypes from '../../helpers/chartTypes';
-import { deviceUtils } from '../../utils';
+import { useDimensions } from '../../hooks';
+import { borders } from '../../styles';
 import { ButtonPressAnimation } from '../animations';
+import { Row } from '../layout';
 import ValueTime from './ValueTime';
 
 const springConfig = {
@@ -16,128 +19,75 @@ const springConfig = {
   stiffness: 600,
 };
 
-const interval = {
-  DAY: 0,
-  MONTH: 2,
-  WEEK: 1,
-  YEAR: 3,
+const indicatorSize = 30;
+const sx = StyleSheet.create({
+  indicator: {
+    ...borders.buildCircleAsObject(indicatorSize),
+    marginBottom: -indicatorSize,
+    position: 'absolute',
+    zIndex: 10,
+  },
+});
+
+const TimespanSelector = ({ color, isLoading, reloadChart }) => {
+  const { width } = useDimensions();
+  const [timespan, setTimespan] = useState(0);
+
+  const bottomSpaceWidth = width / 8;
+  const [translateX] = useValues([Math.round(-bottomSpaceWidth * 3)], []);
+
+  const animateTransition = useCallback(
+    index => {
+      spring(translateX, {
+        toValue: Math.floor(bottomSpaceWidth * (index * 2 - 3)),
+        ...springConfig,
+      }).start();
+    },
+    [bottomSpaceWidth, translateX]
+  );
+
+  const selectTimespan = useCallback(
+    newTimespan => {
+      animateTransition(newTimespan);
+      setTimespan(newTimespan);
+      reloadChart(newTimespan);
+    },
+    [animateTransition, reloadChart, setTimespan]
+  );
+
+  return (
+    <Row align="center" justify="center" width="100%">
+      <Animated.View
+        style={[
+          sx.indicator,
+          {
+            backgroundColor: isLoading ? 'gray' : color,
+            transform: [{ translateX: translateX }],
+          },
+        ]}
+      />
+      <Row align="center" justify="space-around" width={width} zIndex={11}>
+        <ButtonPressAnimation onPress={() => selectTimespan(ChartTypes.day)}>
+          <ValueTime selected={timespan === ChartTypes.day}>1D</ValueTime>
+        </ButtonPressAnimation>
+        <ButtonPressAnimation onPress={() => selectTimespan(ChartTypes.week)}>
+          <ValueTime selected={timespan === ChartTypes.week}>1W</ValueTime>
+        </ButtonPressAnimation>
+        <ButtonPressAnimation onPress={() => selectTimespan(ChartTypes.month)}>
+          <ValueTime selected={timespan === ChartTypes.month}>1M</ValueTime>
+        </ButtonPressAnimation>
+        <ButtonPressAnimation onPress={() => selectTimespan(ChartTypes.year)}>
+          <ValueTime selected={timespan === ChartTypes.year}>1Y</ValueTime>
+        </ButtonPressAnimation>
+      </Row>
+    </Row>
+  );
 };
 
-const bottomSpaceWidth = deviceUtils.dimensions.width / (4 * 2);
+TimespanSelector.propTypes = {
+  color: PropTypes.string,
+  isLoading: PropTypes.bool,
+  reloadChart: PropTypes.func,
+};
 
-class TimespanSelector extends React.Component {
-  propTypes = {
-    color: PropTypes.string,
-    isLoading: PropTypes.bool,
-    reloadChart: PropTypes.func,
-  };
-
-  constructor(props) {
-    super(props);
-
-    this.translateX = new Value(Math.round(-bottomSpaceWidth * 3));
-
-    this.state = {
-      currentInterval: 0,
-    };
-  }
-
-  animateTransition = index => {
-    spring(this.translateX, {
-      toValue: Math.floor(bottomSpaceWidth * (index * 2 - 3)),
-      ...springConfig,
-    }).start();
-  };
-
-  reloadChartToDay = () => {
-    this.animateTransition(0);
-    setTimeout(() => {
-      this.setState({ currentInterval: interval.DAY });
-      this.props.reloadChart(ChartTypes.day);
-    });
-  };
-
-  reloadChartToWeek = () => {
-    this.animateTransition(1);
-    setTimeout(() => {
-      this.setState({ currentInterval: interval.WEEK });
-      this.props.reloadChart(ChartTypes.week);
-    });
-  };
-
-  reloadChartToMonth = () => {
-    this.animateTransition(2);
-    setTimeout(() => {
-      this.setState({ currentInterval: interval.MONTH });
-      this.props.reloadChart(ChartTypes.month);
-    });
-  };
-
-  reloadChartToYear = () => {
-    this.animateTransition(3);
-    setTimeout(() => {
-      this.setState({ currentInterval: interval.YEAR });
-      this.props.reloadChart(ChartTypes.year);
-    });
-  };
-
-  render() {
-    let color = 'gray';
-    if (!this.props.isLoading) {
-      color = this.props.color;
-    }
-    return (
-      <>
-        <Animated.View
-          style={[
-            {
-              backgroundColor: color,
-              borderRadius: 15,
-              height: 30,
-              marginBottom: -30,
-              width: 30,
-              zIndex: 10,
-            },
-            {
-              transform: [{ translateX: this.translateX }],
-            },
-          ]}
-        />
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-around',
-            width: deviceUtils.dimensions.width,
-            zIndex: 11,
-          }}
-        >
-          <ButtonPressAnimation onPress={this.reloadChartToDay}>
-            <ValueTime selected={this.state.currentInterval === interval.DAY}>
-              1D
-            </ValueTime>
-          </ButtonPressAnimation>
-          <ButtonPressAnimation onPress={this.reloadChartToWeek}>
-            <ValueTime selected={this.state.currentInterval === interval.WEEK}>
-              1W
-            </ValueTime>
-          </ButtonPressAnimation>
-          <ButtonPressAnimation onPress={this.reloadChartToMonth}>
-            <ValueTime
-              selected={this.state.currentInterval === interval.MONTH}
-              marginRight={1}
-            >
-              1M
-            </ValueTime>
-          </ButtonPressAnimation>
-          <ButtonPressAnimation onPress={this.reloadChartToYear}>
-            <ValueTime selected={this.state.currentInterval === interval.YEAR}>
-              1Y
-            </ValueTime>
-          </ButtonPressAnimation>
-        </View>
-      </>
-    );
-  }
-}
-
-export default TimespanSelector;
+export default React.memo(TimespanSelector);

@@ -13,6 +13,7 @@ import {
 import { colors } from '../../styles';
 import { deviceUtils, isNewValueForPath } from '../../utils';
 import { ButtonPressAnimation } from '../animations';
+import { EmDash } from '../html-entities';
 import { Column, FlexItem, Row } from '../layout';
 import BalanceText from './BalanceText';
 import BottomRowText from './BottomRowText';
@@ -22,6 +23,11 @@ import CoinRow from './CoinRow';
 import CoinRowInfo from './CoinRowInfo';
 
 const editTranslateOffset = 32;
+
+const BalanceCoinRowExpandedStyles = `
+  padding-bottom: 0;
+  padding-top: 0;
+`;
 
 const formatPercentageString = percentString =>
   percentString
@@ -40,7 +46,11 @@ const BottomRow = ({ balance, isExpandedState, native }) => {
   return (
     <Fragment>
       <BottomRowText>{get(balance, 'display', '')}</BottomRowText>
-      {!isExpandedState && (
+      {isExpandedState ? (
+        <BottomRowText>
+          <EmDash />
+        </BottomRowText>
+      ) : (
         <BottomRowText color={isPositive ? colors.limeGreen : null}>
           {percentageChangeDisplay}
         </BottomRowText>
@@ -80,6 +90,7 @@ TopRow.propTypes = {
 };
 
 const BalanceCoinRow = ({
+  containerStyles,
   isCoinListEdited,
   isExpandedState,
   isFirstCoinRow,
@@ -138,6 +149,10 @@ const BalanceCoinRow = ({
             <CoinRow
               isExpandedState={isExpandedState}
               onPress={onPressHandler}
+
+              containerStyles={
+                isExpandedState ? BalanceCoinRowExpandedStyles : containerStyles
+              }
               onPressSend={onPressSendHandler}
               {...item}
               {...props}
@@ -173,6 +188,9 @@ const BalanceCoinRow = ({
             <CoinRow
               isExpandedState={isExpandedState}
               onPress={onPressHandler}
+              containerStyles={
+                isExpandedState ? BalanceCoinRowExpandedStyles : containerStyles
+              }
               onPressSend={onPressSendHandler}
               {...item}
               {...props}
@@ -193,6 +211,7 @@ const BalanceCoinRow = ({
 };
 
 BalanceCoinRow.propTypes = {
+  containerStyles: PropTypes.string,
   isExpandedState: PropTypes.bool,
   isFirstCoinRow: PropTypes.bool,
   item: PropTypes.object,
