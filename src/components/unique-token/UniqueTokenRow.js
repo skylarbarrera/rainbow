@@ -31,7 +31,7 @@ const UniqueTokenRow = React.memo(({ item }) => {
 
   const handleItemPress = useCallback(
     asset =>
-      navigate(Routes.EXPANDED_ASSET_SCREEN, { asset, type: 'unique_token' }),
+      navigate(Routes.EXPANDED_ASSET_SHEET, { asset, type: 'unique_token' }),
     [navigate]
   );
 
