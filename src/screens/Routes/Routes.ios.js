@@ -17,7 +17,7 @@ import {
 import { updateTransitionProps } from '../../redux/navigation';
 import store from '../../redux/store';
 import { deviceUtils, sentryUtils } from '../../utils';
-import ExpandedAssetScreenWithData from '../ExpandedAssetScreenWithData';
+import ExpandedAssetScreen from '../ExpandedAssetScreen';
 import ImportSeedPhraseSheetWithData from '../ImportSeedPhraseSheetWithData';
 import ProfileScreenWithData from '../ProfileScreenWithData';
 import QRScannerScreenWithData from '../QRScannerScreenWithData';
@@ -80,7 +80,7 @@ const SwipeStack = createMaterialTopTabNavigator(
 const sendFlowRoutes = {
   OverlayExpandedAssetScreen: {
     navigationOptions: overlayExpandedPreset,
-    screen: ExpandedAssetScreenWithData,
+    screen: ExpandedAssetScreen,
   },
   SendSheet: {
     navigationOptions: {
@@ -147,7 +147,7 @@ const MainNavigator = createStackNavigator(
         //   onTransitionStart();
         // },
       },
-      screen: ExpandedAssetScreenWithData,
+      screen: ExpandedAssetScreen,
     },
     ReceiveModal: {
       navigationOptions: {
@@ -207,7 +207,7 @@ const MainNavigator = createStackNavigator(
     },
     SwapDetailsScreen: {
       navigationOptions: swapDetailsPreset,
-      screen: ExpandedAssetScreenWithData,
+      screen: ExpandedAssetScreen,
     },
     SwipeLayout: {
       navigationOptions: {

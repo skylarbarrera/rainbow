@@ -11,7 +11,7 @@ const sx = StyleSheet.create({
   },
 });
 
-const DollarFigure = ({ value }) => {
+const DollarFigure = ({ value = '0.00' }) => {
   const [dollars, cents = '00'] = value.split('.');
 
   return (

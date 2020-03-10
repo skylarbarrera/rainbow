@@ -5,6 +5,7 @@ export { default as useBiometryType, BiometryTypes } from './useBiometryType';
 export { default as useClearAccountData } from './useClearAccountData';
 export { default as useClipboard } from './useClipboard';
 export { default as useCompoundSupplyRate } from './useCompoundSupplyRate';
+export { default as useDimensions } from './useDimensions';
 export { default as useHideSplashScreen } from './useHideSplashScreen';
 export { default as useInitializeAccountData } from './useInitializeAccountData';
 export { default as useInitializeWallet } from './useInitializeWallet';

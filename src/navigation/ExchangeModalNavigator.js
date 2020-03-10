@@ -7,7 +7,7 @@ import SwapModal from '../screens/SwapModal';
 import { deviceUtils } from '../utils';
 import createStackNavigator from './createStackNavigator';
 import { exchangeDetailsPreset } from './transitions/effects';
-import ExpandedAssetScreenWithData from '../screens/ExpandedAssetScreenWithData';
+import ExpandedAssetScreen from '../screens/ExpandedAssetScreen';
 import { withBlockedHorizontalSwipe } from '../hoc';
 
 const ExchangeModalTabPosition = new Animated.Value(0);
@@ -27,7 +27,7 @@ const ExchangeModalNavigator = createMaterialTopTabNavigator(
             navigationOptions: {
               ...exchangeDetailsPreset,
             },
-            screen: withBlockedHorizontalSwipe(ExpandedAssetScreenWithData),
+            screen: withBlockedHorizontalSwipe(ExpandedAssetScreen),
           },
         },
         {

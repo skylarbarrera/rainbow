@@ -1,6 +1,6 @@
 import { get } from 'lodash';
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { InteractionManager } from 'react-native';
 import {
   compose,
@@ -9,68 +9,105 @@ import {
   withProps,
   withState,
 } from 'recompact';
+import { useNavigation } from 'react-navigation-hooks';
 import styled from 'styled-components/primitives';
 import { withAccountData, withAccountSettings } from '../../hoc';
 import { ethereumUtils, deviceUtils } from '../../utils';
 import Chart from '../value-chart/Chart';
 import { BalanceCoinRow } from '../coin-row';
+import { Centered } from '../layout';
 import BottomSendButtons from '../value-chart/BottomSendButtons';
 import { colors } from '../../styles';
 import Divider from '../Divider';
+import { Sheet, SheetActionButton, SheetActionButtonRow } from '../sheet';
 import { Icon } from '../icons';
-
-const HandleIcon = styled(Icon).attrs({
-  color: '#C4C6CB',
-  name: 'handle',
-})`
-  margin-top: 12px;
-`;
+import { SavingsSheetHeader } from '../savings';
 
 const ChartContainer = styled.View`
   align-items: center;
   overflow: hidden;
-  padding-top: 18px;
   padding-bottom: ${deviceUtils.isTallPhone ? '60px' : '30px'};
+  padding-top: 18px;
 `;
 
 const BottomContainer = styled.View`
-  background-color: ${colors.white};
-  width: ${deviceUtils.dimensions.width};
-  padding-top: 8px;
-  padding-bottom: 25px;
+  padding-bottom: 24px;
+  width: 100%;
+  height: 100px;
 `;
 
 const Container = styled.View`
+  align-items: center;
   background-color: ${colors.white};
-  width: ${deviceUtils.dimensions.width};
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
   bottom: -200;
   padding-bottom: 200;
   position: absolute;
-  align-items: center;
+  width: ${deviceUtils.dimensions.width};
 `;
 
-const TokenExpandedState = ({ onPressSend, onPressSwap, selectedAsset }) => {
+const ChartExpandedState = ({
+  asset,
+
+  selectedAsset,
+}) => {
+  const { goBack, navigate } = useNavigation();
+
+  const handlePressSend = useCallback(() => {
+    goBack();
+
+    InteractionManager.runAfterInteractions(() => {
+      navigate('SendSheet', { asset });
+    });
+  }, [asset, goBack, navigate]);
+
+  const handlePressSwap = useCallback(() => {
+    goBack();
+
+    InteractionManager.runAfterInteractions(() => {
+      navigate('ExchangeModal', { asset });
+    });
+  }, [asset, goBack, navigate]);
+
   return (
-    <Container>
-      <HandleIcon />
-      <BottomContainer>
-        <BalanceCoinRow {...selectedAsset} />
-        <BottomSendButtons
-          onPressSend={onPressSend}
-          onPressSwap={onPressSwap}
+    <Sheet>
+    <SavingsSheetHeader />
+      <BalanceCoinRow
+        {...selectedAsset}
+        containerStyles={`
+          padding-top: 0;
+          padding-bottom: 0;
+        `}
+        isExpandedState={true}
+      />
+      <SheetActionButtonRow>
+        <SheetActionButton
+          color={colors.dodgerBlue}
+          icon="swap"
+          label="Swap"
+          onPress={handlePressSwap}
         />
-      </BottomContainer>
-      <Divider />
-      <ChartContainer>
-        <Chart />
-      </ChartContainer>
-    </Container>
+        <SheetActionButton
+          color={colors.paleBlue}
+          icon="send"
+          label="Send"
+          onPress={handlePressSend}
+        />
+      </SheetActionButtonRow>
+    </Sheet>
   );
 };
 
-TokenExpandedState.propTypes = {
+
+
+
+      // <Divider />
+      // <ChartContainer>
+      //   <Chart />
+      // </ChartContainer>
+
+ChartExpandedState.propTypes = {
   change: PropTypes.string,
   changeDirection: PropTypes.bool,
   isOpen: PropTypes.bool,
@@ -85,7 +122,6 @@ TokenExpandedState.propTypes = {
 export default compose(
   withAccountData,
   withAccountSettings,
-  withState('isOpen', 'setIsOpen', false),
   withProps(({ asset: { address, ...asset }, assets }) => {
     let selectedAsset = ethereumUtils.getAsset(assets, address);
     if (!selectedAsset) {
@@ -97,24 +133,4 @@ export default compose(
       selectedAsset,
     };
   }),
-  withHandlers({
-    onOpen: ({ setIsOpen }) => () => {
-      setIsOpen(true);
-    },
-    onPressSend: ({ navigation, asset }) => () => {
-      navigation.goBack();
-
-      InteractionManager.runAfterInteractions(() => {
-        navigation.navigate('SendSheet', { asset });
-      });
-    },
-    onPressSwap: ({ navigation, asset }) => () => {
-      navigation.goBack();
-
-      InteractionManager.runAfterInteractions(() => {
-        navigation.navigate('ExchangeModal', { asset });
-      });
-    },
-  }),
-  onlyUpdateForKeys(['price', 'subtitle'])
-)(TokenExpandedState);
+)(ChartExpandedState);

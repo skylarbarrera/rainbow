@@ -22,7 +22,7 @@ const formatPercentageString = percentString =>
         .join(' %')
     : '-';
 
-const BottomRow = ({ balance, native }) => {
+const BottomRow = ({ balance, isExpandedState, native }) => {
   const percentChange = get(native, 'change');
   const percentageChangeDisplay = formatPercentageString(percentChange);
   const isPositive = percentChange && percentageChangeDisplay.charAt(0) !== '-';
@@ -30,9 +30,11 @@ const BottomRow = ({ balance, native }) => {
   return (
     <Fragment>
       <BottomRowText>{get(balance, 'display')}</BottomRowText>
-      <BottomRowText color={isPositive ? colors.limeGreen : null}>
-        {percentageChangeDisplay}
-      </BottomRowText>
+      {!isExpandedState && (
+        <BottomRowText color={isPositive ? colors.limeGreen : null}>
+          {percentageChangeDisplay}
+        </BottomRowText>
+      )}
     </Fragment>
   );
 };
@@ -42,16 +44,21 @@ BottomRow.propTypes = {
   native: PropTypes.object,
 };
 
-const TopRow = ({ name, native, nativeCurrencySymbol }) => {
+const TopRow = ({ isExpandedState, name, native, nativeCurrencySymbol }) => {
   const nativeDisplay = get(native, 'balance.display');
 
   return (
     <Row align="center" justify="space-between">
       <FlexItem flex={1}>
-        <CoinName>{name}</CoinName>
+        <CoinName weight={isExpandedState ? 'semibold' : 'regular'}>
+          {name}
+        </CoinName>
       </FlexItem>
       <FlexItem flex={0}>
-        <BalanceText color={nativeDisplay ? null : colors.blueGreyLight}>
+        <BalanceText
+          color={nativeDisplay ? null : colors.blueGreyLight}
+          weight={isExpandedState ? 'medium' : 'regular'}
+        >
           {nativeDisplay || `${nativeCurrencySymbol}0.00`}
         </BalanceText>
       </FlexItem>
@@ -65,20 +72,32 @@ TopRow.propTypes = {
   nativeCurrencySymbol: PropTypes.string,
 };
 
-const BalanceCoinRow = ({ item, onPress, onPressSend, ...props }) => (
-  <ButtonPressAnimation onPress={onPress} scaleTo={0.98}>
+const BalanceCoinRow = ({
+  isExpandedState,
+  item,
+  onPress,
+  onPressSend,
+  ...props
+}) => (
+  <ButtonPressAnimation
+    disabled={isExpandedState}
+    onPress={onPress}
+    scaleTo={0.98}
+  >
     <CoinRow
+      bottomRowRender={BottomRow}
+      isExpandedState={isExpandedState}
       onPress={onPress}
       onPressSend={onPressSend}
+      topRowRender={TopRow}
       {...item}
       {...props}
-      bottomRowRender={BottomRow}
-      topRowRender={TopRow}
     />
   </ButtonPressAnimation>
 );
 
 BalanceCoinRow.propTypes = {
+  isExpandedState: PropTypes.bool,
   item: PropTypes.object,
   nativeCurrency: PropTypes.string.isRequired,
   onPress: PropTypes.func,

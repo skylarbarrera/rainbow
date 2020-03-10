@@ -4,9 +4,9 @@ import { padding } from '../../styles';
 import { Row, FlexItem } from '../layout';
 
 const childProps = { marginHorizontal: 7.5 };
-
+//align="center" justify="center"
 const SheetActionButtonRow = ({ children }) => (
-  <Row css={padding(24, 7.5)}>
+  <Row css={padding(24, 7.5)} width="100%">
     {Children.map(children, c => (
       <FlexItem flex={1} {...childProps}>
         {cloneElement(c)}

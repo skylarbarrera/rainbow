@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useRef } from 'react';
+import React, { Fragment, useMemo, useState, useRef } from 'react';
 import ValueChart from './ValueChart';
 import ValueText from './ValueText';
 import {
@@ -111,7 +111,7 @@ export default function Chart() {
   const change = currentChart % 2 === 0 ? 20 : -20; // placeholder
 
   return (
-    <>
+    <Fragment>
       <ValueText
         headerText="PRICE"
         direction={change > 0}
@@ -136,6 +136,6 @@ export default function Chart() {
         color={change > 0 ? colors.chartGreen : colors.red}
         isLoading={false}
       />
-    </>
+    </Fragment>
   );
 }

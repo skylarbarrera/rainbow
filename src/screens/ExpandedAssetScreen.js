@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { Component, createElement } from 'react';
+import React, { createElement } from 'react';
 import { StatusBar } from 'react-native';
 import {
   AddContactState,
@@ -9,12 +9,12 @@ import {
   TokenExpandedState,
   UniqueTokenExpandedState,
 } from '../components/expanded-state';
+import { useSafeArea } from 'react-native-safe-area-context';
+import { useNavigation, useNavigationParam } from 'react-navigation-hooks';
 import { Centered } from '../components/layout';
 import TouchableBackdrop from '../components/TouchableBackdrop';
 import { padding } from '../styles';
-import { deviceUtils, safeAreaInsetValues } from '../utils';
-
-const { bottom: safeAreaBottom, top: safeAreaTop } = safeAreaInsetValues;
+import { useDimensions } from '../hooks';
 
 const ScreenTypes = {
   chart: ChartExpandedState,
@@ -25,38 +25,40 @@ const ScreenTypes = {
   uniswap: InvestmentExpandedState,
 };
 
-export default class ExpandedAssetScreen extends Component {
-  static propTypes = {
-    address: PropTypes.string,
-    asset: PropTypes.object,
-    containerPadding: PropTypes.number.isRequired,
-    onCloseModal: PropTypes.func,
-    onPressBackground: PropTypes.func,
-    panelWidth: PropTypes.number,
-    type: PropTypes.oneOf(Object.keys(ScreenTypes)).isRequired,
-  };
+const ExpandedAssetScreen = ({ containerPadding, ...props }) => {
+  const { height, width } = useDimensions();
+  const insets = useSafeArea();
 
-  static defaultProps = {
-    containerPadding: 15,
-  };
+  const {
+    goBack,
+    state: { params },
+  } = useNavigation();
+  const type = useNavigationParam('type');
 
-  shouldComponentUpdate = () => false;
-
-  render = () => (
+  return (
     <Centered
-      {...deviceUtils.dimensions}
-      css={padding(
-        safeAreaTop,
-        this.props.containerPadding,
-        safeAreaBottom || safeAreaTop
-      )}
+      css={padding(insets.top, containerPadding, 0)}
       direction="column"
+      height={height}
+      width={width}
     >
       <StatusBar barStyle="light-content" />
-      <TouchableBackdrop onPress={this.props.onPressBackground} />
-      {createElement(ScreenTypes[this.props.type], {
-        ...this.props,
+      <TouchableBackdrop onPress={() => goBack()} />
+      {createElement(ScreenTypes[type], {
+        ...params,
+        ...props,
+        panelWidth: width - containerPadding * 2,
       })}
     </Centered>
   );
-}
+};
+
+ExpandedAssetScreen.propTypes = {
+  containerPadding: PropTypes.number.isRequired,
+};
+
+ExpandedAssetScreen.defaultProps = {
+  containerPadding: 15,
+};
+
+export default React.memo(ExpandedAssetScreen);

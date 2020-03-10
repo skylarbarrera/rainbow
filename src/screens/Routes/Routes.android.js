@@ -11,7 +11,7 @@ import createNativeStackNavigator from 'react-native-screens/createNativeStackNa
 import isNativeStackAvailable from '../../helpers/isNativeStackAvailable';
 import { ExchangeModalNavigator, Navigation } from '../../navigation';
 import { deviceUtils, sentryUtils } from '../../utils';
-import ExpandedAssetScreenWithData from '../ExpandedAssetScreenWithData';
+import ExpandedAssetScreen from '../ExpandedAssetScreen';
 import ImportSeedPhraseSheetWithData from '../ImportSeedPhraseSheetWithData';
 import ProfileScreenWithData from '../ProfileScreenWithData';
 import QRScannerScreenWithData from '../QRScannerScreenWithData';
@@ -105,11 +105,11 @@ const MainNavigator = createStackNavigator({
       //   onTransitionStart();
       // },
     },
-    screen: ExpandedAssetScreenWithData,
+    screen: ExpandedAssetScreen,
   },
   OverlayExpandedAssetScreen: {
     navigationOptions: overlayExpandedPreset,
-    screen: ExpandedAssetScreenWithData,
+    screen: ExpandedAssetScreen,
   },
   ReceiveModal: {
     navigationOptions: {
