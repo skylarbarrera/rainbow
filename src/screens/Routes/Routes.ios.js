@@ -142,6 +142,7 @@ const MainNavigator = createStackNavigator(
     ExpandedAssetScreen: {
       navigationOptions: {
         ...expandedPreset,
+        gesturesEnabled: false,
         // onTransitionStart: props => {
         //   expandedPreset.onTransitionStart(props);
         //   onTransitionStart();

@@ -1,13 +1,6 @@
 import PropTypes from 'prop-types';
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import FastImage from 'react-native-fast-image';
-import {
-  compose,
-  onlyUpdateForKeys,
-  withHandlers,
-  withProps,
-  withState,
-} from 'recompact';
 import { buildUniqueTokenName } from '../../helpers/assets';
 import { colors, position } from '../../styles';
 import { Centered } from '../layout';
@@ -22,28 +15,11 @@ const FallbackTextColorVariants = {
 const getFallbackTextColor = bg =>
   colors.getTextColorForBackground(bg, FallbackTextColorVariants);
 
-const enhance = compose(
-  withState('error', 'handleErrorState', null),
-  withHandlers({
-    onError: ({ handleErrorState }) => error => handleErrorState(error),
-  }),
-  withProps(({ backgroundColor, item }) => ({
-    fallbackTextColor: getFallbackTextColor(backgroundColor),
-    name: buildUniqueTokenName(item),
-  })),
-  onlyUpdateForKeys(['error', 'imageUrl'])
-);
+const UniqueTokenImage = ({ backgroundColor, imageUrl, item, resizeMode }) => {
+  const [error, setError] = useState(null);
+  const handleError = useCallback(error => setError(error), [setError]);
 
-const UniqueTokenImage = enhance(
-  ({
-    backgroundColor,
-    error,
-    fallbackTextColor,
-    imageUrl,
-    name,
-    onError,
-    resizeMode,
-  }) => (
+  return (
     <Centered
       shouldRasterizeIOS
       style={{ ...position.coverAsObject, backgroundColor }}
@@ -51,7 +27,7 @@ const UniqueTokenImage = enhance(
       {imageUrl && !error ? (
         <ImageWithCachedDimensions
           id={imageUrl}
-          onError={onError}
+          onError={handleError}
           resizeMode={FastImage.resizeMode[resizeMode]}
           source={{ uri: imageUrl }}
           style={position.coverAsObject}
@@ -59,25 +35,20 @@ const UniqueTokenImage = enhance(
       ) : (
         <Monospace
           align="center"
-          color={fallbackTextColor}
+          color={getFallbackTextColor(backgroundColor)}
           lineHeight="looser"
           size="smedium"
         >
-          {name}
+          {buildUniqueTokenName(item)}
         </Monospace>
       )}
     </Centered>
-  )
-);
+  );
+};
 
 UniqueTokenImage.propTypes = {
   backgroundColor: PropTypes.string,
-  borderRadius: PropTypes.number,
-  error: PropTypes.object,
-  fallbackTextColor: PropTypes.string,
   imageUrl: PropTypes.string,
-  name: PropTypes.string,
-  onError: PropTypes.func,
   resizeMode: PropTypes.oneOf(Object.values(FastImage.resizeMode)),
 };
 
@@ -86,4 +57,4 @@ UniqueTokenImage.defaultProps = {
   resizeMode: 'cover',
 };
 
-export default UniqueTokenImage;
+export default React.memo(UniqueTokenImage);

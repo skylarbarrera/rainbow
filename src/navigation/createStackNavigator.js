@@ -16,7 +16,7 @@ export default function(routes, config = {}) {
     ...config,
     // eslint-disable-next-line sort-keys
     defaultNavigationOptions: {
-      gestureEnabled: true,
+      gestureEnabled: false,
       onTransitionEnd,
       onTransitionStart,
       ...config.defaultNavigationOptions,

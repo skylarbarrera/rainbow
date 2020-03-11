@@ -44,6 +44,8 @@ const colorsArray = [
   colors.purple,
 ];
 
+const chartStroke = { detailed: 1.5, simplified: 3 };
+
 let colorIndex = 0;
 
 const Chart = props => {
@@ -116,7 +118,7 @@ const Chart = props => {
   const [curVal, setCurVal] = useState(0);
 
   const handleValueUpdate = useCallback(v => {
-    console.log('value update', v);
+    // console.log('value update', v);
     setCurVal(v);
     // textInputRef.current = v;
   }, [setCurVal]);
@@ -126,6 +128,8 @@ const Chart = props => {
 //           console.log('lol', lol);
 //           return lol;
 //         }
+
+  console.log('HAPPENIGN');
 
   return (
     <Column
@@ -151,7 +155,7 @@ const Chart = props => {
         importantPointsIndexInterval={25}
         mode="gesture-managed"
         onValueUpdate={handleValueUpdate}
-        stroke={{ detailed: 1.5, simplified: 3 }}
+        stroke={chartStroke}
       />
       <TimespanSelector
         color={change > 0 ? colors.chartGreen : colors.red}

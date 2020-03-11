@@ -43,7 +43,6 @@ const ExpandedAssetScreen = ({ containerPadding, ...props }) => {
       width={width}
     >
       <StatusBar barStyle="light-content" />
-      <TouchableBackdrop onPress={() => goBack()} />
       {createElement(ScreenTypes[type], {
         ...params,
         ...props,
@@ -52,6 +51,7 @@ const ExpandedAssetScreen = ({ containerPadding, ...props }) => {
     </Centered>
   );
 };
+      // {ScreenTypes[type] !== ScreenTypes.unique_token && <TouchableBackdrop onPress={() => goBack()} />}
 
 ExpandedAssetScreen.propTypes = {
   containerPadding: PropTypes.number.isRequired,

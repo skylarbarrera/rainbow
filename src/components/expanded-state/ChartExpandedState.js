@@ -3,12 +3,12 @@ import React, { useCallback, useMemo } from 'react';
 import { InteractionManager } from 'react-native';
 import { useNavigation } from 'react-navigation-hooks';
 import { useAccountAssets } from '../../hooks';
-import { ethereumUtils } from '../../utils';
-import Chart from '../value-chart/Chart';
-import { BalanceCoinRow } from '../coin-row';
 import { colors } from '../../styles';
+import { ethereumUtils } from '../../utils';
+import { BalanceCoinRow } from '../coin-row';
 import Divider from '../Divider';
 import { Sheet, SheetActionButton, SheetActionButtonRow } from '../sheet';
+import Chart from '../value-chart/Chart';
 
 const ChartExpandedState = ({ asset }) => {
   const { allAssets } = useAccountAssets();
