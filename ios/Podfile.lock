@@ -129,9 +129,15 @@ PODS:
     - GoogleUtilities/Network (~> 6.0)
     - "GoogleUtilities/NSData+zlib (~> 6.0)"
     - nanopb (= 0.3.9011)
+<<<<<<< HEAD
   - GoogleDataTransport (5.1.0)
   - GoogleDataTransportCCTSupport (2.0.1):
     - GoogleDataTransport (~> 5.1)
+=======
+  - GoogleDataTransport (5.0.0)
+  - GoogleDataTransportCCTSupport (2.0.0):
+    - GoogleDataTransport (~> 5.0)
+>>>>>>> b6bcfeb9... just for you christian
     - nanopb (~> 0.3.901)
   - GoogleUtilities/AppDelegateSwizzler (6.5.2):
     - GoogleUtilities/Environment
@@ -171,11 +177,16 @@ PODS:
     - nanopb/encode (= 0.3.9011)
   - nanopb/decode (0.3.9011)
   - nanopb/encode (0.3.9011)
+<<<<<<< HEAD
   - OpenSSL-Universal (1.0.2.19):
     - OpenSSL-Universal/Static (= 1.0.2.19)
   - OpenSSL-Universal/Static (1.0.2.19)
   - PanModal (1.2.7)
   - Permission-Camera (2.1.1):
+=======
+  - PanModal (1.2.5)
+  - Permission-Camera (2.0.9):
+>>>>>>> b6bcfeb9... just for you christian
     - RNPermissions
   - Permission-FaceID (2.1.1):
     - RNPermissions
@@ -348,6 +359,7 @@ PODS:
   - react-native-blur (0.8.0):
     - React
 <<<<<<< HEAD
+<<<<<<< HEAD
   - react-native-camera (3.23.0):
     - React
     - react-native-camera/RCT (= 3.23.0)
@@ -357,17 +369,28 @@ PODS:
   - react-native-camera/RN (3.23.0):
 =======
   - react-native-camera (3.18.0):
+=======
+  - react-native-camera (3.19.0):
+>>>>>>> b6bcfeb9... just for you christian
     - React
-    - react-native-camera/RCT (= 3.18.0)
-    - react-native-camera/RN (= 3.18.0)
-  - react-native-camera/RCT (3.18.0):
+    - react-native-camera/RCT (= 3.19.0)
+    - react-native-camera/RN (= 3.19.0)
+  - react-native-camera/RCT (3.19.0):
     - React
+<<<<<<< HEAD
   - react-native-camera/RN (3.18.0):
 >>>>>>> 0ef7500a... WIP
     - React
   - react-native-mail (4.1.0):
     - React
   - react-native-netinfo (5.7.1):
+=======
+  - react-native-camera/RN (3.19.0):
+    - React
+  - react-native-mail (4.1.0):
+    - React
+  - react-native-netinfo (5.6.1):
+>>>>>>> b6bcfeb9... just for you christian
     - React
   - react-native-randombytes (3.5.3):
     - React
@@ -446,11 +469,15 @@ PODS:
     - ReactCommon/callinvoker (= 0.62.2)
   - ReactNativePayments (1.1.5):
     - React
+  - reactnativeslackbottomsheet (0.4.2):
+    - PanModal
+    - React
   - RNAnalytics (1.1.0):
     - Analytics
     - React
   - RNCAsyncStorage (1.7.1):
     - React
+<<<<<<< HEAD
   - RNCClipboard (1.2.2):
     - React
   - RNCMaskedView (0.1.9):
@@ -463,6 +490,11 @@ PODS:
 =======
   - RNCPushNotificationIOS (1.0.6):
 >>>>>>> 0ef7500a... WIP
+=======
+  - RNCMaskedView (0.1.7):
+    - React
+  - RNCPushNotificationIOS (1.0.7):
+>>>>>>> b6bcfeb9... just for you christian
     - React
   - RNDeviceInfo (5.3.1):
     - React
@@ -502,19 +534,29 @@ PODS:
   - RNScreens (2.2.0):
     - React
 <<<<<<< HEAD
+<<<<<<< HEAD
   - RNSentry (1.3.7):
 =======
   - RNSentry (1.3.2):
 >>>>>>> 0ef7500a... WIP
+=======
+  - RNSentry (1.3.3):
+>>>>>>> b6bcfeb9... just for you christian
     - React
     - Sentry (~> 4.4.0)
   - RNStoreReview (0.1.5):
     - React
   - RNSVG (12.1.0):
     - React
+<<<<<<< HEAD
   - SDWebImage (5.7.0):
     - SDWebImage/Core (= 5.7.0)
   - SDWebImage/Core (5.7.0)
+=======
+  - SDWebImage (5.6.0):
+    - SDWebImage/Core (= 5.6.0)
+  - SDWebImage/Core (5.6.0)
+>>>>>>> b6bcfeb9... just for you christian
   - SDWebImageWebPCoder (0.2.5):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.0)
@@ -602,6 +644,7 @@ DEPENDENCIES:
   - ReactCommon/callinvoker (from `../node_modules/react-native/ReactCommon`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "ReactNativePayments (from `../node_modules/@rainbow-me/react-native-payments/lib/ios`)"
+  - reactnativeslackbottomsheet (from `../node_modules/react-native-slack-bottom-sheet`)
   - "RNAnalytics (from `../node_modules/@segment/analytics-react-native`)"
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - "RNCClipboard (from `../node_modules/@react-native-community/clipboard`)"
@@ -662,7 +705,11 @@ SPEC REPOS:
     - JWT
     - libwebp
     - nanopb
+<<<<<<< HEAD
     - OpenSSL-Universal
+=======
+    - PanModal
+>>>>>>> b6bcfeb9... just for you christian
     - Protobuf
     - SDWebImage
     - SDWebImageWebPCoder
@@ -760,6 +807,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   ReactNativePayments:
     :path: "../node_modules/@rainbow-me/react-native-payments/lib/ios"
+  reactnativeslackbottomsheet:
+    :path: "../node_modules/react-native-slack-bottom-sheet"
   RNAnalytics:
     :path: "../node_modules/@segment/analytics-react-native"
   RNCAsyncStorage:
@@ -852,18 +901,30 @@ SPEC CHECKSUMS:
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
   GoogleAppMeasurement: dfe55efa543e899d906309eaaac6ca26d249862f
+<<<<<<< HEAD
   GoogleDataTransport: b29a21d813e906014ca16c00897827e40e4a24ab
   GoogleDataTransportCCTSupport: 6f15a89b0ca35d6fa523e1f752ef818588885988
   GoogleUtilities: ad0f3b691c67909d03a3327cc205222ab8f42e0e
+=======
+  GoogleDataTransport: a857c6a002d201b524dd4bc2ed7e7355ed07e785
+  GoogleDataTransportCCTSupport: 32f75fbe904c82772fcbb6b6bd4525bfb6f2a862
+  GoogleUtilities: 06eb53bb579efe7099152735900dd04bf09e7275
+>>>>>>> b6bcfeb9... just for you christian
   JWT: 9b5c05abbcc1a0e69c3c91e1655b3387fc7e581d
   libwebp: 946cb3063cea9236285f7e9a8505d806d30e07f3
   lottie-ios: 496ac5cea1bbf1a7bd1f1f472f3232eb1b8d744b
   lottie-react-native: 2a1a82bb326ae51331a5520de0cf706733c6db69
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
+<<<<<<< HEAD
   OpenSSL-Universal: 8b48cc0d10c1b2923617dfe5c178aa9ed2689355
   PanModal: 421fe72d4af5b7e9016aaa3b4db94a2fb71756d3
   Permission-Camera: 01583e5864cb99d89cbfb3ec62cb83c78d8d227a
   Permission-FaceID: fafd8c4809ad5be3547e1b66c2ce444c5abd92a6
+=======
+  PanModal: 7c5af3ad4fe22b91508040965bebffb89fb607ae
+  Permission-Camera: 8fe4753b02396489b11c5089e4f57bab7fe1ef42
+  Permission-FaceID: 29c3f213a033c24330a554a5dad7681d6e3698f8
+>>>>>>> b6bcfeb9... just for you christian
   Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7
   RCTRequired: cec6a34b3ac8a9915c37e7e4ad3aa74726ce4035
   RCTTypeSafety: 93006131180074cffa227a1075802c89a49dd4ce
@@ -877,12 +938,18 @@ SPEC CHECKSUMS:
   react-native-background-timer: 1f7d560647b40e6a60b01c452ba29c54bf581fc4
   react-native-blur: cad4d93b364f91e7b7931b3fa935455487e5c33c
 <<<<<<< HEAD
+<<<<<<< HEAD
   react-native-camera: fc44e91dcf7420f21a10e653adc811efd1e78158
 =======
   react-native-camera: 3308898e1b09bf6211647c6e3e42d5f7aa02259e
 >>>>>>> 0ef7500a... WIP
   react-native-mail: a864fb211feaa5845c6c478a3266de725afdce89
   react-native-netinfo: 4fa023c153d582aeae8435df95c9a975c5986449
+=======
+  react-native-camera: 1f4c5be75a037b5573716a01d84ca0390c162954
+  react-native-mail: a864fb211feaa5845c6c478a3266de725afdce89
+  react-native-netinfo: fa42683301345997e876760ba2be86f06148baa5
+>>>>>>> b6bcfeb9... just for you christian
   react-native-randombytes: 3638d24759d67c68f6ccba60c52a7a8a8faa6a23
   react-native-safe-area-context: 13004a45f3021328fdd9ee1f987c3131fb65928d
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
@@ -901,8 +968,10 @@ SPEC CHECKSUMS:
   React-RCTVibration: 4356114dbcba4ce66991096e51a66e61eda51256
   ReactCommon: ed4e11d27609d571e7eee8b65548efc191116eb3
   ReactNativePayments: 40a266450628c05db440fe219b631210e4358a49
+  reactnativeslackbottomsheet: 0dcf0323be669c524a23dba11307d4b8ddd5cbea
   RNAnalytics: 35a54cb740c472a0a6a3de765176b82cccc2d1ef
   RNCAsyncStorage: 44395cb9c7c1523104c2b499eb426ef7aff82bca
+<<<<<<< HEAD
 <<<<<<< HEAD
   RNCClipboard: 8148e21ac347c51fd6cd4b683389094c216bb543
   RNCMaskedView: 71fc32d971f03b7f03d6ab6b86b730c4ee64f5b6
@@ -912,6 +981,10 @@ SPEC CHECKSUMS:
   RNCMaskedView: a88953beefbd347a29072d9eba90e42945fe291e
   RNCPushNotificationIOS: 05262c52fcfb861a2b79aa8e51cad66263c9ea52
 >>>>>>> 0ef7500a... WIP
+=======
+  RNCMaskedView: 76c40a1d41c3e2535df09246a2b5487f04de0814
+  RNCPushNotificationIOS: eea954fa69537d4a8db898fe1b1a06e2b7e15841
+>>>>>>> b6bcfeb9... just for you christian
   RNDeviceInfo: 6f20764111df002b4484f90cbe0a861be29bcc6c
   RNFastImage: 9b0c22643872bb7494c8d87bbbb66cc4c0d9e7a2
   RNFBApp: 69781cf10ce41f6f6db789e6264dd80119ef2fb7
@@ -930,11 +1003,18 @@ SPEC CHECKSUMS:
   RNSentry: 370623102247ebea20191b5fb549ecc7a275b324
 =======
   RNScreens: ba539a5086136eb356e43699cb588a80369763ca
+<<<<<<< HEAD
   RNSentry: 2ec85f3e314c6a650b1c51b30ff764b6103ed7e2
 >>>>>>> 0ef7500a... WIP
   RNStoreReview: 62d6afd7c37db711a594bbffca6b0ea3a812b7a8
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
   SDWebImage: a99471f452bdfa0ca52ddf5b1adf2b61cab1d1eb
+=======
+  RNSentry: 86baf0c87120cd5eb491d073989f8cbc1a2174c6
+  RNStoreReview: 62d6afd7c37db711a594bbffca6b0ea3a812b7a8
+  RNSVG: 67f1f12dae2cef6ed59a42cae74a6b8f5a9e7b46
+  SDWebImage: 21b19f56b4226cdfe3aefe4e6848dc43ed129a86
+>>>>>>> b6bcfeb9... just for you christian
   SDWebImageWebPCoder: 947093edd1349d820c40afbd9f42acb6cdecd987
   Sentry: 14bdd673870e8cf64932b149fad5bbbf39a9b390
   SRSRadialGradient: 77bcb1ae812d0c77560e54ed9e52166df032db1d
