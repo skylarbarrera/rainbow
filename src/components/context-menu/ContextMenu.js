@@ -2,11 +2,11 @@ import { omit, pick } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 import ActionSheet from 'react-native-actionsheet';
-import { withActionSheetManager } from '../hoc';
-import { padding } from '../styles';
-import { ButtonPressAnimation } from './animations';
-import { Icon } from './icons';
-import { Centered, Row } from './layout';
+import { withActionSheetManager } from '../../hoc';
+import { padding } from '../../styles';
+import { ButtonPressAnimation } from '../animations';
+import { Icon } from '../icons';
+import { Centered } from '../layout';
 
 const ActionSheetProps = [
   'cancelButtonIndex',
@@ -20,6 +20,7 @@ const ActionSheetProps = [
 
 class ContextMenu extends PureComponent {
   static propTypes = {
+    activeOpacity: PropTypes.number,
     cancelButtonIndex: PropTypes.number,
     isActionSheetOpen: PropTypes.bool,
     onPressActionSheet: PropTypes.func.isRequired,
@@ -29,6 +30,7 @@ class ContextMenu extends PureComponent {
   };
 
   static defaultProps = {
+    activeOpacity: 0.2,
     options: [],
   };
 
@@ -54,6 +56,17 @@ class ContextMenu extends PureComponent {
     this.props.setIsActionSheetOpen(false);
   };
 
+  renderButton = () =>
+    this.props.children || (
+      <Centered
+        css={padding(2, 9, 0, 9)}
+        height="100%"
+        {...omit(this.props, ActionSheetProps)}
+      >
+        <Icon name="threeDots" />
+      </Centered>
+    );
+
   render = () => {
     const funcOptions = this.props.dynamicOptions
       ? this.props.dynamicOptions()
@@ -66,13 +79,7 @@ class ContextMenu extends PureComponent {
             activeOpacity={0.2}
             onPress={this.showActionSheet}
           >
-            <Centered
-              css={padding(0, 10)}
-              height="100%"
-              {...omit(this.props, ActionSheetProps)}
-            >
-              <Icon name="threeDots" />
-            </Centered>
+            {this.renderButton()}
           </ButtonPressAnimation>
         )}
         <ActionSheet

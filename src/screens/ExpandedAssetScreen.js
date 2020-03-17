@@ -44,6 +44,10 @@ const ExpandedAssetScreen = ({ containerPadding, ...props }) => {
       direction="column"
     >
       <StatusBar barStyle="light-content" />
+      {ScreenTypes[type] !== ScreenTypes.chart &&
+        ScreenTypes[type] !== ScreenTypes.unique_token && (
+          <TouchableBackdrop onPress={() => goBack()} />
+        )}
       {createElement(ScreenTypes[type], {
         ...params,
         ...props,
@@ -52,7 +56,6 @@ const ExpandedAssetScreen = ({ containerPadding, ...props }) => {
     </Centered>
   );
 };
-      // {ScreenTypes[type] !== ScreenTypes.unique_token && <TouchableBackdrop onPress={() => goBack()} />}
 
 ExpandedAssetScreen.propTypes = {
   containerPadding: PropTypes.number.isRequired,
@@ -62,4 +65,4 @@ ExpandedAssetScreen.defaultProps = {
   containerPadding: 15,
 };
 
-export default React.memo(ExpandedAssetScreen);
+export default ExpandedAssetScreen;

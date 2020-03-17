@@ -3,9 +3,10 @@ import React, { Children, cloneElement } from 'react';
 import { padding } from '../../styles';
 import { Row, FlexItem } from '../layout';
 
-const renderButton = c => (
-  <FlexItem marginHorizontal={7.5}>{cloneElement(c)}</FlexItem>
-);
+const renderButton = child =>
+  child ? (
+    <FlexItem marginHorizontal={7.5}>{cloneElement(child)}</FlexItem>
+  ) : null;
 
 const SheetActionButtonRow = ({ children }) => (
   <Row css={padding(24, 7.5)} width="100%">

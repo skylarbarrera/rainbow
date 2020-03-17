@@ -1,18 +1,23 @@
+import { get } from 'lodash';
 import { useCallback, useMemo, useState } from 'react';
 import { transformOrigin as transformOriginUtil } from 'react-native-redash';
 
-export default function useTransformOrigin(transformOrigin) {
+export default function useTransformOrigin(transformOrigin, onLayoutProp) {
   const [height, setHeight] = useState(0);
   const [width, setWidth] = useState(0);
 
   const onLayout = useCallback(
-    ({ nativeEvent: { layout } }) => {
+    event => {
       if (transformOrigin && !height && !width) {
-        setHeight(layout.height);
-        setWidth(layout.width);
+        setHeight(get(event, 'nativeEvent.layout.height'));
+        setWidth(get(event, 'nativeEvent.layout.width'));
+      }
+
+      if (onLayoutProp) {
+        onLayoutProp(event);
       }
     },
-    [height, transformOrigin, width]
+    [height, onLayoutProp, transformOrigin, width]
   );
 
   const { offsetX, offsetY } = useMemo(() => {

@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import FastImage from 'react-native-fast-image';
 import { buildUniqueTokenName } from '../../helpers/assets';
 import { colors, position } from '../../styles';
@@ -18,18 +18,16 @@ const getFallbackTextColor = bg =>
 const UniqueTokenImage = ({ backgroundColor, imageUrl, item, resizeMode }) => {
   const [error, setError] = useState(null);
   const handleError = useCallback(error => setError(error), [setError]);
+  const source = useMemo(() => ({ uri: imageUrl }), [imageUrl]);
 
   return (
-    <Centered
-      shouldRasterizeIOS
-      style={{ ...position.coverAsObject, backgroundColor }}
-    >
+    <Centered {...position.coverAsObject} backgroundColor={backgroundColor}>
       {imageUrl && !error ? (
         <ImageWithCachedDimensions
           id={imageUrl}
           onError={handleError}
           resizeMode={FastImage.resizeMode[resizeMode]}
-          source={{ uri: imageUrl }}
+          source={source}
           style={position.coverAsObject}
         />
       ) : (
@@ -57,4 +55,6 @@ UniqueTokenImage.defaultProps = {
   resizeMode: 'cover',
 };
 
-export default React.memo(UniqueTokenImage);
+const arePropsEqual = (prev, next) => prev.imageUrl === next.imageUrl;
+
+export default React.memo(UniqueTokenImage, arePropsEqual);
