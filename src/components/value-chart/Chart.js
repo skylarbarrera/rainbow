@@ -68,7 +68,6 @@ const Chart = ({ change, ...props }) => {
   const positiveChange = greaterThan(change, 0);
 
   const valueRef = useRef(null);
-
   const [curVal, setCurVal] = useState(0);
 
   const handleValueUpdate = useCallback(v => {
@@ -87,7 +86,6 @@ const Chart = ({ change, ...props }) => {
 
   return (
     <Column
-      align="center"
       overflow="hidden"
       paddingBottom={21}
       paddingTop={19}

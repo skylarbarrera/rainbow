@@ -185,10 +185,16 @@ PODS:
   - Permission-Camera (2.1.1):
 =======
   - PanModal (1.2.5)
+<<<<<<< HEAD
   - Permission-Camera (2.0.9):
 >>>>>>> b6bcfeb9... just for you christian
     - RNPermissions
   - Permission-FaceID (2.1.1):
+=======
+  - Permission-Camera (2.0.10):
+    - RNPermissions
+  - Permission-FaceID (2.0.10):
+>>>>>>> a0813526... WIP JellySelecyor
     - RNPermissions
   - Protobuf (3.11.4)
   - RCTRequired (0.62.2)
@@ -360,6 +366,7 @@ PODS:
     - React
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   - react-native-camera (3.23.0):
     - React
     - react-native-camera/RCT (= 3.23.0)
@@ -372,11 +379,15 @@ PODS:
 =======
   - react-native-camera (3.19.0):
 >>>>>>> b6bcfeb9... just for you christian
+=======
+  - react-native-camera (3.21.0):
+>>>>>>> a0813526... WIP JellySelecyor
     - React
-    - react-native-camera/RCT (= 3.19.0)
-    - react-native-camera/RN (= 3.19.0)
-  - react-native-camera/RCT (3.19.0):
+    - react-native-camera/RCT (= 3.21.0)
+    - react-native-camera/RN (= 3.21.0)
+  - react-native-camera/RCT (3.21.0):
     - React
+<<<<<<< HEAD
 <<<<<<< HEAD
   - react-native-camera/RN (3.18.0):
 >>>>>>> 0ef7500a... WIP
@@ -391,6 +402,13 @@ PODS:
     - React
   - react-native-netinfo (5.6.1):
 >>>>>>> b6bcfeb9... just for you christian
+=======
+  - react-native-camera/RN (3.21.0):
+    - React
+  - react-native-mail (4.1.0):
+    - React
+  - react-native-netinfo (5.6.2):
+>>>>>>> a0813526... WIP JellySelecyor
     - React
   - react-native-randombytes (3.5.3):
     - React
@@ -469,7 +487,7 @@ PODS:
     - ReactCommon/callinvoker (= 0.62.2)
   - ReactNativePayments (1.1.5):
     - React
-  - reactnativeslackbottomsheet (0.4.2):
+  - reactnativeslackbottomsheet (0.5.0):
     - PanModal
     - React
   - RNAnalytics (1.1.0):
@@ -493,16 +511,25 @@ PODS:
 =======
   - RNCMaskedView (0.1.7):
     - React
+<<<<<<< HEAD
   - RNCPushNotificationIOS (1.0.7):
 >>>>>>> b6bcfeb9... just for you christian
+=======
+  - RNCPushNotificationIOS (1.1.0):
+>>>>>>> a0813526... WIP JellySelecyor
     - React
   - RNDeviceInfo (5.3.1):
     - React
-  - RNFastImage (7.0.2):
+  - RNFastImage (8.1.5):
     - React
     - SDWebImage (~> 5.0)
+<<<<<<< HEAD
     - SDWebImageWebPCoder (~> 0.2.3)
   - RNFBApp (6.4.0):
+=======
+    - SDWebImageWebPCoder (~> 0.4.1)
+  - RNFBApp (6.3.4):
+>>>>>>> a0813526... WIP JellySelecyor
     - Firebase/Core (~> 6.13.0)
     - React
   - RNFBCrashlytics (6.4.0):
@@ -525,7 +552,11 @@ PODS:
     - React
   - RNOS (1.2.8):
     - React
+<<<<<<< HEAD
   - RNPermissions (2.1.1):
+=======
+  - RNPermissions (2.0.10):
+>>>>>>> a0813526... WIP JellySelecyor
     - React
   - RNReactNativeHapticFeedback (1.9.0):
     - React
@@ -549,6 +580,7 @@ PODS:
   - RNSVG (12.1.0):
     - React
 <<<<<<< HEAD
+<<<<<<< HEAD
   - SDWebImage (5.7.0):
     - SDWebImage/Core (= 5.7.0)
   - SDWebImage/Core (5.7.0)
@@ -558,8 +590,14 @@ PODS:
   - SDWebImage/Core (5.6.0)
 >>>>>>> b6bcfeb9... just for you christian
   - SDWebImageWebPCoder (0.2.5):
+=======
+  - SDWebImage (5.6.1):
+    - SDWebImage/Core (= 5.6.1)
+  - SDWebImage/Core (5.6.1)
+  - SDWebImageWebPCoder (0.4.1):
+>>>>>>> a0813526... WIP JellySelecyor
     - libwebp (~> 1.0)
-    - SDWebImage/Core (~> 5.0)
+    - SDWebImage/Core (~> 5.5)
   - Sentry (4.4.3):
     - Sentry/Core (= 4.4.3)
   - Sentry/Core (4.4.3)
@@ -604,9 +642,13 @@ DEPENDENCIES:
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
   - libwebp
+<<<<<<< HEAD
   - lottie-ios (from `../node_modules/lottie-ios`)
   - lottie-react-native (from `../node_modules/lottie-react-native`)
   - PanModal (from `https://github.com/osdnk/PanModal`, commit `25be2df9ccf997b62c39e1edb42857bab2d0cdab`)
+=======
+  - PanModal (from `https://github.com/slackhq/PanModal`, commit `1819113e97bba04fb776d300956ec78febbd6ccb`)
+>>>>>>> a0813526... WIP JellySelecyor
   - Permission-Camera (from `../node_modules/react-native-permissions/ios/Camera.podspec`)
   - Permission-FaceID (from `../node_modules/react-native-permissions/ios/FaceID.podspec`)
   - RCTRequired (from `../node_modules/react-native/Libraries/RCTRequired`)
@@ -706,10 +748,13 @@ SPEC REPOS:
     - libwebp
     - nanopb
 <<<<<<< HEAD
+<<<<<<< HEAD
     - OpenSSL-Universal
 =======
     - PanModal
 >>>>>>> b6bcfeb9... just for you christian
+=======
+>>>>>>> a0813526... WIP JellySelecyor
     - Protobuf
     - SDWebImage
     - SDWebImageWebPCoder
@@ -732,6 +777,7 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/Folly.podspec"
   glog:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
+<<<<<<< HEAD
   lottie-ios:
     :path: "../node_modules/lottie-ios"
   lottie-react-native:
@@ -739,6 +785,11 @@ EXTERNAL SOURCES:
   PanModal:
     :commit: 25be2df9ccf997b62c39e1edb42857bab2d0cdab
     :git: https://github.com/osdnk/PanModal
+=======
+  PanModal:
+    :commit: 1819113e97bba04fb776d300956ec78febbd6ccb
+    :git: https://github.com/slackhq/PanModal
+>>>>>>> a0813526... WIP JellySelecyor
   Permission-Camera:
     :path: "../node_modules/react-native-permissions/ios/Camera.podspec"
   Permission-FaceID:
@@ -866,8 +917,13 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   PanModal:
+<<<<<<< HEAD
     :commit: 25be2df9ccf997b62c39e1edb42857bab2d0cdab
     :git: https://github.com/osdnk/PanModal
+=======
+    :commit: 1819113e97bba04fb776d300956ec78febbd6ccb
+    :git: https://github.com/slackhq/PanModal
+>>>>>>> a0813526... WIP JellySelecyor
 
 SPEC CHECKSUMS:
   Analytics: f82f3cd6d3c8fbfd76ce25773199576656981a4a
@@ -922,9 +978,14 @@ SPEC CHECKSUMS:
   Permission-FaceID: fafd8c4809ad5be3547e1b66c2ce444c5abd92a6
 =======
   PanModal: 7c5af3ad4fe22b91508040965bebffb89fb607ae
+<<<<<<< HEAD
   Permission-Camera: 8fe4753b02396489b11c5089e4f57bab7fe1ef42
   Permission-FaceID: 29c3f213a033c24330a554a5dad7681d6e3698f8
 >>>>>>> b6bcfeb9... just for you christian
+=======
+  Permission-Camera: a8f6007d17b02ed8a2d6bac1c37c2fd5df9b4e8a
+  Permission-FaceID: cb03a979336319d837a4e5e867306345297c5230
+>>>>>>> a0813526... WIP JellySelecyor
   Protobuf: 176220c526ad8bd09ab1fb40a978eac3fef665f7
   RCTRequired: cec6a34b3ac8a9915c37e7e4ad3aa74726ce4035
   RCTTypeSafety: 93006131180074cffa227a1075802c89a49dd4ce
@@ -939,6 +1000,7 @@ SPEC CHECKSUMS:
   react-native-blur: cad4d93b364f91e7b7931b3fa935455487e5c33c
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   react-native-camera: fc44e91dcf7420f21a10e653adc811efd1e78158
 =======
   react-native-camera: 3308898e1b09bf6211647c6e3e42d5f7aa02259e
@@ -950,6 +1012,11 @@ SPEC CHECKSUMS:
   react-native-mail: a864fb211feaa5845c6c478a3266de725afdce89
   react-native-netinfo: fa42683301345997e876760ba2be86f06148baa5
 >>>>>>> b6bcfeb9... just for you christian
+=======
+  react-native-camera: 4e12e877b8fef60b0914a49c942a0f32479e5b50
+  react-native-mail: a864fb211feaa5845c6c478a3266de725afdce89
+  react-native-netinfo: 73303369946c2487c600418961bfdc87748b832f
+>>>>>>> a0813526... WIP JellySelecyor
   react-native-randombytes: 3638d24759d67c68f6ccba60c52a7a8a8faa6a23
   react-native-safe-area-context: 13004a45f3021328fdd9ee1f987c3131fb65928d
   react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
@@ -968,7 +1035,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: 4356114dbcba4ce66991096e51a66e61eda51256
   ReactCommon: ed4e11d27609d571e7eee8b65548efc191116eb3
   ReactNativePayments: 40a266450628c05db440fe219b631210e4358a49
-  reactnativeslackbottomsheet: 0dcf0323be669c524a23dba11307d4b8ddd5cbea
+  reactnativeslackbottomsheet: d44b4c59c1e69c045983044d2f361d256d3ddb98
   RNAnalytics: 35a54cb740c472a0a6a3de765176b82cccc2d1ef
   RNCAsyncStorage: 44395cb9c7c1523104c2b499eb426ef7aff82bca
 <<<<<<< HEAD
@@ -983,6 +1050,7 @@ SPEC CHECKSUMS:
 >>>>>>> 0ef7500a... WIP
 =======
   RNCMaskedView: 76c40a1d41c3e2535df09246a2b5487f04de0814
+<<<<<<< HEAD
   RNCPushNotificationIOS: eea954fa69537d4a8db898fe1b1a06e2b7e15841
 >>>>>>> b6bcfeb9... just for you christian
   RNDeviceInfo: 6f20764111df002b4484f90cbe0a861be29bcc6c
@@ -990,12 +1058,24 @@ SPEC CHECKSUMS:
   RNFBApp: 69781cf10ce41f6f6db789e6264dd80119ef2fb7
   RNFBCrashlytics: f6630b1cfa1fbac5348205232709ac779369d9e7
   RNFBMessaging: 805710731a2b616030514f6f416e8787de521f41
+=======
+  RNCPushNotificationIOS: ec3e8c17cda6a92a0bb97a53ec5ecf5771d94d21
+  RNDeviceInfo: 6f20764111df002b4484f90cbe0a861be29bcc6c
+  RNFastImage: 35ae972d6727c84ee3f5c6897e07f84d0a3445e9
+  RNFBApp: 7d4006751de8bb5cafa2e8d2e7d94ee250df81db
+  RNFBCrashlytics: 93e1cc09a93aa4bb1e9b5a07af0efb2702db5a39
+  RNFBMessaging: 51cc7f6beaf4c4feac6f18ea941bba5854e3d9c6
+>>>>>>> a0813526... WIP JellySelecyor
   RNGestureHandler: dde546180bf24af0b5f737c8ad04b6f3fa51609a
   RNInputMask: 815461ebdf396beb62cf58916c35cf6930adb991
   RNKeychain: f5783613aa3095af63345ddb9626a729bd4a3897
   RNLanguages: 962e562af0d34ab1958d89bcfdb64fafc37c513e
   RNOS: 31db6fa4a197d179afbba9e6b4d28d450a7f250b
+<<<<<<< HEAD
   RNPermissions: 18cf517660d0247a4b66d21b6f85272fd1870cd2
+=======
+  RNPermissions: 1008d3511fee0e25739cf81c4af0d1b2248f1053
+>>>>>>> a0813526... WIP JellySelecyor
   RNReactNativeHapticFeedback: 2566b468cc8d0e7bb2f84b23adc0f4614594d071
   RNReanimated: 031fe8d9ea93c2bd689a40f05320ef9d96f74d7f
 <<<<<<< HEAD
@@ -1013,9 +1093,14 @@ SPEC CHECKSUMS:
   RNSentry: 86baf0c87120cd5eb491d073989f8cbc1a2174c6
   RNStoreReview: 62d6afd7c37db711a594bbffca6b0ea3a812b7a8
   RNSVG: 67f1f12dae2cef6ed59a42cae74a6b8f5a9e7b46
+<<<<<<< HEAD
   SDWebImage: 21b19f56b4226cdfe3aefe4e6848dc43ed129a86
 >>>>>>> b6bcfeb9... just for you christian
   SDWebImageWebPCoder: 947093edd1349d820c40afbd9f42acb6cdecd987
+=======
+  SDWebImage: 7edb9c3ea661e77a66661f7f044de8c1b55d1120
+  SDWebImageWebPCoder: 36f8f47bd9879a8aea6044765c1351120fd8e3a8
+>>>>>>> a0813526... WIP JellySelecyor
   Sentry: 14bdd673870e8cf64932b149fad5bbbf39a9b390
   SRSRadialGradient: 77bcb1ae812d0c77560e54ed9e52166df032db1d
   SSZipArchive: fa16b8cc4cdeceb698e5e5d9f67e9558532fbf23
@@ -1025,9 +1110,13 @@ SPEC CHECKSUMS:
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 PODFILE CHECKSUM: 83684de3969b44377a61e17ecbb99f936d354493
 =======
 PODFILE CHECKSUM: 056d676880e0903c906715772145882214dfb738
 >>>>>>> 0ef7500a... WIP
+=======
+PODFILE CHECKSUM: 151a2512ce20b31d7ec5c5dfe514a4a4ed46851d
+>>>>>>> a0813526... WIP JellySelecyor
 
 COCOAPODS: 1.9.1

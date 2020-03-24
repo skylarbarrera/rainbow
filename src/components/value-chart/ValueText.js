@@ -1,99 +1,97 @@
 import PropTypes from 'prop-types';
-import React, { Fragment, useEffect, useRef, useState } from 'react';
-import { View } from 'react-native';
+import React, { Fragment, useRef } from 'react';
+import { StyleSheet } from 'react-native';
 import { Transition, Transitioning } from 'react-native-reanimated';
-import styled from 'styled-components/primitives';
-import { useDimensions } from '../../hooks';
-import { colors, fonts } from '../../styles';
-import { AnimatedNumber } from '../animations';
-import { Row } from '../layout';
-import { TruncatedText } from '../text';
-import TrendIndicatorText from './TrendIndicatorText';
+import { withProps } from 'recompact';
+import { colors } from '../../styles';
+import { Icon } from '../icons';
+import { RowWithMargins } from '../layout';
+import { Rounded, TruncatedText } from '../text';
 
-const HeadingTextStyles = {
-  color: colors.dark,
-  weight: 'bold',
-};
+const sx = StyleSheet.create({
+  container: {
+    height: 85,
+    paddingLeft: 15,
+    width: '100%',
+  },
+});
 
-const Title = styled(TruncatedText).attrs(HeadingTextStyles)`
-  font-size: 30px;
-  margin-bottom: 6.5px;
-`;
+const TruncatedRounded = withProps({ component: Rounded })(TruncatedText);
 
-const Header = styled(TruncatedText)`
-  font-size: ${fonts.size.smedium};
-  color: ${colors.alpha(colors.blueGreyDark, 0.5)};
-  font-weight: ${fonts.weight.semibold};
-`;
+const Subtitle = props => (
+  <TruncatedRounded
+    color={colors.blueGreyLight}
+    letterSpacing="tooLoose"
+    size="smedium"
+    weight="semibold"
+    {...props}
+  />
+);
+
+const Title = props => <TruncatedRounded size="h2" weight="bold" {...props} />;
 
 const transition = (
   <Transition.Together>
     <Transition.Out
       durationMs={220}
-      type="slide-top"
-      propagation="right"
       interpolation="easeInOut"
+      propagation="right"
+      type="slide-top"
     />
     <Transition.In
-      durationMs={200}
       delayMs={120}
-      type="fade"
+      durationMs={200}
       propagation="left"
+      type="fade"
     />
   </Transition.Together>
 );
 
 const ValueText = props => {
   const { change, direction, headerText, value } = props;
-  const { width } = useDimensions();
   const transitionRef = useRef();
 
-  // const currentValue = useRef(value);
-  // useEffect(() => {
-  //   // setText(value);
-  //   transitionRef.current.animateNextTransition();
-  // }, [value]);
+  if (transitionRef.current) {
+    transitionRef.current.animateNextTransition();
+  }
 
-                  // value={ref}
   return (
-    <View
-      style={{
-        height: 85,
-        paddingLeft: 15,
-        width,
-      }}
+    <Transitioning.View
+      ref={transitionRef}
+      style={sx.container}
+      transition={transition}
     >
-      <Transitioning.View ref={transitionRef} transition={transition}>
-        {value ? (
-          <View>
-            <Header>{headerText}</Header>
-            <Row align="center">
-              <Title>$</Title>
-                <AnimatedNumber
-                  disableTabularNums
-                  textAlign="left"
-                  formatter={thing => `${Number(thing).toFixed(2)}`}
-                  value={value}
-                  style={{
-                    ...HeadingTextStyles,
-                    fontSize: 30,
-                    fontWeight: fonts.weight.bold,
-                    marginBottom: 6.5,
-                  }}
-                />
-            </Row>
-            <TrendIndicatorText direction={direction}>
+      {value ? (
+        <Fragment>
+          <Subtitle>{headerText}</Subtitle>
+          <Title>${value}</Title>
+          <RowWithMargins align="center" margin={2} marginTop={2}>
+            <Icon
+              color={direction ? colors.chartGreen : colors.red}
+              direction={direction ? 'right' : 'left'}
+              fat
+              height={15}
+              name="arrow"
+              width={13}
+            />
+            <Rounded
+              color={direction ? colors.chartGreen : colors.red}
+              letterSpacing="looser"
+              lineHeight="loose"
+              size="large"
+              weight="bold"
+            >
               {Math.abs(Number(change))}%
-            </TrendIndicatorText>
-          </View>
-        ) : (
-          <Fragment>
-            <Header>Downloading data...</Header>
-            <Title>Loading...</Title>
-          </Fragment>
-        )}
-      </Transitioning.View>
-    </View>
+            </Rounded>
+          </RowWithMargins>
+        </Fragment>
+      ) : (
+        <Fragment>
+          <Subtitle>Downloading data...</Subtitle>
+          <Title>Loading...</Title>
+        </Fragment>
+      )}
+    </Transitioning.View>
   );
 };
 

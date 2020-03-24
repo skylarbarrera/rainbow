@@ -1,16 +1,25 @@
 import { get } from 'lodash';
 import { useCallback, useMemo, useState } from 'react';
-import { transformOrigin as transformOriginUtil } from 'react-native-redash';
+import { useMemoOne } from 'use-memo-one';
+import {
+  transformOrigin as transformOriginUtil,
+  useValues,
+} from 'react-native-redash';
+import Animated from 'react-native-reanimated';
+
+const { floor, divide, multiply, Value } = Animated;
 
 export default function useTransformOrigin(transformOrigin, onLayoutProp) {
-  const [height, setHeight] = useState(0);
-  const [width, setWidth] = useState(0);
+  const [height, width] = useValues([0, 0], []);
+
+  // const [height, setHeight] = useState(0);
+  // const [width, setWidth] = useState(0);
 
   const onLayout = useCallback(
     event => {
       if (transformOrigin && !height && !width) {
-        setHeight(get(event, 'nativeEvent.layout.height'));
-        setWidth(get(event, 'nativeEvent.layout.width'));
+        height.setValue(get(event, 'nativeEvent.layout.height'));
+        width.setValue(get(event, 'nativeEvent.layout.width'));
       }
 
       if (onLayoutProp) {
@@ -24,13 +33,13 @@ export default function useTransformOrigin(transformOrigin, onLayoutProp) {
     const offsetMultiplier =
       transformOrigin === 'left' || transformOrigin === 'top' ? -1 : 1;
 
-    let offsetX = 0;
-    let offsetY = 0;
+    const offsetX = new Value(0);
+    const offsetY = new Value(0);
 
     if (transformOrigin === 'left' || transformOrigin === 'right') {
-      offsetX = Math.floor(width / 2) * offsetMultiplier;
+      offsetX.setValue(multiply(floor(divide(width, 2)), offsetMultiplier));
     } else if (transformOrigin === 'bottom' || transformOrigin === 'top') {
-      offsetY = Math.floor(height / 2) * offsetMultiplier;
+      offsetY.setValue(multiply(floor(divide(height, 2)), offsetMultiplier));
     }
     return { offsetX, offsetY };
   }, [height, transformOrigin, width]);

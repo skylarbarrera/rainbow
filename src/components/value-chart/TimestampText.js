@@ -7,15 +7,11 @@ const TimestampText = ({ style, ...props }) => (
   <Text
     {...props}
     align="center"
-    color={colors.blueGreyDark}
-    lineHeight={17}
-    style={[
-      style,
-      {
-        marginLeft: -15,
-        opacity: 0.5,
-      },
-    ]}
+    color={colors.blueGreyDark50}
+    letterSpacing="looser"
+    size="smedium"
+    weight="semibold"
+    style={[{ marginLeft: -15 }, style]}
   />
 );
 

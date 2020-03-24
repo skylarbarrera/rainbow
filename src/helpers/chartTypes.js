@@ -4,4 +4,5 @@ export default {
   month: 'm',
   week: 'w',
   year: 'y',
+  max: 'a',
 };

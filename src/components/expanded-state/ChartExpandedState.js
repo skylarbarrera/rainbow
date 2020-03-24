@@ -5,13 +5,13 @@ import { InteractionManager } from 'react-native';
 import { useNavigation } from 'react-navigation-hooks';
 import styled from 'styled-components/primitives';
 import { chartExpandedAvailable } from '../../config/experimental';
-import { useAccountAssets, useCharts } from '../../hooks';
+import { useAsset, useAccountAssets, useDimensions, useCharts } from '../../hooks';
 import Routes from '../../screens/Routes/routesNames';
 import { colors } from '../../styles';
-import { deviceUtils, ethereumUtils } from '../../utils';
+import { deviceUtils, ethereumUtils, magicMemo } from '../../utils';
 import Divider from '../Divider';
 import { BalanceCoinRow } from '../coin-row';
-import { Sheet, SheetActionButton, SheetActionButtonRow } from '../sheet';
+import { Sheet,SlackSheet, SheetActionButton, SheetActionButtonRow } from '../sheet';
 import Chart from '../value-chart/Chart';
 
 const ChartContainer = styled.View`
@@ -22,7 +22,8 @@ const ChartContainer = styled.View`
 `;
 
 const ChartExpandedState = ({ asset }) => {
-  const { allAssets } = useAccountAssets();
+  const selectedAsset = useAsset(asset);
+  const { height } = useDimensions();
   const { goBack, navigate } = useNavigation();
   const { charts } = useCharts();
 
@@ -30,17 +31,12 @@ const ChartExpandedState = ({ asset }) => {
   const hasChart = chartExpandedAvailable || !isEmpty(chart);
   const change = get(asset, 'price.relative_change_24h', 0);
 
-  const selectedAsset = useMemo(
-    () => ethereumUtils.getAsset(allAssets, asset.address) || asset,
-    [allAssets, asset]
-  );
 
   const handleNavigation = useCallback(
     route => {
       goBack();
-
-      InteractionManager.runAfterInteractions(() => {
-        navigate(route, { asset: selectedAsset });
+      return InteractionManager.runAfterInteractions(() => {
+        return navigate(route, { asset: selectedAsset });
       });
     },
     [goBack, navigate, selectedAsset]
@@ -86,4 +82,4 @@ ChartExpandedState.propTypes = {
   asset: PropTypes.object,
 };
 
-export default React.memo(ChartExpandedState);
+export default magicMemo(ChartExpandedState, 'asset');
