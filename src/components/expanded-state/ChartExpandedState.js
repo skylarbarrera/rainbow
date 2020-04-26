@@ -11,7 +11,7 @@ import { colors } from '../../styles';
 import { deviceUtils, ethereumUtils, magicMemo } from '../../utils';
 import Divider from '../Divider';
 import { BalanceCoinRow } from '../coin-row';
-import { Sheet,SlackSheet, SheetActionButton, SheetActionButtonRow } from '../sheet';
+import { Sheet, SheetActionButton, SheetActionButtonRow } from '../sheet'; //SlackSheet
 import Chart from '../value-chart/Chart';
 
 const ChartContainer = styled.View`

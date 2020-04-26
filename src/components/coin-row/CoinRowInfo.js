@@ -26,7 +26,7 @@ const Container = styled(Column).attrs({
 const PercentageText = styled(BottomRowText).attrs({
   align: 'right',
 })`
-  color: ${({ isPositive }) => (isPositive ? colors.green : null)};
+  ${({ isPositive }) => (isPositive ? `color: ${colors.green};` : null)};
   margin-bottom: 0.5;
 `;
 

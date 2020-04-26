@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { createElement, useCallback, useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
-import SlackBottomSheet from 'react-native-slack-bottom-sheet';
+// import SlackBottomSheet from 'react-native-slack-bottom-sheet';
 import { useNavigation, useNavigationEvents } from 'react-navigation-hooks';
 import { useDimensions } from '../../hooks';
 import { colors } from '../../styles';
@@ -78,16 +78,6 @@ const SlackSheet = ({
   useNavigationEvents(handleWillFocus);
 
   return (
-    <SlackBottomSheet
-      {...SlackSheetConfig}
-      cornerRadius={cornerRadius}
-      headerHeight={headerHeight}
-      onDidDismiss={() => goBack()}
-      springDamping={springDamping}
-      topOffset={topOffset}
-      transitionDuration={transitionDuration}
-      visible={isVisible}
-    >
       <Centered backgroundColor={colors.white} direction="column" width={width}>
         <SheetHandleFixedToTop />
         {createElement(scrollEnabled ? ScrollView : View, {
@@ -100,9 +90,21 @@ const SlackSheet = ({
           style: sx.scrollview,
         })}
       </Centered>
-    </SlackBottomSheet>
   );
 };
+
+
+    // <SlackBottomSheet
+    //   {...SlackSheetConfig}
+    //   cornerRadius={cornerRadius}
+    //   headerHeight={headerHeight}
+    //   onDidDismiss={() => goBack()}
+    //   springDamping={springDamping}
+    //   topOffset={topOffset}
+    //   transitionDuration={transitionDuration}
+    //   visible={isVisible}
+    // >
+    // </SlackBottomSheet>
 
 SlackSheet.propTypes = {
   cornerRadius: PropTypes.number,

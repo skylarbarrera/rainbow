@@ -6,7 +6,7 @@ import { withActionSheetManager } from '../../hoc';
 import { padding } from '../../styles';
 import { ButtonPressAnimation } from '../animations';
 import { Icon } from '../icons';
-import { Centered } from '../layout';
+import { Centered, Row } from '../layout';
 
 const ActionSheetProps = [
   'cancelButtonIndex',

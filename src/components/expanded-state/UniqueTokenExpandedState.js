@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { Share } from 'react-native';
+import { useNavigation } from 'react-navigation-hooks';
 import { useSafeArea } from 'react-native-safe-area-context';
 import { Transition, Transitioning } from 'react-native-reanimated';
-import { InteractionManager, Linking, ScrollView, Share, StyleSheet } from 'react-native';
-import { useNavigation } from 'react-navigation-hooks';
 import { useAsset, useAccountAssets, useDimensions } from '../../hooks';
 import { buildUniqueTokenName } from '../../helpers/assets';
 import Routes from '../../screens/Routes/routesNames';

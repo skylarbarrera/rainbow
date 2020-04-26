@@ -101,7 +101,6 @@ target 'Rainbow' do
   permissions_path = '../node_modules/react-native-permissions/ios'
   pod 'Permission-Camera', :path => "#{permissions_path}/Camera.podspec"
   pod 'Permission-FaceID', :path => "#{permissions_path}/FaceID.podspec"
-  pod "PanModal", :git => 'https://github.com/slackhq/PanModal', :commit => '1819113e97bba04fb776d300956ec78febbd6ccb'
 
   pod "PanModal", :git => 'https://github.com/osdnk/PanModal', :commit => '25be2df9ccf997b62c39e1edb42857bab2d0cdab'
 

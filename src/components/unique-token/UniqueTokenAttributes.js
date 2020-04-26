@@ -3,7 +3,6 @@ import React from 'react';
 import { sortList } from '../../helpers/sortList';
 import { margin } from '../../styles';
 import { magicMemo } from '../../utils';
-import { Row } from '../layout';
 import Tag from '../Tag';
 import { Row } from '../layout';
 
