@@ -12,7 +12,12 @@ const ExpandedStateSection = ({ children, title, ...props }) => (
     paddingTop={19}
     {...props}
   >
-    <Text letterSpacing="tight" lineHeight="normal" size="large" weight="bold">
+    <Text
+      letterSpacing="roundedTight"
+      lineHeight="normal"
+      size="large"
+      weight="bold"
+    >
       {title}
     </Text>
     {typeof children === 'string' ? (

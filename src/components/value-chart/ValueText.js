@@ -6,7 +6,7 @@ import { withProps } from 'recompact';
 import { colors } from '../../styles';
 import { Icon } from '../icons';
 import { RowWithMargins } from '../layout';
-import { Rounded, TruncatedText } from '../text';
+import { Text, TruncatedText } from '../text';
 
 const sx = StyleSheet.create({
   container: {
@@ -16,19 +16,17 @@ const sx = StyleSheet.create({
   },
 });
 
-const TruncatedRounded = withProps({ component: Rounded })(TruncatedText);
-
 const Subtitle = props => (
-  <TruncatedRounded
+  <TruncatedText
     color={colors.blueGreyLight}
-    letterSpacing="tooLoose"
+    letterSpacing="uppercase"
     size="smedium"
     weight="semibold"
     {...props}
   />
 );
 
-const Title = props => <TruncatedRounded size="h2" weight="bold" {...props} />;
+const Title = props => <TruncatedText size="h2" weight="bold" {...props} />;
 
 const transition = (
   <Transition.Together>
@@ -74,15 +72,15 @@ const ValueText = props => {
               name="arrow"
               width={13}
             />
-            <Rounded
+            <Text
               color={direction ? colors.chartGreen : colors.red}
-              letterSpacing="looser"
+              letterSpacing="roundedTight"
               lineHeight="loose"
               size="large"
               weight="bold"
             >
               {Math.abs(Number(change))}%
-            </Rounded>
+            </Text>
           </RowWithMargins>
         </Fragment>
       ) : (

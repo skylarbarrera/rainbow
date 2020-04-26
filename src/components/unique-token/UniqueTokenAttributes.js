@@ -36,4 +36,4 @@ UniqueTokenAttributes.propTypes = {
   ),
 };
 
-export default magicMemo(UniqueTokenAttributes, 'traits');
+export default UniqueTokenAttributes;//magicMemo(UniqueTokenAttributes, 'traits');

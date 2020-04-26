@@ -5,7 +5,12 @@ import { InteractionManager } from 'react-native';
 import { useNavigation } from 'react-navigation-hooks';
 import styled from 'styled-components/primitives';
 import { chartExpandedAvailable } from '../../config/experimental';
-import { useAsset, useAccountAssets, useDimensions, useCharts } from '../../hooks';
+import {
+  useAccountAssets,
+  useAsset,
+  useCharts,
+  useDimensions,
+} from '../../hooks';
 import Routes from '../../screens/Routes/routesNames';
 import { colors } from '../../styles';
 import { deviceUtils, ethereumUtils, magicMemo } from '../../utils';
@@ -31,6 +36,9 @@ const ChartExpandedState = ({ asset }) => {
   const hasChart = chartExpandedAvailable || !isEmpty(chart);
   const change = get(asset, 'price.relative_change_24h', 0);
 
+  console.log('asset', asset);
+  console.log('selectedAsset', selectedAsset);
+
 
   const handleNavigation = useCallback(
     route => {
@@ -45,7 +53,7 @@ const ChartExpandedState = ({ asset }) => {
   return (
     <Sheet>
       <BalanceCoinRow
-        {...selectedAsset}
+        item={selectedAsset}
         containerStyles={`
           padding-top: 0;
           padding-bottom: 0;
@@ -78,8 +86,24 @@ const ChartExpandedState = ({ asset }) => {
   );
 };
 
+      // <SheetActionButtonRow>
+      //   <SheetActionButton
+      //     color={colors.dodgerBlue}
+      //     icon="swap"
+      //     label="Swap"
+      //     onPress={() => handleNavigation('ExchangeModal')}
+      //   />
+      //   <SheetActionButton
+      //     color={colors.paleBlue}
+      //     icon="send"
+      //     label="Send"
+      //     onPress={() => handleNavigation('SendSheet')}
+      //   />
+      // </SheetActionButtonRow>
+
+
 ChartExpandedState.propTypes = {
   asset: PropTypes.object,
 };
 
-export default magicMemo(ChartExpandedState, 'asset');
+export default ChartExpandedState; //magicMemo(ChartExpandedState, 'asset');

@@ -1,25 +1,23 @@
 import PropTypes from 'prop-types';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback } from 'react';
 import { Share } from 'react-native';
 import { useNavigation } from 'react-navigation-hooks';
-import { useSafeArea } from 'react-native-safe-area-context';
-import { Transition, Transitioning } from 'react-native-reanimated';
-import { useAsset, useAccountAssets, useDimensions } from '../../hooks';
 import { buildUniqueTokenName } from '../../helpers/assets';
+import { useAsset } from '../../hooks';
 import Routes from '../../screens/Routes/routesNames';
 import { colors } from '../../styles';
 import { magicMemo } from '../../utils';
 import Divider from '../Divider';
-import { Column, ColumnWithDividers } from '../layout';
 import Link from '../Link';
-import { SheetActionButton, SheetActionButtonRow, SlackSheet } from '../sheet';
+import { Column, ColumnWithDividers } from '../layout';
+import { SlackSheet, SheetActionButton, SheetActionButtonRow } from '../sheet';
 import { Text } from '../text';
 import { UniqueTokenAttributes } from '../unique-token';
+import ExpandedStateSection from './ExpandedStateSection';
 import {
   UniqueTokenExpandedStateHeader,
   UniqueTokenExpandedStateImage,
 } from './unique-token';
-import ExpandedStateSection from './ExpandedStateSection';
 
 const UniqueTokenExpandedState = ({ asset }) => {
   const { navigate } = useNavigation();
@@ -37,8 +35,10 @@ const UniqueTokenExpandedState = ({ asset }) => {
     });
   }, [asset]);
 
+
+  // //headerHeight={50}
   return (
-    <SlackSheet headerHeight={50}>
+    <SlackSheet>
       <UniqueTokenExpandedStateHeader asset={asset} />
       <UniqueTokenExpandedStateImage asset={asset} />
       <SheetActionButtonRow>
@@ -92,4 +92,5 @@ UniqueTokenExpandedState.propTypes = {
   asset: PropTypes.object,
 };
 
-export default magicMemo(UniqueTokenExpandedState, 'asset');
+export default UniqueTokenExpandedState; //magicMemo(, 'asset');
+

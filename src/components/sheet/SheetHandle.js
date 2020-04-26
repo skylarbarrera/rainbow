@@ -1,8 +1,8 @@
+import { VibrancyView } from '@react-native-community/blur';
 import PropTypes from 'prop-types';
 import React, { createElement } from 'react';
 import { StyleSheet, View } from 'react-native';
 import stylePropType from 'react-style-proptype';
-import { VibrancyView } from '@react-native-community/blur';
 import { colors } from '../../styles';
 
 const sx = StyleSheet.create({

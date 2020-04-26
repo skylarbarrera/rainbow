@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Centered } from '../layout';
-import { SheetHandle } from '../sheet';
+import SheetHandle from './SheetHandle';
 
 const sx = StyleSheet.create({
   container: {

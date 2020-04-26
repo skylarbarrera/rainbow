@@ -6,8 +6,8 @@ import { buildUniqueTokenName } from '../../../helpers/assets';
 import { colors, padding } from '../../../styles';
 import { magicMemo } from '../../../utils';
 import { ContextButton } from '../../context-menu';
-import { FlexItem, ColumnWithMargins, Row, RowWithMargins } from '../../layout';
-import { APRPill } from '../../savings';
+import { ColumnWithMargins, FlexItem, Row, RowWithMargins } from '../../layout';
+import { APYPill } from '../../savings';
 import { Text } from '../../text';
 
 const paddingHorizontal = 19;
@@ -40,29 +40,31 @@ const UniqueTokenExpandedStateHeader = ({ asset }) => {
         <RowWithMargins align="center" margin={paddingVertical} marginLeft={1}>
           <Text
             color={colors.blueGreyDark50}
-            letterSpacing="looser"
+            letterSpacing="roundedTight"
             size="small"
             uppercase
             weight="semibold"
           >
             {asset.asset_contract.name}
           </Text>
-          <APRPill maxWidth={150}>#{asset.id}</APRPill>
+          <APYPill maxWidth={150}>#{asset.id}</APYPill>
         </RowWithMargins>
         <FlexItem flex={1}>
-          <Text letterSpacing="tightest" size="blarge" weight="bold">
+          <Text letterSpacing="roundedTight" size="blarge" weight="bold">
             {buildUniqueTokenName(asset)}
           </Text>
         </FlexItem>
       </ColumnWithMargins>
-      <ContextButton
-        flex={0}
-        onPressActionSheet={handleActionSheetPress}
-        options={['View on OpenSea', lang.t('wallet.action.cancel')]}
-      />
     </Row>
   );
 };
+
+
+      // <ContextButton
+      //   flex={0}
+      //   onPressActionSheet={handleActionSheetPress}
+      //   options={['View on OpenSea', lang.t('wallet.action.cancel')]}
+      // />
 
 UniqueTokenExpandedStateHeader.propTypes = {
   asset: PropTypes.object,

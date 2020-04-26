@@ -15,4 +15,4 @@ const ContextButton = props => (
   </ContextMenu>
 );
 
-export default React.memo(ContextButton);
+export default ContextButton;

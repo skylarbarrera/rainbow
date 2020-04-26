@@ -8,7 +8,7 @@ const TimestampText = ({ style, ...props }) => (
     {...props}
     align="center"
     color={colors.blueGreyDark50}
-    letterSpacing="looser"
+    letterSpacing="roundedTight"
     size="smedium"
     weight="semibold"
     style={[{ marginLeft: -15 }, style]}

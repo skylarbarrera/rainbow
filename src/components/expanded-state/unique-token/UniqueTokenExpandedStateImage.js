@@ -51,4 +51,4 @@ UniqueTokenExpandedStateImage.propTypes = {
   asset: PropTypes.object,
 };
 
-export default magicMemo(UniqueTokenExpandedStateImage, 'asset');
+export default UniqueTokenExpandedStateImage;//magicMemo(, 'asset');

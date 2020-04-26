@@ -78,18 +78,18 @@ const SlackSheet = ({
   useNavigationEvents(handleWillFocus);
 
   return (
-      <Centered backgroundColor={colors.white} direction="column" width={width}>
-        <SheetHandleFixedToTop />
-        {createElement(scrollEnabled ? ScrollView : View, {
-          ...props,
-          alwaysBounceVertical: true,
-          bounces: true,
-          contentContainerStyle: contentContainerStyle,
-          directionalLockEnabled: true,
-          scrollIndicatorInsets: scrollIndicatorInsets,
-          style: sx.scrollview,
-        })}
-      </Centered>
+    <Centered backgroundColor={colors.white} direction="column" width={width}>
+      <SheetHandleFixedToTop />
+      {createElement(scrollEnabled ? ScrollView : View, {
+        ...props,
+        alwaysBounceVertical: true,
+        bounces: true,
+        contentContainerStyle: contentContainerStyle,
+        directionalLockEnabled: true,
+        scrollIndicatorInsets: scrollIndicatorInsets,
+        style: sx.scrollview,
+      })}
+    </Centered>
   );
 };
 

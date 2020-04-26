@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import React, { Fragment, useCallback, useEffect, useState } from 'react';
 import { View } from 'react-native';
 import { compose } from 'recompact';
+import styled from 'styled-components/primitives';
 import { buildAssetUniqueIdentifier } from '../../helpers/assets';
 import {
   withCoinListEdited,
@@ -10,8 +11,9 @@ import {
   withEditOptions,
   withOpenBalances,
 } from '../../hoc';
+import { useDimensions } from '../../hooks';
 import { colors } from '../../styles';
-import { deviceUtils, isNewValueForPath } from '../../utils';
+import { isNewValueForPath } from '../../utils';
 import { ButtonPressAnimation } from '../animations';
 import { EmDash } from '../html-entities';
 import { Column, FlexItem, Row } from '../layout';
@@ -20,7 +22,6 @@ import BottomRowText from './BottomRowText';
 import CoinCheckButton from './CoinCheckButton';
 import CoinName from './CoinName';
 import CoinRow from './CoinRow';
-import CoinRowInfo from './CoinRowInfo';
 
 const editTranslateOffset = 32;
 
@@ -29,32 +30,35 @@ const BalanceCoinRowExpandedStyles = `
   padding-top: 0;
 `;
 
+const PercentageText = styled(BottomRowText).attrs({
+  align: 'right',
+})`
+  ${({ isPositive }) => (isPositive ? `color: ${colors.green};` : null)};
+  margin-bottom: 0.5;
+`;
+
 const formatPercentageString = percentString =>
-  percentString
-    ? percentString
-        .split('-')
-        .join('- ')
-        .split('%')
-        .join(' %')
-    : '-';
+  percentString ? percentString.split('-').join('- ') : '-';
 
 const BottomRow = ({ balance, isExpandedState, native }) => {
   const percentChange = get(native, 'change');
   const percentageChangeDisplay = formatPercentageString(percentChange);
-  const isPositive = percentChange && percentageChangeDisplay.charAt(0) !== '-';
+
+  const isPositive =
+    !isExpandedState &&
+    percentChange &&
+    percentageChangeDisplay.charAt(0) !== '-';
 
   return (
     <Fragment>
-      <BottomRowText>{get(balance, 'display', '')}</BottomRowText>
-      {isExpandedState ? (
-        <BottomRowText>
-          <EmDash />
-        </BottomRowText>
-      ) : (
-        <BottomRowText color={isPositive ? colors.limeGreen : null}>
-          {percentageChangeDisplay}
-        </BottomRowText>
-      )}
+      <FlexItem flex={1}>
+        <BottomRowText>{get(balance, 'display', '')}</BottomRowText>
+      </FlexItem>
+      <FlexItem flex={0}>
+        <PercentageText isPositive={isPositive}>
+          {isExpandedState ? <EmDash /> : percentageChangeDisplay}
+        </PercentageText>
+      </FlexItem>
     </Fragment>
   );
 };
@@ -76,6 +80,7 @@ const TopRow = ({ isExpandedState, name, native, nativeCurrencySymbol }) => {
       <FlexItem flex={0}>
         <BalanceText
           color={nativeDisplay ? null : colors.blueGreyLight}
+          numberOfLines={1}
           weight={isExpandedState ? 'medium' : 'regular'}
         >
           {nativeDisplay || `${nativeCurrencySymbol}0.00`}
@@ -102,6 +107,7 @@ const BalanceCoinRow = ({
   removeSelectedCoin,
   ...props
 }) => {
+  const { width: deviceWidth } = useDimensions();
   const [toggle, setToggle] = useState(false);
   const [previousPinned, setPreviousPinned] = useState(0);
 
@@ -113,14 +119,14 @@ const BalanceCoinRow = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCoinListEdited, recentlyPinnedCount]);
 
-  const handlePress = () => {
+  const handlePress = useCallback(() => {
     if (toggle) {
       removeSelectedCoin(item.uniqueId);
     } else {
       pushSelectedCoin(item.uniqueId);
     }
     setToggle(!toggle);
-  };
+  }, [item.uniqueId, pushSelectedCoin, removeSelectedCoin, setToggle, toggle]);
 
   const onPressHandler = useCallback(() => {
     onPress && onPress(item);
@@ -130,81 +136,33 @@ const BalanceCoinRow = ({
     onPressSend && onPressSend(item);
   }, [onPressSend, item]);
 
-  return item.isSmall ? (
-    <View width={deviceUtils.dimensions.width}>
-      <ButtonPressAnimation
-        disabled={isExpandedState}
-        onPress={isCoinListEdited ? handlePress : onPressHandler}
-        scaleTo={0.96}
-      >
-        <Row>
-          <View
-            left={isCoinListEdited ? editTranslateOffset : 0}
-            width={
-              deviceUtils.dimensions.width -
-              80 -
-              (isCoinListEdited ? editTranslateOffset : 0)
-            }
-          >
-            <CoinRow
-              isExpandedState={isExpandedState}
-              onPress={onPressHandler}
-
-              containerStyles={
-                isExpandedState ? BalanceCoinRowExpandedStyles : containerStyles
-              }
-              onPressSend={onPressSendHandler}
-              {...item}
-              {...props}
-              bottomRowRender={BottomRow}
-              topRowRender={TopRow}
-            />
-          </View>
-          <View position="absolute" right={3}>
-            <CoinRowInfo isHidden={item.isHidden} native={item.native} />
-          </View>
-        </Row>
-      </ButtonPressAnimation>
-      {isCoinListEdited ? (
-        <CoinCheckButton isAbsolute toggle={toggle} onPress={handlePress} />
-      ) : null}
-    </View>
-  ) : (
+  return (
     <Column flex={1} justify={isFirstCoinRow ? 'end' : 'start'}>
       <ButtonPressAnimation
         disabled={isExpandedState}
         onPress={isCoinListEdited ? handlePress : onPressHandler}
         scaleTo={0.96}
       >
-        <Row>
-          <View
-            left={isCoinListEdited ? editTranslateOffset : 0}
-            width={
-              deviceUtils.dimensions.width -
-              80 -
-              (isCoinListEdited ? editTranslateOffset : 0)
+        <View
+          left={isCoinListEdited ? editTranslateOffset : 0}
+          width={deviceWidth - (isCoinListEdited ? editTranslateOffset : 0)}
+        >
+          <CoinRow
+            containerStyles={
+              isExpandedState ? BalanceCoinRowExpandedStyles : containerStyles
             }
-          >
-            <CoinRow
-              isExpandedState={isExpandedState}
-              onPress={onPressHandler}
-              containerStyles={
-                isExpandedState ? BalanceCoinRowExpandedStyles : containerStyles
-              }
-              onPressSend={onPressSendHandler}
-              {...item}
-              {...props}
-              bottomRowRender={BottomRow}
-              topRowRender={TopRow}
-            />
-          </View>
-          <View position="absolute" right={3}>
-            <CoinRowInfo native={item.native} />
-          </View>
-        </Row>
+            isExpandedState={isExpandedState}
+            onPress={onPressHandler}
+            onPressSend={onPressSendHandler}
+            bottomRowRender={BottomRow}
+            topRowRender={TopRow}
+            {...item}
+            {...props}
+          />
+        </View>
       </ButtonPressAnimation>
       {isCoinListEdited ? (
-        <CoinCheckButton isAbsolute toggle={toggle} onPress={handlePress} />
+        <CoinCheckButton toggle={toggle} onPress={handlePress} />
       ) : null}
     </Column>
   );

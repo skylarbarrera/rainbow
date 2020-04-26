@@ -7,7 +7,7 @@ import ChartTypes from '../../helpers/chartTypes';
 import { useDimensions } from '../../hooks';
 import { borders, colors, position } from '../../styles';
 import { Centered, Row } from '../layout';
-import { Rounded } from '../text';
+import { Text } from '../text';
 import { JellySelector } from '../jelly-selector';
 
 const indicatorSize = 30;
@@ -25,14 +25,14 @@ const TimespanItem = ({ isSelected, item, ...props }) => {
         // lineHeight={30}
   return (
     <Centered flexShrink={0} height={32} {...props}>
-      <Rounded
+      <Text
         align="center"
         color={isSelected ? colors.dark : colors.grey}
         style={sx.item}
         weight="semibold"
       >
         {ChartTypes[item] === ChartTypes.max ? 'MAX' : `1${item.charAt(0)}`}
-      </Rounded>
+      </Text>
     </Centered>
   );
 }

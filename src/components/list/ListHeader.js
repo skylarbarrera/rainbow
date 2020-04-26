@@ -5,10 +5,10 @@ import LinearGradient from 'react-native-linear-gradient';
 import { pure } from 'recompact';
 import { colors, padding, position } from '../../styles';
 import { deviceUtils } from '../../utils';
+import Divider from '../Divider';
 import { ContextMenu } from '../context-menu';
 import { Row } from '../layout';
 import { H1 } from '../text';
-import Divider from '../Divider';
 
 const height = 44;
 

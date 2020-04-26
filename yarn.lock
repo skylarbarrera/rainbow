@@ -1842,11 +1842,6 @@ acorn@^7.1.1:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.1.1.tgz#e35668de0b402f359de515c5482a1ab9f89a69bf"
   integrity sha512-add7dgA5ppRPxCFJoAGfMDi7PIBXq1RtGo7BhbLaxwrXPOmw8gq48Y9ozT01hUKy9byMjlR20EJhu5zlkErEkg==
 
-action-sheet-rn@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/action-sheet-rn/-/action-sheet-rn-0.0.2.tgz#18587573bfd562acc1eb996e7dbaa3dca2b601ec"
-  integrity sha512-RmYzKbRJhBeNbR+vDOnUW3pzUypqUQMinyvBUuGlFM0WCyx/Fc2w96sMpw/YVV4Khdu7u581kRYEpFOKFJwv8Q==
-
 aes-js@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/aes-js/-/aes-js-3.0.0.tgz#e21df10ad6c2053295bcbb8dab40b09dbea87e4d"

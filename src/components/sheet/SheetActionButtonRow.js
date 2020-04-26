@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Children, cloneElement } from 'react';
 import { padding } from '../../styles';
-import { Row, FlexItem } from '../layout';
+import { FlexItem, Row } from '../layout';
 
 const renderButton = child =>
   child ? (
