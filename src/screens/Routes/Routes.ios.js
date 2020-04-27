@@ -18,7 +18,7 @@ import { deviceUtils } from '../../utils';
 import AddCashSheet from '../AddCashSheet';
 import AvatarBuilder from '../AvatarBuilder';
 import ExampleScreen from '../ExampleScreen';
-import ExpandedAssetScreenWithData from '../ExpandedAssetScreenWithData';
+import ExpandedAssetScreen from '../ExpandedAssetScreen';
 import ImportSeedPhraseSheetWithData from '../ImportSeedPhraseSheetWithData';
 import ProfileScreen from '../ProfileScreen';
 import QRScannerScreenWithData from '../QRScannerScreenWithData';
@@ -40,6 +40,7 @@ import {
 } from './helpers';
 import {
   AddCashSheetWrapper,
+  ExpandedAssetSheetWrapper,
   appearListener,
   ImportSeedPhraseSheetWrapper,
   SendSheetWrapper,
@@ -63,7 +64,7 @@ const SwipeStack = createMaterialTopTabNavigator(routesForSwipeStack, {
 const sendFlowRoutes = {
   [Routes.OVERLAY_EXPANDED_ASSET_SCREEN]: {
     navigationOptions: overlayExpandedPreset,
-    screen: ExpandedAssetScreenWithData,
+    screen: ExpandedAssetScreen,
   },
   [Routes.SEND_SHEET]: {
     navigationOptions: sheetPresetWithTransitions,
@@ -82,7 +83,7 @@ const routesForAddCash = {
   },
   [Routes.OVERLAY_EXPANDED_SUPPORTED_COUNTRIES]: {
     navigationOptions: overlayExpandedPreset,
-    screen: ExpandedAssetScreenWithData,
+    screen: ExpandedAssetScreen,
   },
 };
 
@@ -109,7 +110,7 @@ const routesForMainNavigator = {
   },
   [Routes.EXPANDED_ASSET_SCREEN]: {
     navigationOptions: expandedPreset,
-    screen: ExpandedAssetScreenWithData,
+    screen: ExpandedAssetScreen,
   },
   [Routes.SAVINGS_SHEET]: {
     navigationOptions: savingsPreset,
@@ -126,7 +127,7 @@ const routesForMainNavigator = {
   ...(isNativeStackAvailable && {
     [Routes.OVERLAY_EXPANDED_ASSET_SCREEN]: {
       navigationOptions: overlayExpandedPreset,
-      screen: ExpandedAssetScreenWithData,
+      screen: ExpandedAssetScreen,
     },
   }),
 };
@@ -189,11 +190,11 @@ const routesForNativeStackFallback = {
   [Routes.MAIN_NAVIGATOR]: MainNavigator,
   [Routes.OVERLAY_EXPANDED_ASSET_SCREEN]: {
     navigationOptions: overlayExpandedPreset,
-    screen: ExpandedAssetScreenWithData,
+    screen: ExpandedAssetScreen,
   },
   [Routes.OVERLAY_EXPANDED_SUPPORTED_COUNTRIES]: {
     navigationOptions: overlayExpandedPreset,
-    screen: ExpandedAssetScreenWithData,
+    screen: ExpandedAssetScreen,
   },
   [Routes.SEND_SHEET]: {
     navigationOptions: {
@@ -231,6 +232,22 @@ const routesForBottomSheetStack = {
   [Routes.STACK]: Stack,
   [Routes.RECEIVE_MODAL]: withCustomStack(ReceiveModal),
   [Routes.SETTINGS_MODAL]: withCustomStack(SettingsModal),
+  [Routes.EXPANDED_ASSET_SHEET]: {
+    navigationOptions: {
+      allowsDragToDismiss: true,
+      allowsTapToDismiss: true,
+      backgroundOpacity: 0.7,
+      blocksBackgroundTouches: true,
+      cornerRadius: 24,
+      customStack: true,
+      gestureEnabled: true,
+      headerHeight: 50,
+      scrollEnabled: true,
+      springDamping: 0.8755,
+      transitionDuration: 0.42,
+    },
+    screen: ExpandedAssetSheetWrapper,
+  },
   ...(isNativeStackAvailable && routesForNativeStack),
 };
 

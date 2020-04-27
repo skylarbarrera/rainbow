@@ -11,7 +11,7 @@ import SheetHandleFixedToTop from './SheetHandleFixedToTop';
 
 const sx = StyleSheet.create({
   scrollview: {
-    // height: '100%',
+    height: '100%',
     backgroundColor: 'white',
     flex: 1,
     marginBottom: -20,
@@ -78,7 +78,14 @@ const SlackSheet = ({
   useNavigationEvents(handleWillFocus);
 
   return (
-    <Centered backgroundColor={colors.white} direction="column" width={width}>
+    <Centered
+      backgroundColor={colors.white}
+      borderRadius={24}
+      direction="column"
+      flex={1}
+      overflow="hidden"
+      width={width}
+    >
       <SheetHandleFixedToTop />
       {createElement(scrollEnabled ? ScrollView : View, {
         ...props,

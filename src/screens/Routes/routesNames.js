@@ -6,6 +6,7 @@ const Routes = {
   EXAMPLE_SCREEN: 'ExampleScreen',
   EXCHANGE_MODAL: 'ExchangeModal',
   EXPANDED_ASSET_SCREEN: 'ExpandedAssetScreen',
+  EXPANDED_ASSET_SHEET: 'ExpandedAssetScreen',
   IMPORT_SEED_PHRASE_SHEET: 'ImportSeedPhraseSheet',
   MAIN_NATIVE_BOTTOM_SHEET_NAVIGATOR: 'MainNativeBottomSheetNavigation',
   MAIN_NAVIGATOR: 'MainNavigator',

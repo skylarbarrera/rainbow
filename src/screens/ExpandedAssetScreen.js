@@ -37,6 +37,12 @@ const ExpandedAssetScreen = ({ containerPadding, ...props }) => {
   } = useNavigation();
   const type = useNavigationParam('type');
 
+  // return createElement(ScreenTypes[type], {
+  //       ...params,
+  //       ...props,
+  //       panelWidth: width - containerPadding * 2,
+  //     });
+
   return (
     <Centered
       {...{ height, width }}
@@ -46,7 +52,7 @@ const ExpandedAssetScreen = ({ containerPadding, ...props }) => {
       <StatusBar barStyle="light-content" />
       {ScreenTypes[type] !== ScreenTypes.chart &&
         ScreenTypes[type] !== ScreenTypes.unique_token && (
-          <TouchableBackdrop onPress={() => goBack()} />
+          <TouchableBackdrop onPress={goBack} />
         )}
       {createElement(ScreenTypes[type], {
         ...params,
