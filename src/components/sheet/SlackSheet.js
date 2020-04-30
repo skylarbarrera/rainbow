@@ -1,131 +1,68 @@
 import PropTypes from 'prop-types';
-import React, { createElement, useCallback, useMemo, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import React, { useMemo } from 'react';
+import { ScrollView, View } from 'react-native';
 import { useSafeArea } from 'react-native-safe-area-context';
-// import SlackBottomSheet from 'react-native-slack-bottom-sheet';
-import { useNavigation, useNavigationEvents } from 'react-navigation-hooks';
-import { useDimensions } from '../../hooks';
-import { colors } from '../../styles';
+import styled from 'styled-components/primitives';
+import { colors, position } from '../../styles';
 import { Centered } from '../layout';
 import SheetHandleFixedToTop from './SheetHandleFixedToTop';
 
-const sx = StyleSheet.create({
-  scrollview: {
-    height: '100%',
-    backgroundColor: 'white',
-    flex: 1,
-    marginBottom: -20,
-    opacity: 1,
-    paddingTop: 24,
-  },
-});
+const SheetBorderRadius = 24;
 
-const SlackSheetConfig = {
-  allowsDragToDismiss: true,
-  allowsTapToDismiss: true,
-  backgroundOpacity: 0.7,
-  blocksBackgroundTouches: true,
-  initialAnimation: true,
-  isHapticFeedbackEnabled: false,
-  isShortFormEnabled: false,
-  presentGlobally: false,
-  shouldRoundTopCorners: true,
-  showDragIndicator: false,
-  unmountAnimation: true,
-};
+const Container = styled(Centered).attrs({ direction: 'column' })`
+  ${position.size('100%')};
+  background-color: ${colors.white};
+  border-radius: ${SheetBorderRadius};
+  overflow: hidden;
+`;
 
-const SlackSheet = ({
-  cornerRadius = 24,
-  headerHeight,
-  scrollEnabled,
-  springDamping,
-  topOffset,
-  transitionDuration,
-  ...props
-}) => {
-  const { width } = useDimensions();
-  const { goBack } = useNavigation();
+const Content = styled.View`
+  background-color: ${colors.white};
+  flex: 1;
+  height: 100%;
+  margin-bottom: -20;
+  opacity: 1;
+  padding-top: 24;
+`;
+
+const SlackSheet = ({ cornerRadius = 24, scrollEnabled = true, ...props }) => {
   const insets = useSafeArea();
-  const [isVisible, setIsVisible] = useState(false);
+  const bottomInset = insets.bottom * 2;
 
   const contentContainerStyle = useMemo(
     () => ({
-      paddingBottom: insets.bottom * 2,
-      width,
+      paddingBottom: bottomInset,
     }),
-    [insets, width]
+    [bottomInset]
   );
 
   const scrollIndicatorInsets = useMemo(
     () => ({
-      bottom: insets.bottom * 2,
+      bottom: bottomInset,
       top: 26 + cornerRadius,
     }),
-    [cornerRadius, insets]
+    [bottomInset, cornerRadius]
   );
-
-  const handleWillFocus = useCallback(
-    ({ type }) => {
-      if (type === 'willFocus') {
-        setIsVisible(true);
-      } else if (type === 'willBlur') {
-        setIsVisible(false);
-      }
-    },
-    [setIsVisible]
-  );
-
-  useNavigationEvents(handleWillFocus);
 
   return (
-    <Centered
-      backgroundColor={colors.white}
-      borderRadius={24}
-      direction="column"
-      flex={1}
-      overflow="hidden"
-      width={width}
-    >
+    <Container>
       <SheetHandleFixedToTop />
-      {createElement(scrollEnabled ? ScrollView : View, {
-        ...props,
-        alwaysBounceVertical: true,
-        bounces: true,
-        contentContainerStyle: contentContainerStyle,
-        directionalLockEnabled: true,
-        scrollIndicatorInsets: scrollIndicatorInsets,
-        style: sx.scrollview,
-      })}
-    </Centered>
+      <Content
+        {...props}
+        alwaysBounceVertical
+        as={scrollEnabled ? ScrollView : View}
+        bounces
+        contentContainerStyle={contentContainerStyle}
+        directionalLockEnabled
+        scrollIndicatorInsets={scrollIndicatorInsets}
+      />
+    </Container>
   );
 };
-
-
-    // <SlackBottomSheet
-    //   {...SlackSheetConfig}
-    //   cornerRadius={cornerRadius}
-    //   headerHeight={headerHeight}
-    //   onDidDismiss={() => goBack()}
-    //   springDamping={springDamping}
-    //   topOffset={topOffset}
-    //   transitionDuration={transitionDuration}
-    //   visible={isVisible}
-    // >
-    // </SlackBottomSheet>
 
 SlackSheet.propTypes = {
   cornerRadius: PropTypes.number,
-  headerHeight: PropTypes.number,
   scrollEnabled: PropTypes.bool,
-  springDamping: PropTypes.number,
-  topOffset: PropTypes.number,
-  transitionDuration: PropTypes.number,
-};
-
-SlackSheet.defaultProps = {
-  scrollEnabled: true,
-  springDamping: 0.8755,
-  transitionDuration: 0.42,
 };
 
 export default SlackSheet;
