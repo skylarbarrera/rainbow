@@ -5,9 +5,9 @@ import { Linking } from 'react-native';
 import { buildUniqueTokenName } from '../../../helpers/assets';
 import { colors, padding } from '../../../styles';
 import { magicMemo } from '../../../utils';
-import { ContextButton } from '../../context-menu';
+import Pill from '../../Pill';
+import { ContextCircleButton } from '../../context-menu';
 import { ColumnWithMargins, FlexItem, Row, RowWithMargins } from '../../layout';
-import { APYPill } from '../../savings';
 import { Text } from '../../text';
 
 const paddingHorizontal = 19;
@@ -47,7 +47,7 @@ const UniqueTokenExpandedStateHeader = ({ asset }) => {
           >
             {asset.asset_contract.name}
           </Text>
-          <APYPill maxWidth={150}>#{asset.id}</APYPill>
+          <Pill maxWidth={150}>#{asset.id}</Pill>
         </RowWithMargins>
         <FlexItem flex={1}>
           <Text letterSpacing="roundedTight" size="blarge" weight="bold">
@@ -55,16 +55,14 @@ const UniqueTokenExpandedStateHeader = ({ asset }) => {
           </Text>
         </FlexItem>
       </ColumnWithMargins>
+      <ContextCircleButton
+        flex={0}
+        onPressActionSheet={handleActionSheetPress}
+        options={['View on OpenSea', lang.t('wallet.action.cancel')]}
+      />
     </Row>
   );
 };
-
-
-      // <ContextButton
-      //   flex={0}
-      //   onPressActionSheet={handleActionSheetPress}
-      //   options={['View on OpenSea', lang.t('wallet.action.cancel')]}
-      // />
 
 UniqueTokenExpandedStateHeader.propTypes = {
   asset: PropTypes.object,

@@ -1,12 +1,11 @@
 import { omit, pick } from 'lodash';
 import PropTypes from 'prop-types';
-import React, { PureComponent } from 'react';
+import React, { Fragment, useCallback, useRef, useState } from 'react';
 import ActionSheet from 'react-native-actionsheet';
-import { withActionSheetManager } from '../../hoc';
 import { padding } from '../../styles';
 import { ButtonPressAnimation } from '../animations';
 import { Icon } from '../icons';
-import { Centered, Row } from '../layout';
+import { Centered } from '../layout';
 
 const ActionSheetProps = [
   'cancelButtonIndex',
@@ -18,84 +17,77 @@ const ActionSheetProps = [
   'title',
 ];
 
-class ContextMenu extends PureComponent {
-  static propTypes = {
-    activeOpacity: PropTypes.number,
-    cancelButtonIndex: PropTypes.number,
-    isActionSheetOpen: PropTypes.bool,
-    onPressActionSheet: PropTypes.func.isRequired,
-    options: PropTypes.arrayOf(PropTypes.string).isRequired,
-    setIsActionSheetOpen: PropTypes.func,
-    title: PropTypes.string,
-  };
+const ContextButton = props => (
+  <Centered css={padding(0, 10)} height="100%" {...props}>
+    <Icon name="threeDots" />
+  </Centered>
+);
 
-  static defaultProps = {
-    activeOpacity: 0.2,
-    options: [],
-  };
+function ContextMenu({
+  activeOpacity = 0.2,
+  cancelButtonIndex,
+  children,
+  dynamicOptions,
+  onPressActionSheet,
+  options = [],
+  ...props
+}) {
+  const actionsheetRef = useRef();
+  const [isOpen, setIsOpen] = useState(false);
 
-  actionSheetRef = null;
+  const handlePressActionSheet = useCallback(
+    buttonIndex => {
+      if (onPressActionSheet) {
+        onPressActionSheet(buttonIndex);
+      }
 
-  handleActionSheetRef = ref => {
-    this.actionSheetRef = ref;
-  };
+      setIsOpen(false);
+    },
+    [onPressActionSheet]
+  );
 
-  showActionSheet = () => {
+  const handleShowActionSheet = useCallback(() => {
     setTimeout(() => {
-      if (this.props.isActionSheetOpen) return;
-      this.props.setIsActionSheetOpen(true);
-      this.actionSheetRef.show();
+      if (isOpen) return;
+      setIsOpen(true);
+      if (actionsheetRef.current && actionsheetRef.current.show) {
+        actionsheetRef.current.show();
+      }
     }, 40);
-  };
+  }, [isOpen]);
 
-  handlePressActionSheet = buttonIndex => {
-    if (this.props.onPressActionSheet) {
-      this.props.onPressActionSheet(buttonIndex);
-    }
-
-    this.props.setIsActionSheetOpen(false);
-  };
-
-  renderButton = () =>
-    this.props.children || (
-      <Centered
-        css={padding(2, 9, 0, 9)}
-        height="100%"
-        {...omit(this.props, ActionSheetProps)}
-      >
-        <Icon name="threeDots" />
-      </Centered>
-    );
-
-  render = () => {
-    const funcOptions = this.props.dynamicOptions
-      ? this.props.dynamicOptions()
-      : false;
-
-    return (
-      <Row width={30} height={30}>
-        {this.props.onPressActionSheet && (
-          <ButtonPressAnimation
-            activeOpacity={0.2}
-            onPress={this.showActionSheet}
-          >
-            {this.renderButton()}
-          </ButtonPressAnimation>
-        )}
-        <ActionSheet
-          {...pick(this.props, ActionSheetProps)}
-          cancelButtonIndex={
-            Number.isInteger(this.props.cancelButtonIndex)
-              ? this.props.cancelButtonIndex
-              : this.props.options.length - 1
-          }
-          options={funcOptions ? funcOptions : this.props.options}
-          onPress={this.handlePressActionSheet}
-          ref={this.handleActionSheetRef}
-        />
-      </Row>
-    );
-  };
+  return (
+    <Fragment>
+      {onPressActionSheet && (
+        <ButtonPressAnimation
+          activeOpacity={activeOpacity}
+          onPress={handleShowActionSheet}
+        >
+          {children || <ContextButton {...omit(props, ActionSheetProps)} />}
+        </ButtonPressAnimation>
+      )}
+      <ActionSheet
+        {...pick(props, ActionSheetProps)}
+        cancelButtonIndex={
+          Number.isInteger(cancelButtonIndex)
+            ? cancelButtonIndex
+            : options.length - 1
+        }
+        options={dynamicOptions ? dynamicOptions() : options}
+        onPress={handlePressActionSheet}
+        ref={actionsheetRef}
+      />
+    </Fragment>
+  );
 }
 
-export default withActionSheetManager(ContextMenu);
+ContextMenu.propTypes = {
+  activeOpacity: PropTypes.number,
+  cancelButtonIndex: PropTypes.number,
+  children: PropTypes.node,
+  dynamicOptions: PropTypes.func,
+  onPressActionSheet: PropTypes.func.isRequired,
+  options: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
+
+export default ContextMenu;

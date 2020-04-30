@@ -10,7 +10,7 @@ import { magicMemo } from '../../utils';
 import Divider from '../Divider';
 import Link from '../Link';
 import { Column, ColumnWithDividers } from '../layout';
-import { SlackSheet, SheetActionButton, SheetActionButtonRow } from '../sheet';
+import { SheetActionButton, SheetActionButtonRow, SlackSheet } from '../sheet';
 import { Text } from '../text';
 import { UniqueTokenAttributes } from '../unique-token';
 import ExpandedStateSection from './ExpandedStateSection';
@@ -34,7 +34,6 @@ const UniqueTokenExpandedState = ({ asset }) => {
       url: asset.permalink,
     });
   }, [asset]);
-
 
   // //headerHeight={50}
   return (
@@ -92,5 +91,4 @@ UniqueTokenExpandedState.propTypes = {
   asset: PropTypes.object,
 };
 
-export default UniqueTokenExpandedState; //magicMemo(, 'asset');
-
+export default magicMemo(UniqueTokenExpandedState, 'asset');
