@@ -5,7 +5,7 @@ const Routes = {
   CONFIRM_REQUEST: 'ConfirmRequest',
   EXAMPLE_SCREEN: 'ExampleScreen',
   EXCHANGE_MODAL: 'ExchangeModal',
-  EXPANDED_ASSET_SHEET: 'ExpandedAssetScreen',
+  EXPANDED_ASSET_SHEET: 'ExpandedAssetSheet',
   IMPORT_SEED_PHRASE_SHEET: 'ImportSeedPhraseSheet',
   MAIN_NATIVE_BOTTOM_SHEET_NAVIGATOR: 'MainNativeBottomSheetNavigation',
   MAIN_NAVIGATOR: 'MainNavigator',

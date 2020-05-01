@@ -10,19 +10,22 @@ import SheetHandleFixedToTop from './SheetHandleFixedToTop';
 const SheetBorderRadius = 24;
 
 const Container = styled(Centered).attrs({ direction: 'column' })`
+  ${position.cover};
   ${position.size('100%')};
   background-color: ${colors.white};
+  flex: 1;
   border-radius: ${SheetBorderRadius};
   overflow: hidden;
 `;
 
 const Content = styled.View`
+  ${position.cover};
   background-color: ${colors.white};
   flex: 1;
   height: 100%;
   margin-bottom: -20;
   opacity: 1;
-  padding-top: 24;
+  padding-top: 44;
 `;
 
 const SlackSheet = ({ cornerRadius = 24, scrollEnabled = true, ...props }) => {

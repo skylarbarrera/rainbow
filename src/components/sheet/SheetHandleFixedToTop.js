@@ -1,24 +1,22 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import styled from 'styled-components/primitives';
 import { Centered } from '../layout';
 import SheetHandle from './SheetHandle';
 
-const sx = StyleSheet.create({
-  container: {
-    left: 0,
-    paddingBottom: 15,
-    paddingTop: 6,
-    position: 'absolute',
-    right: 0,
-    top: 0,
-    zIndex: 9,
-  },
-});
+const Container = styled(Centered)`
+  left: 0;
+  padding-bottom: 15;
+  padding-top: 6;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 9;
+`;
 
 export default function SheetHandleFixedToTop() {
   return (
-    <Centered style={sx.container}>
+    <Container>
       <SheetHandle showBlur />
-    </Centered>
+    </Container>
   );
 }

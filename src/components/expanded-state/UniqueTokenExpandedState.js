@@ -9,7 +9,7 @@ import { colors } from '../../styles';
 import { magicMemo } from '../../utils';
 import Divider from '../Divider';
 import Link from '../Link';
-import { Column, ColumnWithDividers } from '../layout';
+import { Column, ColumnWithDividers, FlexItem } from '../layout';
 import { SheetActionButton, SheetActionButtonRow, SlackSheet } from '../sheet';
 import { Text } from '../text';
 import { UniqueTokenAttributes } from '../unique-token';
@@ -38,51 +38,53 @@ const UniqueTokenExpandedState = ({ asset }) => {
   // //headerHeight={50}
   return (
     <SlackSheet>
-      <UniqueTokenExpandedStateHeader asset={asset} />
-      <UniqueTokenExpandedStateImage asset={asset} />
-      <SheetActionButtonRow>
-        <SheetActionButton
-          color={colors.dark}
-          icon="share"
-          label="Share"
-          onPress={handlePressShare}
-        />
-        {asset.isSendable && (
+      <FlexItem flex={1}>
+        <UniqueTokenExpandedStateHeader asset={asset} />
+        <UniqueTokenExpandedStateImage asset={asset} />
+        <SheetActionButtonRow>
           <SheetActionButton
-            color={colors.paleBlue}
-            icon="send"
-            label="Send"
-            onPress={handlePressSend}
+            color={colors.dark}
+            icon="share"
+            label="Share"
+            onPress={handlePressShare}
           />
-        )}
-      </SheetActionButtonRow>
-      <Divider />
-      <ColumnWithDividers>
-        {!!asset.description && (
-          <ExpandedStateSection title="Bio">
-            {asset.description}
-          </ExpandedStateSection>
-        )}
-        {!!asset.traits.length && (
-          <ExpandedStateSection paddingBottom={14} title="Attributes">
-            <UniqueTokenAttributes {...asset} />
-          </ExpandedStateSection>
-        )}
-        {!!asset.asset_contract.description && (
-          <ExpandedStateSection title={`About ${asset.asset_contract.name}`}>
-            <Column>
-              <Text
-                color={colors.alpha(colors.blueGreyDark, 0.5)}
-                lineHeight={25}
-                size="lmedium"
-              >
-                {asset.asset_contract.description}
-              </Text>
-              <Link url={asset.asset_contract.external_link} />
-            </Column>
-          </ExpandedStateSection>
-        )}
-      </ColumnWithDividers>
+          {asset.isSendable && (
+            <SheetActionButton
+              color={colors.paleBlue}
+              icon="send"
+              label="Send"
+              onPress={handlePressSend}
+            />
+          )}
+        </SheetActionButtonRow>
+        <Divider />
+        <ColumnWithDividers>
+          {!!asset.description && (
+            <ExpandedStateSection title="Bio">
+              {asset.description}
+            </ExpandedStateSection>
+          )}
+          {!!asset.traits.length && (
+            <ExpandedStateSection paddingBottom={14} title="Attributes">
+              <UniqueTokenAttributes {...asset} />
+            </ExpandedStateSection>
+          )}
+          {!!asset.asset_contract.description && (
+            <ExpandedStateSection title={`About ${asset.asset_contract.name}`}>
+              <Column>
+                <Text
+                  color={colors.alpha(colors.blueGreyDark, 0.5)}
+                  lineHeight={25}
+                  size="lmedium"
+                >
+                  {asset.asset_contract.description}
+                </Text>
+                <Link url={asset.asset_contract.external_link} />
+              </Column>
+            </ExpandedStateSection>
+          )}
+        </ColumnWithDividers>
+      </FlexItem>
     </SlackSheet>
   );
 };

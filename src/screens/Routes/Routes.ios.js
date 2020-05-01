@@ -9,7 +9,6 @@ import { ExchangeModalNavigator, SavingModalNavigator } from '../../navigation';
 import {
   backgroundPreset,
   emojiPreset,
-  expandedPreset,
   overlayExpandedPreset,
   savingsPreset,
   sheetPreset,
@@ -18,8 +17,8 @@ import { deviceUtils } from '../../utils';
 import AddCashSheet from '../AddCashSheet';
 import AvatarBuilder from '../AvatarBuilder';
 import ExampleScreen from '../ExampleScreen';
-import ExpandedAssetScreen from '../ExpandedAssetScreen';
 import ImportSeedPhraseSheetWithData from '../ImportSeedPhraseSheetWithData';
+import ModalScreen from '../ModalScreen';
 import ProfileScreen from '../ProfileScreen';
 import QRScannerScreenWithData from '../QRScannerScreenWithData';
 import ReceiveModal from '../ReceiveModal';
@@ -40,8 +39,8 @@ import {
 } from './helpers';
 import {
   AddCashSheetWrapper,
-  ExpandedAssetSheetWrapper,
   appearListener,
+  ExpandedAssetSheetWrapper,
   ImportSeedPhraseSheetWrapper,
   SendSheetWrapper,
 } from './nativeStackWrappers';
@@ -62,9 +61,9 @@ const SwipeStack = createMaterialTopTabNavigator(routesForSwipeStack, {
 });
 
 const sendFlowRoutes = {
-  [Routes.OVERLAY_EXPANDED_ASSET_SCREEN]: {
+  [Routes.MODAL_SCREEN]: {
     navigationOptions: overlayExpandedPreset,
-    screen: ExpandedAssetScreen,
+    screen: ModalScreen,
   },
   [Routes.SEND_SHEET]: {
     navigationOptions: sheetPresetWithTransitions,
@@ -81,9 +80,9 @@ const routesForAddCash = {
     navigationOptions: sheetPresetWithTransitions,
     screen: AddCashSheetWrapper,
   },
-  [Routes.OVERLAY_EXPANDED_SUPPORTED_COUNTRIES]: {
+  [Routes.SUPPORTED_COUNTRIES_MODAL_SCREEN]: {
     navigationOptions: overlayExpandedPreset,
-    screen: ExpandedAssetScreen,
+    screen: ModalScreen,
   },
 };
 
@@ -108,10 +107,6 @@ const routesForMainNavigator = {
     },
     screen: ExchangeModalNavigator,
   },
-  [Routes.EXPANDED_ASSET_SCREEN]: {
-    navigationOptions: expandedPreset,
-    screen: ExpandedAssetScreen,
-  },
   [Routes.SAVINGS_SHEET]: {
     navigationOptions: savingsPreset,
     screen: SavingsSheet,
@@ -125,9 +120,9 @@ const routesForMainNavigator = {
     screen: WalletConnectConfirmationModal,
   },
   ...(isNativeStackAvailable && {
-    [Routes.OVERLAY_EXPANDED_ASSET_SCREEN]: {
+    [Routes.MODAL_SCREEN]: {
       navigationOptions: overlayExpandedPreset,
-      screen: ExpandedAssetScreen,
+      screen: ModalScreen,
     },
   }),
 };
@@ -188,13 +183,9 @@ const routesForNativeStackFallback = {
     screen: ImportSeedPhraseSheetWithData,
   },
   [Routes.MAIN_NAVIGATOR]: MainNavigator,
-  [Routes.OVERLAY_EXPANDED_ASSET_SCREEN]: {
+  [Routes.MODAL_SCREEN]: {
     navigationOptions: overlayExpandedPreset,
-    screen: ExpandedAssetScreen,
-  },
-  [Routes.OVERLAY_EXPANDED_SUPPORTED_COUNTRIES]: {
-    navigationOptions: overlayExpandedPreset,
-    screen: ExpandedAssetScreen,
+    screen: ModalScreen,
   },
   [Routes.SEND_SHEET]: {
     navigationOptions: {
@@ -205,6 +196,10 @@ const routesForNativeStackFallback = {
       },
     },
     screen: SendSheet,
+  },
+  [Routes.SUPPORTED_COUNTRIES_MODAL_SCREEN]: {
+    navigationOptions: overlayExpandedPreset,
+    screen: ModalScreen,
   },
   ...routesForSavingsModals,
 };

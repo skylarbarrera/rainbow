@@ -21,6 +21,7 @@ const ScreenTypes = {
 
 const Container = styled(Centered).attrs({ direction: 'column' })`
   ${position.size('100%')};
+  ${position.cover};
   padding-top: ${({ top }) => top || 0};
 `;
 

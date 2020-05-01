@@ -1,6 +1,6 @@
 import React from 'react';
 import AddCashSheet from '../AddCashSheet';
-import ExpandedAssetScreen from '../ExpandedAssetScreen';
+import ExpandedAssetSheet from '../ExpandedAssetSheet';
 import ImportSeedPhraseSheetWithData from '../ImportSeedPhraseSheetWithData';
 import SendSheet from '../SendSheet';
 
@@ -12,7 +12,7 @@ export function AddCashSheetWrapper(...props) {
 }
 
 export function ExpandedAssetSheetWrapper(...props) {
-  return <ExpandedAssetScreen {...props} setAppearListener={setListener} />;
+  return <ExpandedAssetSheet {...props} setAppearListener={setListener} />;
 }
 
 export function ImportSeedPhraseSheetWrapper(...props) {
