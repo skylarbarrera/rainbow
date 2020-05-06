@@ -1,4 +1,3 @@
-import Spline from 'cubic-spline';
 import deepEqual from 'fbjs/lib/areEqual';
 import { maxBy, minBy } from 'lodash';
 import PropTypes from 'prop-types';
@@ -11,6 +10,7 @@ import Svg, { Circle, Path } from 'react-native-svg';
 import { deviceUtils } from '../../utils';
 import ActivityIndicator from '../ActivityIndicator';
 import GestureWrapper from './GestureWrapper';
+import { createInterpolant } from './MonotoneCubicInterpolation';
 import TimestampText from './TimestampText';
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
@@ -368,7 +368,7 @@ export default class Chart extends PureComponent {
 
   componentWillUnmount = () => {
     if (this.timeoutHandle) {
-      clearTimeout(this.timeoutHandle)
+      clearTimeout(this.timeoutHandle);
     }
   };
 
@@ -503,11 +503,14 @@ export default class Chart extends PureComponent {
           points,
           this.props.importantPointsIndexInterval
         );
-        const spline = new Spline(importantPoints.xs, importantPoints.ys);
+        const spline = createInterpolant(
+          importantPoints.xs,
+          importantPoints.ys
+        );
         splinePoints.push(
           points
             .map(({ x, y }) => {
-              return { x, y1: y, y2: spline.at(x) };
+              return { x, y1: y, y2: spline(x) };
             })
             .filter(Boolean)
         );
