@@ -10,7 +10,6 @@ import {
   backgroundPreset,
   emojiPreset,
   overlayExpandedPreset,
-  savingsPreset,
   sheetPreset,
 } from '../../navigation/transitions/effects';
 import { deviceUtils } from '../../utils';
@@ -28,13 +27,13 @@ import SettingsModal from '../SettingsModal';
 import TransactionConfirmationScreen from '../TransactionConfirmationScreen';
 import WalletConnectConfirmationModal from '../WalletConnectConfirmationModal';
 import WalletScreen from '../WalletScreen';
-import WithdrawModal from '../WithdrawModal';
 import {
   createStackNavigator,
   exchangePresetWithTransitions,
   expandedPresetWithTransitions,
   onTransitionEnd,
   onTransitionStart,
+  savingsPresetWithTransitions,
   sheetPresetWithTransitions,
 } from './helpers';
 import {
@@ -43,6 +42,7 @@ import {
   ExpandedAssetSheetWrapper,
   ImportSeedPhraseSheetWrapper,
   SendSheetWrapper,
+  WithdrawModalWrapper,
 } from './nativeStackWrappers';
 import { onNavigationStateChange } from './onNavigationStateChange.ios';
 import Routes from './routesNames';
@@ -107,10 +107,6 @@ const routesForMainNavigator = {
     },
     screen: ExchangeModalNavigator,
   },
-  [Routes.SAVINGS_SHEET]: {
-    navigationOptions: savingsPreset,
-    screen: SavingsSheet,
-  },
   [Routes.SWIPE_LAYOUT]: {
     navigationOptions: backgroundPreset,
     screen: SwipeStack,
@@ -142,7 +138,7 @@ const routesForSavingsModals = {
     params: {
       isGestureBlocked: false,
     },
-    screen: WithdrawModal,
+    screen: WithdrawModalWrapper,
   },
 };
 
@@ -158,7 +154,6 @@ const routesForNativeStack = {
 
 const routesForMainNavigatorWrapper = {
   [Routes.MAIN_NAVIGATOR]: MainNavigator,
-  ...routesForSavingsModals,
 };
 
 const MainNavigationWrapper = createStackNavigator(
@@ -244,6 +239,32 @@ const routesForBottomSheetStack = {
       transitionDuration: 0.42,
     },
     screen: ExpandedAssetSheetWrapper,
+  },
+  [Routes.SAVINGS_SHEET]: {
+    navigationOptions: {
+      allowsDragToDismiss: true,
+      allowsTapToDismiss: true,
+      backgroundOpacity: 0.7,
+      blocksBackgroundTouches: true,
+      cornerRadius: 24,
+      customStack: true,
+      gestureEnabled: true,
+      headerHeight: 50,
+      onAppear: null,
+      scrollEnabled: true,
+      springDamping: 0.8755,
+      topOffset: 0,
+      transitionDuration: 0.42,
+    },
+    screen: SavingsSheet,
+  },
+  [Routes.SAVINGS_DEPOSIT_MODAL]: {
+    navigationOptions: savingsPresetWithTransitions,
+    screen: SavingModalNavigator,
+  },
+  [Routes.SAVINGS_WITHDRAW_MODAL]: {
+    navigationOptions: savingsPresetWithTransitions,
+    screen: WithdrawModalWrapper,
   },
   ...(isNativeStackAvailable && routesForNativeStack),
 };

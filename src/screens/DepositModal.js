@@ -5,8 +5,8 @@ import createSwapAndDepositCompoundRap, {
 } from '../raps/swapAndDepositCompound';
 import ExchangeModalWithData from './ExchangeModalWithData';
 
-const DepositModal = ({ navigation, ...props }) => {
-  const defaultInputAsset = navigation.getParam('defaultInputAsset');
+const DepositModal = props => {
+  const defaultInputAsset = props[0].navigation.getParam('defaultInputAsset');
   return (
     <ExchangeModalWithData
       createRap={createSwapAndDepositCompoundRap}

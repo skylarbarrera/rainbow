@@ -3,7 +3,7 @@ import React from 'react';
 import { Value } from 'react-native-reanimated';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import CurrencySelectModal from '../screens/CurrencySelectModal';
-import DepositModal from '../screens/DepositModal';
+import { DepositModalWrapper } from '../screens/Routes/nativeStackWrappers';
 import { deviceUtils } from '../utils';
 
 const ExchangeModalTabPosition = new Value(0);
@@ -14,7 +14,7 @@ const SavingModalNavigator = createMaterialTopTabNavigator(
       params: {
         position: ExchangeModalTabPosition,
       },
-      screen: DepositModal,
+      screen: DepositModalWrapper,
     },
     // eslint-disable-next-line sort-keys
     CurrencySelectScreen: {

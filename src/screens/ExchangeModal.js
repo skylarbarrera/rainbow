@@ -31,6 +31,7 @@ import { GasSpeedButton } from '../components/gas';
 import { Centered, KeyboardFixedOpenLayout } from '../components/layout';
 import { calculateTradeDetails } from '../handlers/uniswap';
 import ExchangeModalTypes from '../helpers/exchangeModalTypes';
+import isNativeStackAvailable from '../helpers/isNativeStackAvailable';
 import {
   convertAmountFromNativeValue,
   convertAmountToNativeAmount,
@@ -51,6 +52,7 @@ import {
   useInteraction,
   useMagicFocus,
   usePrevious,
+  useTimeout,
   useUniswapAllowances,
   useUniswapAssetsInWallet,
 } from '../hooks';
@@ -116,6 +118,7 @@ const ExchangeModal = ({
   tabPosition,
   type,
   underlyingPrice,
+  setAppearListener,
 }) => {
   const isDeposit = type === ExchangeModalTypes.deposit;
   const isWithdrawal = type === ExchangeModalTypes.withdrawal;
@@ -235,6 +238,26 @@ const ExchangeModal = ({
     },
     [dispatch, estimateRap, gasUpdateTxFee, isDeposit, isWithdrawal]
   );
+
+  const [startFocusTimeout] = useTimeout();
+
+  const inputRef = useRef(null);
+  const focusListener = useCallback(() => {
+    inputFieldRef.current && inputFieldRef.current.focus();
+  }, []);
+
+  const inputRefListener = useCallback(
+    value => {
+      value && startFocusTimeout(value.focus, 100);
+      inputRef.current = value;
+    },
+    [startFocusTimeout]
+  );
+
+  useEffect(() => {
+    setAppearListener && setAppearListener(focusListener);
+    return () => setAppearListener && setAppearListener(null);
+  });
 
   useEffect(() => {
     updateGasLimit({
@@ -1168,6 +1191,7 @@ const ExchangeModal = ({
               onPressSelectInputCurrency={navigateToSelectInputCurrency}
               setInputAmount={updateInputAmount}
               setNativeAmount={updateNativeAmount}
+              ref={isNativeStackAvailable ? inputRef : inputRefListener}
             />
             {showOutputField && (
               <ExchangeOutputField

@@ -3,6 +3,7 @@ import { createStackNavigator as oldCreateStackNavigator } from 'react-navigatio
 import {
   exchangePreset,
   expandedPreset,
+  savingsPreset,
   sheetPreset,
 } from '../../navigation/transitions/effects';
 import { updateTransitionProps } from '../../redux/navigation';
@@ -37,6 +38,8 @@ function presetWithTransition(preset) {
 }
 
 export const sheetPresetWithTransitions = presetWithTransition(sheetPreset);
+
+export const savingsPresetWithTransitions = presetWithTransition(savingsPreset);
 
 export const expandedPresetWithTransitions = presetWithTransition(
   expandedPreset
