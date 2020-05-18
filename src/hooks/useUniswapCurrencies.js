@@ -38,7 +38,8 @@ const createMissingAsset = (asset, underlyingPrice, priceOfEther) => {
 };
 
 export default function useUniswapCurrencies({
-  defaultInputAsset,
+  defaultInputAsset, // TODO JIN need to hook up from charts expanded state
+  defaultOutputAsset, // TODO JIN from top movers
   inputHeaderTitle,
   isDeposit,
   isWithdrawal,

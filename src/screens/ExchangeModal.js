@@ -54,6 +54,7 @@ const ExchangeModal = ({
   createRap,
   cTokenBalance,
   defaultInputAsset,
+  defaultOutputAsset,
   estimateRap,
   inputHeaderTitle,
   navigation,
@@ -111,6 +112,7 @@ const ExchangeModal = ({
     previousInputCurrency,
   } = useUniswapCurrencies({
     defaultInputAsset,
+    defaultOutputAsset,
     inputHeaderTitle,
     isDeposit,
     isWithdrawal,
@@ -533,6 +535,7 @@ ExchangeModal.propTypes = {
   createRap: PropTypes.func,
   cTokenBalance: PropTypes.string,
   defaultInputAddress: PropTypes.string,
+  defaultOutputAddress: PropTypes.string,
   estimateRap: PropTypes.func,
   inputHeaderTitle: PropTypes.string,
   navigation: PropTypes.object,
