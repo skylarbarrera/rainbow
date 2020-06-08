@@ -32,11 +32,15 @@ export default function useUniswapPairs() {
   );
 
   // translating v1 tokens into v2. Probably need to fix later
-  const inputToken: Token = inputCurrency
-    ? tokens[inputCurrency.address]
-    : WETH[ChainId.MAINNET];
+  const inputToken: Token =
+    inputCurrency && inputCurrency.address !== 'eth'
+      ? tokens[inputCurrency.address]
+      : WETH[ChainId.MAINNET];
+
   const outputToken: Token | null = outputCurrency
-    ? tokens[outputCurrency.address]
+    ? outputCurrency.address === 'eth'
+      ? WETH[ChainId.MAINNET]
+      : tokens[outputCurrency.address]
     : null;
 
   const bases = useMemo(() => UNISWAP_V2_BASES[chainId as ChainId] ?? [], [
