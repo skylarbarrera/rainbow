@@ -38,6 +38,7 @@ import {
   useUniswapCurrencyReserves,
   useUniswapMarketDetails,
 } from '../hooks';
+import useUniswapPairs from '../hooks/useUniswapPairs';
 import { loadWallet } from '../model/wallet';
 import { executeRap } from '../raps/common';
 import { savingsLoadState } from '../redux/savings';
@@ -323,6 +324,8 @@ const ExchangeModal = ({
     updateInputAmount,
   ]);
 
+  const { inputToken, outputToken, pairs } = useUniswapPairs();
+
   const handleSubmit = useCallback(() => {
     backgroundTask.execute(async () => {
       analytics.track(`Submitted ${type}`, {
@@ -346,10 +349,13 @@ const ExchangeModal = ({
           inputAsExactAmount,
           inputCurrency,
           inputReserve,
+          inputToken,
           isMax,
           outputAmount,
           outputCurrency,
           outputReserve,
+          outputToken,
+          pairs,
           selectedGasPrice: null,
         });
         logger.log('[exchange - handle submit] rap', rap);

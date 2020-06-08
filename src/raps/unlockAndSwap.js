@@ -73,7 +73,10 @@ const createUnlockAndSwapRap = async ({
   outputAmount,
   outputCurrency,
   outputReserve,
+  pairs,
   selectedGasPrice,
+  inputToken,
+  outputToken,
 }) => {
   // create unlock rap
   const { accountAddress, chainId } = store.getState().settings;
@@ -104,9 +107,12 @@ const createUnlockAndSwapRap = async ({
     inputAsExactAmount,
     inputCurrency,
     inputReserve,
+    inputToken,
     outputAmount,
     outputCurrency,
     outputReserve,
+    outputToken,
+    pairs,
     selectedGasPrice,
   });
   actions = concat(actions, swap);

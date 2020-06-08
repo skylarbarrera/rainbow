@@ -1,6 +1,7 @@
 import { find, get, toLower } from 'lodash';
 import {
   calculateTradeDetails,
+  calculateTradeDetailsV2,
   estimateSwapGasLimit,
   executeSwap,
 } from '../../handlers/uniswap';
@@ -76,6 +77,9 @@ const swap = async (wallet, currentRap, index, parameters) => {
     outputCurrency,
     outputReserve,
     selectedGasPrice = null,
+    inputToken,
+    outputToken,
+    pairs,
   } = parameters;
   const { dispatch } = store;
   const { gasPrices } = store.getState().gas;
@@ -92,6 +96,17 @@ const swap = async (wallet, currentRap, index, parameters) => {
     outputReserve,
     inputAsExactAmount
   );
+
+  const tradeDetailsV2 = calculateTradeDetailsV2(
+    inputAmount,
+    outputAmount,
+    inputToken,
+    outputToken,
+    pairs,
+    inputAsExactAmount
+  );
+
+  console.log(tradeDetailsV2, 'GGG');
 
   // Execute Swap
   logger.log('[swap] execute the swap');
