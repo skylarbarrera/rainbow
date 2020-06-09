@@ -1,10 +1,5 @@
 import { find, get, toLower } from 'lodash';
-import {
-  calculateTradeDetails,
-  calculateTradeDetailsV2,
-  estimateSwapGasLimit,
-  executeSwap,
-} from '../../handlers/uniswap';
+import { estimateSwapGasLimit, executeSwap } from '../../handlers/uniswap';
 import ProtocolTypes from '../../helpers/protocolTypes';
 import TransactionStatusTypes from '../../helpers/transactionStatusTypes';
 import TransactionTypes from '../../helpers/transactionTypes';
@@ -68,45 +63,16 @@ const swap = async (wallet, currentRap, index, parameters) => {
   logger.log('[swap] swap on uniswap!');
   const {
     accountAddress,
-    chainId,
     inputAmount,
-    inputAsExactAmount,
     inputCurrency,
-    inputReserve,
-    outputAmount,
     outputCurrency,
-    outputReserve,
     selectedGasPrice = null,
-    inputToken,
-    outputToken,
-    pairs,
+    tradeDetails,
+    useV1,
   } = parameters;
   const { dispatch } = store;
   const { gasPrices } = store.getState().gas;
   logger.log('[swap] calculating trade details');
-
-  // Get Trade Details
-  const tradeDetails = calculateTradeDetails(
-    chainId,
-    inputAmount,
-    inputCurrency,
-    inputReserve,
-    outputAmount,
-    outputCurrency,
-    outputReserve,
-    inputAsExactAmount
-  );
-
-  const tradeDetailsV2 = calculateTradeDetailsV2(
-    inputAmount,
-    outputAmount,
-    inputToken,
-    outputToken,
-    pairs,
-    inputAsExactAmount
-  );
-
-  console.log(tradeDetailsV2, 'GGG');
 
   // Execute Swap
   logger.log('[swap] execute the swap');
@@ -117,7 +83,11 @@ const swap = async (wallet, currentRap, index, parameters) => {
     gasPrice = get(gasPrices, `[${gasUtils.FAST}].value.amount`);
   }
 
-  const gasLimit = await estimateSwapGasLimit(accountAddress, tradeDetails);
+  const gasLimit = await estimateSwapGasLimit(
+    accountAddress,
+    tradeDetails,
+    useV1
+  );
 
   logger.log('[swap] About to execute swap with', {
     gasLimit,
@@ -126,7 +96,13 @@ const swap = async (wallet, currentRap, index, parameters) => {
     wallet,
   });
 
-  const swap = await executeSwap(tradeDetails, gasLimit, gasPrice, wallet);
+  const swap = await executeSwap(
+    tradeDetails,
+    gasLimit,
+    gasPrice,
+    wallet,
+    useV1
+  );
   logger.log('[swap] response', swap);
   currentRap.actions[index].transaction.hash = swap.hash;
   dispatch(rapsAddOrUpdate(currentRap.id, currentRap));

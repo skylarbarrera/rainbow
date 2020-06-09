@@ -1,6 +1,6 @@
 import { Trade } from '@uniswap/sdk2';
 import { get, isNil } from 'lodash';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import {
   calculateTradeDetails,
   calculateTradeDetailsV2,
@@ -109,6 +109,8 @@ export default function useUniswapMarketDetails() {
   const { getMarketPrice } = useUniswapMarketPrice();
   const { allPairs, inputToken, outputToken } = useUniswapPairs();
 
+  const [allTradeDetails, setAllTradeDetails] = useState({});
+
   const { inputReserve, outputReserve } = useUniswapCurrencyReserves();
 
   const updateTradeDetails = useCallback(
@@ -213,6 +215,12 @@ export default function useUniswapMarketDetails() {
           inputAsExactAmount
         );
 
+        setAllTradeDetails({
+          tradeDetailsV1,
+          tradeDetailsV2,
+          useV1: !isV2BetterThanV1,
+        });
+
         const isSufficientAmountToTrade = greaterThanOrEqualTo(
           maxInputBalance,
           rawUpdatedInputAmount
@@ -257,6 +265,12 @@ export default function useUniswapMarketDetails() {
           rawUpdatedOutputAmountV1,
           rawUpdatedOutputAmountV2
         );
+
+        setAllTradeDetails({
+          tradeDetailsV1,
+          tradeDetailsV2,
+          useV1: isV1BetterThanV2,
+        });
 
         const rawUpdatedOutputAmount = isV1BetterThanV2
           ? rawUpdatedOutputAmountV1
@@ -365,6 +379,7 @@ export default function useUniswapMarketDetails() {
   );
 
   return {
+    ...allTradeDetails,
     getMarketDetails,
   };
 }

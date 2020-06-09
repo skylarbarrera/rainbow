@@ -38,7 +38,6 @@ import {
   useUniswapCurrencyReserves,
   useUniswapMarketDetails,
 } from '../hooks';
-import useUniswapPairs from '../hooks/useUniswapPairs';
 import { loadWallet } from '../model/wallet';
 import { executeRap } from '../raps/common';
 import { savingsLoadState } from '../redux/savings';
@@ -83,15 +82,16 @@ const ExchangeModal = ({
     updateDefaultGasLimit,
     updateTxFee,
   } = useGas();
-  const {
-    clearUniswapCurrenciesAndReserves,
-    inputReserve,
-    outputReserve,
-  } = useUniswapCurrencyReserves();
+  const { clearUniswapCurrenciesAndReserves } = useUniswapCurrencyReserves();
   const { initWeb3Listener, stopWeb3Listener } = useBlockPolling();
   const { nativeCurrency } = useAccountSettings();
   const prevSelectedGasPrice = usePrevious(selectedGasPrice);
-  const { getMarketDetails } = useUniswapMarketDetails();
+  const {
+    getMarketDetails,
+    tradeDetailsV1,
+    tradeDetailsV2,
+    useV1,
+  } = useUniswapMarketDetails();
   const { maxInputBalance, updateMaxInputBalance } = useMaxInputBalance();
 
   const {
@@ -157,10 +157,10 @@ const ExchangeModal = ({
       const gasLimit = await estimateRap({
         inputAmount,
         inputCurrency,
-        inputReserve,
         outputAmount,
         outputCurrency,
-        outputReserve,
+        tradeDetails: useV1 ? tradeDetailsV1 : tradeDetailsV2,
+        useV1,
       });
       updateTxFee(gasLimit);
     } catch (error) {
@@ -171,11 +171,12 @@ const ExchangeModal = ({
     estimateRap,
     inputAmount,
     inputCurrency,
-    inputReserve,
     outputAmount,
     outputCurrency,
-    outputReserve,
+    tradeDetailsV1,
+    tradeDetailsV2,
     updateTxFee,
+    useV1,
   ]);
 
   // Update gas limit
@@ -324,8 +325,6 @@ const ExchangeModal = ({
     updateInputAmount,
   ]);
 
-  const { inputToken, outputToken, pairs } = useUniswapPairs();
-
   const handleSubmit = useCallback(() => {
     backgroundTask.execute(async () => {
       analytics.track(`Submitted ${type}`, {
@@ -346,17 +345,13 @@ const ExchangeModal = ({
         const rap = await createRap({
           callback,
           inputAmount: isWithdrawal && isMax ? cTokenBalance : inputAmount,
-          inputAsExactAmount,
           inputCurrency,
-          inputReserve,
-          inputToken,
           isMax,
           outputAmount,
           outputCurrency,
-          outputReserve,
-          outputToken,
-          pairs,
           selectedGasPrice: null,
+          tradeDetails: useV1 ? tradeDetailsV1 : tradeDetailsV2,
+          useV1,
         });
         logger.log('[exchange - handle submit] rap', rap);
         await executeRap(wallet, rap);
@@ -382,17 +377,17 @@ const ExchangeModal = ({
     defaultInputAsset,
     dispatch,
     inputAmount,
-    inputAsExactAmount,
     inputCurrency,
-    inputReserve,
     isDeposit,
     isMax,
     isWithdrawal,
     navigation,
     outputAmount,
     outputCurrency,
-    outputReserve,
+    tradeDetailsV1,
+    tradeDetailsV2,
     type,
+    useV1,
   ]);
 
   const navigateToSwapDetailsModal = useCallback(() => {
