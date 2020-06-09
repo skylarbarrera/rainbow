@@ -6,7 +6,7 @@ import { ethereumUtils } from '../utils';
 import useAccountAssets from './useAccountAssets';
 import useUniswapCurrencyReserves from './useUniswapCurrencyReserves';
 
-export default function useUniswapMarketDetails() {
+export default function useUniswapMarketPrice() {
   const { allAssets } = useAccountAssets();
 
   const { inputReserve, outputReserve } = useUniswapCurrencyReserves();
