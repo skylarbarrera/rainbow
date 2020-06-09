@@ -175,23 +175,66 @@ const getContractExecutionDetails = (tradeDetails, providerOrSigner) => {
   };
 };
 
+// TODO JIN - fix this for V2
+const getContractExecutionDetailsV2 = (tradeDetails, providerOrSigner) => {
+  const slippage = convertStringToNumber(
+    get(tradeDetails, 'executionRateSlippage', 0)
+  );
+  const maxSlippage = Math.max(
+    slippage + SlippageBufferInBips,
+    DefaultMaxSlippageInBips
+  );
+  // TODO JIN - we'll need to construct our own function to represent this
+  const executionDetails = getExecutionDetails(tradeDetails, maxSlippage);
+  const {
+    exchangeAddress,
+    methodArguments,
+    methodName,
+    value: rawValue,
+  } = executionDetails;
+  const exchange = new ethers.Contract(
+    exchangeAddress,
+    exchangeABI,
+    providerOrSigner
+  );
+  const updatedMethodArgs = convertArgsForEthers(methodArguments);
+  const value = convertValueForEthers(rawValue);
+  return {
+    exchange,
+    methodName,
+    updatedMethodArgs,
+    value,
+  };
+};
+
 export const executeSwap = async (
   tradeDetails,
   gasLimit,
   gasPrice,
-  wallet = null
+  wallet = null,
+  executeV1 = false // TODO JIN this doesnt exist yet
 ) => {
   const walletToUse = wallet || (await loadWallet());
   if (!walletToUse) return null;
+  const transactionParams = {
+    gasLimit: gasLimit ? toHex(gasLimit) : undefined,
+    gasPrice: gasPrice ? toHex(gasPrice) : undefined,
+  };
+  return executeV1
+    ? executeSwapV1(tradeDetails, walletToUse, transactionParams)
+    : executeSwapV2(tradeDetails, walletToUse, transactionParams);
+};
+
+export const executeSwapV1 = async (tradeDetails, walletToUse, params) => {
   const {
     exchange,
     methodName,
     updatedMethodArgs,
     value,
   } = getContractExecutionDetails(tradeDetails, walletToUse);
+
   const transactionParams = {
-    gasLimit: gasLimit ? toHex(gasLimit) : undefined,
-    gasPrice: gasPrice ? toHex(gasPrice) : undefined,
+    ...params,
     value,
   };
 
@@ -223,6 +266,56 @@ export const executeSwap = async (
       );
     case 'tokenToTokenSwapOutput':
       return exchange.tokenToTokenSwapOutput(
+        ...updatedMethodArgs,
+        transactionParams
+      );
+    default:
+      return null;
+  }
+};
+
+export const executeSwapV2 = async (tradeDetails, walletToUse, params) => {
+  // TODO JIN - need to fix getContractExec details for v2
+  const {
+    exchange,
+    methodName,
+    updatedMethodArgs,
+    value,
+  } = getContractExecutionDetailsV2(tradeDetails, walletToUse);
+
+  const transactionParams = {
+    ...params,
+    value,
+  };
+
+  switch (methodName) {
+    case 'swapExactETHForTokens':
+      return exchange.swapExactETHForTokens(
+        ...updatedMethodArgs,
+        transactionParams
+      );
+    case 'swapETHForExactTokens':
+      return exchange.swapETHForExactTokens(
+        ...updatedMethodArgs,
+        transactionParams
+      );
+    case 'swapTokensForExactETH':
+      return exchange.swapTokensForExactETH(
+        ...updatedMethodArgs,
+        transactionParams
+      );
+    case 'swapExactTokensForETH':
+      return exchange.swapExactTokensForETH(
+        ...updatedMethodArgs,
+        transactionParams
+      );
+    case 'swapExactTokensForTokens':
+      return exchange.swapExactTokensForTokens(
+        ...updatedMethodArgs,
+        transactionParams
+      );
+    case 'swapTokensForExactTokens':
+      return exchange.swapTokensForExactTokens(
         ...updatedMethodArgs,
         transactionParams
       );
