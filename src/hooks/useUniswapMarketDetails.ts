@@ -28,81 +28,6 @@ const updateSlippage = (tradeDetailsV1, tradeDetailsV2, useV1, setSlippage) => {
   setSlippage(slippage);
 };
 
-function updateInputsUniswap({
-  calculateInputGivenOutputChange,
-  calculateOutputGivenInputChange,
-  inputAmount,
-  inputAsExactAmount,
-  inputCurrency,
-  inputFieldRef,
-  maxInputBalance,
-  outputAmount,
-  outputCurrency,
-  outputFieldRef,
-  setIsSufficientBalance,
-  setSlippage,
-  tradeDetailsV1,
-  tradeDetailsV2,
-  updateInputAmount,
-  updateOutputAmount,
-}) {
-  const isMissingAmounts = !inputAmount && !outputAmount;
-  if (isMissingAmounts) return;
-
-  const { decimals: inputDecimals } = inputCurrency;
-  const { decimals: outputDecimals } = outputCurrency;
-
-  const newIsSufficientBalance =
-    !inputAmount || greaterThanOrEqualTo(maxInputBalance, inputAmount);
-
-  setIsSufficientBalance(newIsSufficientBalance);
-
-  const isInputEmpty = !inputAmount;
-  const isOutputEmpty = !outputAmount;
-
-  const isInputZero = Number(inputAmount) === 0;
-  const isOutputZero = Number(outputAmount) === 0;
-
-  // update output amount given input amount changes
-  if (inputAsExactAmount) {
-    calculateOutputGivenInputChange({
-      inputAsExactAmount,
-      inputCurrency,
-      isInputEmpty,
-      isInputZero,
-      outputCurrency,
-      outputDecimals,
-      outputFieldRef,
-      setSlippage,
-      tradeDetailsV1,
-      tradeDetailsV2,
-      updateOutputAmount,
-    });
-  }
-
-  // update input amount given output amount changes
-  if (
-    !inputAsExactAmount &&
-    inputFieldRef &&
-    inputFieldRef.current &&
-    !inputFieldRef.current.isFocused()
-  ) {
-    calculateInputGivenOutputChange({
-      inputAsExactAmount,
-      inputCurrency,
-      inputDecimals,
-      isOutputEmpty,
-      isOutputZero,
-      maxInputBalance,
-      setIsSufficientBalance,
-      setSlippage,
-      tradeDetailsV1,
-      tradeDetailsV2,
-      updateInputAmount,
-    });
-  }
-}
-
 export default function useUniswapMarketDetails() {
   const { chainId } = useAccountSettings();
   const { allPairs, inputToken, outputToken } = useUniswapPairs();
@@ -178,6 +103,7 @@ export default function useUniswapMarketDetails() {
       tradeDetailsV2,
       updateInputAmount,
     }) => {
+      let useV1 = false;
       if (isOutputEmpty || isOutputZero) {
         updateInputAmount();
         setIsSufficientBalance(true);
@@ -190,14 +116,14 @@ export default function useUniswapMarketDetails() {
         const rawUpdatedInputAmountV2 = tradeDetailsV2?.inputAmount?.toExact();
 
         // SMALLER input value is the better option
-        const isV2BetterThanV1 = greaterThanOrEqualTo(
+        useV1 = !greaterThanOrEqualTo(
           rawUpdatedInputAmountV1,
           rawUpdatedInputAmountV2
         );
 
-        const rawUpdatedInputAmount = isV2BetterThanV1
-          ? rawUpdatedInputAmountV2
-          : rawUpdatedInputAmountV1;
+        const rawUpdatedInputAmount = useV1
+          ? rawUpdatedInputAmountV1
+          : rawUpdatedInputAmountV2;
 
         const updatedInputAmountDisplay = updatePrecisionToDisplay(
           rawUpdatedInputAmount,
@@ -213,15 +139,10 @@ export default function useUniswapMarketDetails() {
         setAllTradeDetails({
           tradeDetailsV1,
           tradeDetailsV2,
-          useV1: !isV2BetterThanV1,
+          useV1,
         });
 
-        updateSlippage(
-          tradeDetailsV1,
-          tradeDetailsV2,
-          !isV2BetterThanV1,
-          setSlippage
-        );
+        updateSlippage(tradeDetailsV1, tradeDetailsV2, useV1, setSlippage);
 
         const isSufficientAmountToTrade = greaterThanOrEqualTo(
           maxInputBalance,
@@ -229,6 +150,7 @@ export default function useUniswapMarketDetails() {
         );
         setIsSufficientBalance(isSufficientAmountToTrade);
       }
+      return useV1;
     },
     []
   );
@@ -247,6 +169,7 @@ export default function useUniswapMarketDetails() {
       updateOutputAmount,
     }) => {
       logger.log('calculate OUTPUT given INPUT change');
+      let useV1 = false;
       if (
         (isInputEmpty || isInputZero) &&
         outputFieldRef &&
@@ -263,25 +186,17 @@ export default function useUniswapMarketDetails() {
         const rawUpdatedOutputAmountV2 = tradeDetailsV2?.outputAmount?.toExact();
 
         // LARGER output value is the better option
-        const isV1BetterThanV2 = greaterThan(
-          rawUpdatedOutputAmountV1,
-          rawUpdatedOutputAmountV2
-        );
+        useV1 = greaterThan(rawUpdatedOutputAmountV1, rawUpdatedOutputAmountV2);
 
         setAllTradeDetails({
           tradeDetailsV1,
           tradeDetailsV2,
-          useV1: isV1BetterThanV2,
+          useV1,
         });
 
-        updateSlippage(
-          tradeDetailsV1,
-          tradeDetailsV2,
-          isV1BetterThanV2,
-          setSlippage
-        );
+        updateSlippage(tradeDetailsV1, tradeDetailsV2, useV1, setSlippage);
 
-        const rawUpdatedOutputAmount = isV1BetterThanV2
+        const rawUpdatedOutputAmount = useV1
           ? rawUpdatedOutputAmountV1
           : rawUpdatedOutputAmountV2;
 
@@ -299,6 +214,7 @@ export default function useUniswapMarketDetails() {
           );
         }
       }
+      return useV1;
     },
     []
   );
@@ -310,13 +226,13 @@ export default function useUniswapMarketDetails() {
       inputCurrency,
       inputFieldRef,
       maxInputBalance,
-      // nativeCurrency,
+      nativeCurrency,
       outputAmount,
       outputCurrency,
       outputFieldRef,
       setIsSufficientBalance,
       setSlippage,
-      // updateExtraTradeDetails,
+      updateExtraTradeDetails,
       updateInputAmount,
       updateOutputAmount,
     }) => {
@@ -338,34 +254,71 @@ export default function useUniswapMarketDetails() {
           outputCurrency,
         });
 
-        updateInputsUniswap({
-          calculateInputGivenOutputChange,
-          calculateOutputGivenInputChange,
-          inputAmount,
-          inputAsExactAmount,
-          inputCurrency,
-          inputFieldRef,
-          maxInputBalance,
-          outputAmount,
-          outputCurrency,
-          outputFieldRef,
-          setIsSufficientBalance,
-          setSlippage,
-          tradeDetailsV1,
-          tradeDetailsV2,
-          updateInputAmount,
-          updateOutputAmount,
-        });
+        const isMissingAmounts = !inputAmount && !outputAmount;
+        if (isMissingAmounts) return;
 
-        // TODO JIN v1 - need to fix and enable
-        /*
+        const { decimals: inputDecimals } = inputCurrency;
+        const { decimals: outputDecimals } = outputCurrency;
+
+        const newIsSufficientBalance =
+          !inputAmount || greaterThanOrEqualTo(maxInputBalance, inputAmount);
+
+        setIsSufficientBalance(newIsSufficientBalance);
+
+        const isInputEmpty = !inputAmount;
+        const isOutputEmpty = !outputAmount;
+
+        const isInputZero = Number(inputAmount) === 0;
+        const isOutputZero = Number(outputAmount) === 0;
+
+        let useV1 = false;
+
+        // update output amount given input amount changes
+        if (inputAsExactAmount) {
+          useV1 = calculateOutputGivenInputChange({
+            inputAsExactAmount,
+            inputCurrency,
+            isInputEmpty,
+            isInputZero,
+            outputCurrency,
+            outputDecimals,
+            outputFieldRef,
+            setSlippage,
+            tradeDetailsV1,
+            tradeDetailsV2,
+            updateOutputAmount,
+          });
+        }
+
+        // update input amount given output amount changes
+        if (
+          !inputAsExactAmount &&
+          inputFieldRef &&
+          inputFieldRef.current &&
+          !inputFieldRef.current.isFocused()
+        ) {
+          useV1 = calculateInputGivenOutputChange({
+            inputAsExactAmount,
+            inputCurrency,
+            inputDecimals,
+            isOutputEmpty,
+            isOutputZero,
+            maxInputBalance,
+            setIsSufficientBalance,
+            setSlippage,
+            tradeDetailsV1,
+            tradeDetailsV2,
+            updateInputAmount,
+          });
+        }
+
         updateExtraTradeDetails({
           inputCurrency,
           nativeCurrency,
           outputCurrency,
-          tradeDetails: tradeDetailsV1,
+          tradeDetails: useV1 ? tradeDetailsV1 : tradeDetailsV2,
+          useV1,
         });
-       */
       } catch (error) {
         logger.log('error getting market details', error);
       }

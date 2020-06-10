@@ -9,7 +9,13 @@ export default function useSwapDetails() {
   const [extraTradeDetails, setExtraTradeDetails] = useState({});
 
   const updateExtraTradeDetails = useCallback(
-    ({ inputCurrency, nativeCurrency, outputCurrency, tradeDetails }) => {
+    ({
+      inputCurrency,
+      nativeCurrency,
+      outputCurrency,
+      tradeDetails,
+      useV1,
+    }) => {
       let inputExecutionRate = '';
       let inputNativePrice = '';
       let outputExecutionRate = '';
@@ -18,8 +24,12 @@ export default function useSwapDetails() {
       if (inputCurrency) {
         const inputPriceValue = get(inputCurrency, 'native.price.amount', null);
 
+        inputExecutionRate = useV1
+          ? get(tradeDetails, 'executionRate.rate', 0)
+          : tradeDetails?.executionPrice?.toFixed();
+
         inputExecutionRate = updatePrecisionToDisplay(
-          get(tradeDetails, 'executionRate.rate', 0),
+          inputExecutionRate,
           inputPriceValue
         );
 
@@ -36,8 +46,12 @@ export default function useSwapDetails() {
           null
         );
 
+        outputExecutionRate = useV1
+          ? get(tradeDetails, 'executionRate.rateInverted', 0)
+          : tradeDetails?.executionPrice?.invert()?.toFixed();
+
         outputExecutionRate = updatePrecisionToDisplay(
-          get(tradeDetails, 'executionRate.rateInverted', 0),
+          outputExecutionRate,
           outputPriceValue
         );
 
