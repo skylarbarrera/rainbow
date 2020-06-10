@@ -55,7 +55,6 @@ export { default as useUniswapAssetsInWallet } from './useUniswapAssetsInWallet'
 export { default as useUniswapCurrencies } from './useUniswapCurrencies';
 export { default as useUniswapCurrencyReserves } from './useUniswapCurrencyReserves';
 export { default as useUniswapMarketDetails } from './useUniswapMarketDetails';
-export { default as useUniswapMarketPrice } from './useUniswapMarketPrice';
 export { default as useUniswapPairs } from './useUniswapPairs';
 export { default as useWallets } from './useWallets';
 export { default as useWalletSectionsData } from './useWalletSectionsData';

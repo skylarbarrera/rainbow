@@ -4,11 +4,8 @@ import {
   convertAmountToNativeDisplay,
   updatePrecisionToDisplay,
 } from '../helpers/utilities';
-import useUniswapMarketPrice from './useUniswapMarketPrice';
 
 export default function useSwapDetails() {
-  const { getMarketPrice } = useUniswapMarketPrice();
-
   const [extraTradeDetails, setExtraTradeDetails] = useState({});
 
   const updateExtraTradeDetails = useCallback(
@@ -19,7 +16,7 @@ export default function useSwapDetails() {
       let outputNativePrice = '';
 
       if (inputCurrency) {
-        const inputPriceValue = getMarketPrice(inputCurrency, outputCurrency);
+        const inputPriceValue = get(inputCurrency, 'native.price.amount', null);
 
         inputExecutionRate = updatePrecisionToDisplay(
           get(tradeDetails, 'executionRate.rate', 0),
@@ -33,10 +30,10 @@ export default function useSwapDetails() {
       }
 
       if (outputCurrency) {
-        const outputPriceValue = getMarketPrice(
-          inputCurrency,
+        const outputPriceValue = get(
           outputCurrency,
-          false
+          'native.price.amount',
+          null
         );
 
         outputExecutionRate = updatePrecisionToDisplay(
@@ -57,7 +54,7 @@ export default function useSwapDetails() {
         outputNativePrice,
       });
     },
-    [getMarketPrice]
+    []
   );
 
   const areTradeDetailsValid = useMemo(() => {
