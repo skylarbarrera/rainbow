@@ -22,6 +22,13 @@ import useUniswapPairs from './useUniswapPairs';
 
 const DEFAULT_NATIVE_INPUT_AMOUNT = 50;
 
+const updateSlippage = (tradeDetailsV1, tradeDetailsV2, useV1, setSlippage) => {
+  const slippage = useV1
+    ? convertNumberToString(get(tradeDetailsV1, 'executionRateSlippage', 0))
+    : tradeDetailsV2?.slippage?.toFixed(2).toString();
+  setSlippage(slippage);
+};
+
 function updateInputsUniswap({
   calculateInputGivenOutputChange,
   calculateOutputGivenInputChange,
@@ -46,15 +53,6 @@ function updateInputsUniswap({
   const { decimals: inputDecimals } = inputCurrency;
   const { decimals: outputDecimals } = outputCurrency;
 
-  // TODO JIN - fix slippage
-  // const slippageV2 = tradeDetailsV2?.slippage?.toFixed(2).toString();
-
-  // update slippage
-  const slippage = convertNumberToString(
-    get(tradeDetailsV1, 'executionRateSlippage', 0)
-  );
-  setSlippage(slippage);
-
   const newIsSufficientBalance =
     !inputAmount || greaterThanOrEqualTo(maxInputBalance, inputAmount);
 
@@ -76,6 +74,7 @@ function updateInputsUniswap({
       outputCurrency,
       outputDecimals,
       outputFieldRef,
+      setSlippage,
       tradeDetailsV1,
       tradeDetailsV2,
       updateOutputAmount,
@@ -97,6 +96,7 @@ function updateInputsUniswap({
       isOutputZero,
       maxInputBalance,
       setIsSufficientBalance,
+      setSlippage,
       tradeDetailsV1,
       tradeDetailsV2,
       updateInputAmount,
@@ -179,6 +179,7 @@ export default function useUniswapMarketDetails() {
       isOutputZero,
       maxInputBalance,
       setIsSufficientBalance,
+      setSlippage,
       tradeDetailsV1,
       tradeDetailsV2,
       updateInputAmount,
@@ -221,6 +222,13 @@ export default function useUniswapMarketDetails() {
           useV1: !isV2BetterThanV1,
         });
 
+        updateSlippage(
+          tradeDetailsV1,
+          tradeDetailsV2,
+          !isV2BetterThanV1,
+          setSlippage
+        );
+
         const isSufficientAmountToTrade = greaterThanOrEqualTo(
           maxInputBalance,
           rawUpdatedInputAmount
@@ -240,6 +248,7 @@ export default function useUniswapMarketDetails() {
       outputCurrency,
       outputDecimals,
       outputFieldRef,
+      setSlippage,
       tradeDetailsV1,
       tradeDetailsV2,
       updateOutputAmount,
@@ -271,6 +280,13 @@ export default function useUniswapMarketDetails() {
           tradeDetailsV2,
           useV1: isV1BetterThanV2,
         });
+
+        updateSlippage(
+          tradeDetailsV1,
+          tradeDetailsV2,
+          isV1BetterThanV2,
+          setSlippage
+        );
 
         const rawUpdatedOutputAmount = isV1BetterThanV2
           ? rawUpdatedOutputAmountV1
