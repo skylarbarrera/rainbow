@@ -1,5 +1,5 @@
 import { Trade } from '@uniswap/sdk2';
-import { get, isNil } from 'lodash';
+import { get } from 'lodash';
 import { useCallback, useState } from 'react';
 import {
   calculateTradeDetails,
@@ -17,7 +17,6 @@ import {
 import { logger } from '../utils';
 import useAccountSettings from './useAccountSettings';
 import useUniswapCurrencyReserves from './useUniswapCurrencyReserves';
-import useUniswapMarketPrice from './useUniswapMarketPrice';
 import useUniswapPairs from './useUniswapPairs';
 
 const DEFAULT_NATIVE_INPUT_AMOUNT = 50;
@@ -106,7 +105,6 @@ function updateInputsUniswap({
 
 export default function useUniswapMarketDetails() {
   const { chainId } = useAccountSettings();
-  const { getMarketPrice } = useUniswapMarketPrice();
   const { allPairs, inputToken, outputToken } = useUniswapPairs();
 
   const [allTradeDetails, setAllTradeDetails] = useState({});
@@ -126,7 +124,11 @@ export default function useUniswapMarketDetails() {
       const isMissingAmounts = !inputAmount && !outputAmount;
 
       if (isMissingAmounts) {
-        const inputNativePrice = getMarketPrice(inputCurrency, outputCurrency);
+        const inputNativePrice = get(
+          inputCurrency,
+          'native.price.amount',
+          null
+        );
         updatedInputAmount = convertAmountFromNativeValue(
           DEFAULT_NATIVE_INPUT_AMOUNT,
           inputNativePrice,
@@ -159,15 +161,7 @@ export default function useUniswapMarketDetails() {
         v2: tradeDetailsV2,
       };
     },
-    [
-      chainId,
-      getMarketPrice,
-      inputReserve,
-      inputToken,
-      outputReserve,
-      outputToken,
-      allPairs,
-    ]
+    [chainId, inputReserve, inputToken, outputReserve, outputToken, allPairs]
   );
 
   const calculateInputGivenOutputChange = useCallback(
@@ -242,7 +236,6 @@ export default function useUniswapMarketDetails() {
   const calculateOutputGivenInputChange = useCallback(
     ({
       inputAsExactAmount,
-      inputCurrency,
       isInputEmpty,
       isInputZero,
       outputCurrency,
@@ -293,15 +286,7 @@ export default function useUniswapMarketDetails() {
           : rawUpdatedOutputAmountV2;
 
         if (!isZero(rawUpdatedOutputAmount)) {
-          let outputNativePrice = get(outputCurrency, 'price.value', null);
-          if (isNil(outputNativePrice)) {
-            // TODO JIN - may need to change get market price
-            outputNativePrice = getMarketPrice(
-              inputCurrency,
-              outputCurrency,
-              false
-            );
-          }
+          const outputNativePrice = get(outputCurrency, 'price.value', null);
           const updatedOutputAmountDisplay = updatePrecisionToDisplay(
             rawUpdatedOutputAmount,
             outputNativePrice
@@ -315,7 +300,7 @@ export default function useUniswapMarketDetails() {
         }
       }
     },
-    [getMarketPrice]
+    []
   );
 
   const getMarketDetails = useCallback(

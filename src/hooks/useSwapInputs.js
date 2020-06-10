@@ -1,5 +1,5 @@
 import analytics from '@segment/analytics-react-native';
-import { get, isNil } from 'lodash';
+import { get } from 'lodash';
 import { useCallback, useState } from 'react';
 import {
   convertAmountFromNativeValue,
@@ -10,7 +10,6 @@ import {
   updatePrecisionToDisplay,
 } from '../helpers/utilities';
 import { logger } from '../utils';
-import useUniswapMarketPrice from './useUniswapMarketPrice';
 
 export default function useSwapInputs({
   defaultInputAsset,
@@ -19,12 +18,9 @@ export default function useSwapInputs({
   isWithdrawal,
   maxInputBalance,
   nativeFieldRef,
-  outputCurrency,
   supplyBalanceUnderlying,
   type,
 }) {
-  const { getMarketPrice } = useUniswapMarketPrice();
-
   const [isMax, setIsMax] = useState(false);
   const [inputAmount, setInputAmount] = useState(null);
   const [inputAmountDisplay, setInputAmountDisplay] = useState(null);
@@ -57,10 +53,11 @@ export default function useSwapInputs({
         const isInputZero = isZero(newInputAmount);
 
         if (newInputAmount && !isInputZero) {
-          let newNativePrice = get(inputCurrency, 'native.price.amount', null);
-          if (isNil(newNativePrice)) {
-            newNativePrice = getMarketPrice(inputCurrency, outputCurrency);
-          }
+          const newNativePrice = get(
+            inputCurrency,
+            'native.price.amount',
+            null
+          );
           newNativeAmount = convertAmountToNativeAmount(
             newInputAmount,
             newNativePrice
@@ -90,13 +87,11 @@ export default function useSwapInputs({
     },
     [
       defaultInputAsset,
-      getMarketPrice,
       inputCurrency,
       isDeposit,
       isWithdrawal,
       maxInputBalance,
       nativeFieldRef,
-      outputCurrency,
       supplyBalanceUnderlying,
       type,
     ]
@@ -117,10 +112,7 @@ export default function useSwapInputs({
       setIsMax(false);
 
       if (nativeAmount && !isNativeZero) {
-        let nativePrice = get(inputCurrency, 'native.price.amount', null);
-        if (isNil(nativePrice)) {
-          nativePrice = getMarketPrice(inputCurrency, outputCurrency);
-        }
+        const nativePrice = get(inputCurrency, 'native.price.amount', null);
         inputAmount = convertAmountFromNativeValue(
           nativeAmount,
           nativePrice,
@@ -137,7 +129,7 @@ export default function useSwapInputs({
       setInputAmountDisplay(inputAmountDisplay);
       setInputAsExactAmount(true);
     },
-    [getMarketPrice, inputCurrency, outputCurrency]
+    [inputCurrency]
   );
 
   const updateOutputAmount = useCallback(
