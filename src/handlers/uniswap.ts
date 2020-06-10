@@ -88,40 +88,7 @@ const getGasLimit = async (
   value
 ) => {
   const params = { from: accountAddress, value };
-  switch (methodName) {
-    case 'ethToTokenSwapInput':
-      return exchange.estimate.ethToTokenSwapInput(
-        ...updatedMethodArgs,
-        params
-      );
-    case 'ethToTokenSwapOutput':
-      return exchange.estimate.ethToTokenSwapOutput(
-        ...updatedMethodArgs,
-        params
-      );
-    case 'tokenToEthSwapInput':
-      return exchange.estimate.tokenToEthSwapInput(
-        ...updatedMethodArgs,
-        params
-      );
-    case 'tokenToEthSwapOutput':
-      return exchange.estimate.tokenToEthSwapOutput(
-        ...updatedMethodArgs,
-        params
-      );
-    case 'tokenToTokenSwapInput':
-      return exchange.estimate.tokenToTokenSwapInput(
-        ...updatedMethodArgs,
-        params
-      );
-    case 'tokenToTokenSwapOutput':
-      return exchange.estimate.tokenToTokenSwapOutput(
-        ...updatedMethodArgs,
-        params
-      );
-    default:
-      return null;
-  }
+  return exchange['estimate'][methodName](...updatedMethodArgs, params);
 };
 
 export const estimateSwapGasLimit = async (accountAddress, tradeDetails) => {
@@ -238,40 +205,7 @@ export const executeSwapV1 = async (tradeDetails, walletToUse, params) => {
     value,
   };
 
-  switch (methodName) {
-    case 'ethToTokenSwapInput':
-      return exchange.ethToTokenSwapInput(
-        ...updatedMethodArgs,
-        transactionParams
-      );
-    case 'ethToTokenSwapOutput':
-      return exchange.ethToTokenSwapOutput(
-        ...updatedMethodArgs,
-        transactionParams
-      );
-    case 'tokenToEthSwapInput':
-      return exchange.tokenToEthSwapInput(
-        ...updatedMethodArgs,
-        transactionParams
-      );
-    case 'tokenToEthSwapOutput':
-      return exchange.tokenToEthSwapOutput(
-        ...updatedMethodArgs,
-        transactionParams
-      );
-    case 'tokenToTokenSwapInput':
-      return exchange.tokenToTokenSwapInput(
-        ...updatedMethodArgs,
-        transactionParams
-      );
-    case 'tokenToTokenSwapOutput':
-      return exchange.tokenToTokenSwapOutput(
-        ...updatedMethodArgs,
-        transactionParams
-      );
-    default:
-      return null;
-  }
+  return exchange[methodName](...updatedMethodArgs, transactionParams);
 };
 
 export const executeSwapV2 = async (tradeDetails, walletToUse, params) => {
@@ -288,40 +222,7 @@ export const executeSwapV2 = async (tradeDetails, walletToUse, params) => {
     value,
   };
 
-  switch (methodName) {
-    case 'swapExactETHForTokens':
-      return exchange.swapExactETHForTokens(
-        ...updatedMethodArgs,
-        transactionParams
-      );
-    case 'swapETHForExactTokens':
-      return exchange.swapETHForExactTokens(
-        ...updatedMethodArgs,
-        transactionParams
-      );
-    case 'swapTokensForExactETH':
-      return exchange.swapTokensForExactETH(
-        ...updatedMethodArgs,
-        transactionParams
-      );
-    case 'swapExactTokensForETH':
-      return exchange.swapExactTokensForETH(
-        ...updatedMethodArgs,
-        transactionParams
-      );
-    case 'swapExactTokensForTokens':
-      return exchange.swapExactTokensForTokens(
-        ...updatedMethodArgs,
-        transactionParams
-      );
-    case 'swapTokensForExactTokens':
-      return exchange.swapTokensForExactTokens(
-        ...updatedMethodArgs,
-        transactionParams
-      );
-    default:
-      return null;
-  }
+  return exchange[methodName](...updatedMethodArgs, transactionParams);
 };
 
 export const getLiquidityInfo = async (
