@@ -43,8 +43,8 @@ import { loadWallet } from '../model/wallet';
 import {
   erc20ABI,
   ethUnits,
-  exchangeABI,
   uniswapTestnetAssets,
+  uniswapV1ExchangeABI,
   uniswapV2RouterABI,
 } from '../references';
 import { logger } from '../utils';
@@ -146,11 +146,8 @@ const getContractExecutionDetails = ({
     value: rawValue,
   } = executionDetails;
 
-  const exchange = new ethers.Contract(
-    exchangeAddress,
-    useV1 ? exchangeABI : uniswapV2RouterABI,
-    providerOrSigner
-  );
+  const abi = useV1 ? uniswapV1ExchangeABI : uniswapV2RouterABI;
+  const exchange = new ethers.Contract(exchangeAddress, abi, providerOrSigner);
 
   const updatedMethodArgs = useV1
     ? convertV1Args(methodArguments)
@@ -205,10 +202,10 @@ export const getLiquidityInfo = async (
   const promises = map(exchangeContracts, async exchangeAddress => {
     try {
       const ethReserveCall = web3Provider.getBalance(exchangeAddress);
-      // TODO JIN exchange ABI
+      // TODO JIN - liquidity pool, support V2
       const exchange = new ethers.Contract(
         exchangeAddress,
-        exchangeABI,
+        uniswapV1ExchangeABI,
         web3Provider
       );
       const tokenAddressCall = exchange.tokenAddress();
