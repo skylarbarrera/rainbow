@@ -10,6 +10,7 @@ export { default as compoundCETHABI } from './compound/compound-ceth-abi.json';
 export { default as erc20ABI } from './erc20-abi.json';
 export { default as ethUnits } from './ethereum-units.json';
 export { default as exchangeABI } from './uniswap/uniswap-exchange-abi.json';
+export { default as uniswapV2RouterABI } from './uniswap/uniswap-v2-router.json';
 export { default as uniswapTestnetAssets } from './uniswap/uniswap-pairs-testnet.json';
 
 export const CDAI_CONTRACT = '0x5d3a536e4d6dbd6114cc1ead35777bab948e3643';
@@ -17,6 +18,9 @@ export const SAI_ADDRESS = '0x89d24a6b4ccb1b6faa2625fe562bdd9a23260359';
 export const DAI_ADDRESS = '0x6b175474e89094c44da98b954eedeac495271d0f';
 export const USDC_ADDRESS = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48';
 const SOCKS_ADDRESS = '0x23B608675a2B2fB1890d3ABBd85c5775c51691d5';
+
+export const UNISWAP_V2_ROUTER_ADDRESS =
+  '0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D';
 
 export const UNISWAP_V2_BASES = {
   [ChainId.MAINNET]: [

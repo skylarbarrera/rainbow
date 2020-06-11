@@ -13,6 +13,8 @@ export const subtract = (numberOne, numberTwo) =>
     .minus(BigNumber(`${numberTwo}`))
     .toFixed();
 
+export const isBigNumber = value => BigNumber.isBigNumber(value);
+
 /**
  * @desc convert amount to raw amount
  * @param  {String}   value

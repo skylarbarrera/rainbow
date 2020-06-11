@@ -63,6 +63,7 @@ const swap = async (wallet, currentRap, index, parameters) => {
   logger.log('[swap] swap on uniswap!');
   const {
     accountAddress,
+    chainId,
     inputAmount,
     inputCurrency,
     outputCurrency,
@@ -83,11 +84,12 @@ const swap = async (wallet, currentRap, index, parameters) => {
     gasPrice = get(gasPrices, `[${gasUtils.FAST}].value.amount`);
   }
 
-  const gasLimit = await estimateSwapGasLimit(
+  const gasLimit = await estimateSwapGasLimit({
     accountAddress,
+    chainId,
     tradeDetails,
-    useV1
-  );
+    useV1,
+  });
 
   logger.log('[swap] About to execute swap with', {
     gasLimit,
@@ -96,13 +98,15 @@ const swap = async (wallet, currentRap, index, parameters) => {
     wallet,
   });
 
-  const swap = await executeSwap(
-    tradeDetails,
+  const swap = await executeSwap({
+    accountAddress,
+    chainId,
     gasLimit,
     gasPrice,
+    tradeDetails,
+    useV1,
     wallet,
-    useV1
-  );
+  });
   logger.log('[swap] response', swap);
   currentRap.actions[index].transaction.hash = swap.hash;
   dispatch(rapsAddOrUpdate(currentRap.id, currentRap));

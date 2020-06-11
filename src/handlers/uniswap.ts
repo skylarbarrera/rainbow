@@ -33,10 +33,10 @@ import {
   convertAmountToRawAmount,
   convertNumberToString,
   convertRawAmountToDecimalFormat,
-  convertStringToNumber,
   divide,
   fromWei,
   greaterThan,
+  isBigNumber,
   multiply,
 } from '../helpers/utilities';
 import { loadWallet } from '../model/wallet';
@@ -45,8 +45,10 @@ import {
   ethUnits,
   exchangeABI,
   uniswapTestnetAssets,
+  uniswapV2RouterABI,
 } from '../references';
 import { logger } from '../utils';
+import getExecutionDetailsV2 from './uniswapv2';
 import { toHex, web3Provider } from './web3';
 
 const DefaultMaxSlippageInBips = 200;
@@ -60,12 +62,12 @@ export const getTestnetUniswapPairs = network => {
   }));
 };
 
-const convertArgsForEthers = methodArguments =>
+const convertV1Args = methodArguments =>
   methodArguments.map(arg =>
-    typeof arg === 'object' ? ethers.utils.bigNumberify(arg.toFixed()) : arg
+    isBigNumber(arg) ? ethers.utils.bigNumberify(arg.toFixed()) : arg
   );
 
-const convertValueForEthers = value => {
+const convertV1Value = value => {
   const valueBigNumber = ethers.utils.bigNumberify(value.toString());
   return ethers.utils.hexlify(valueBigNumber);
 };
@@ -76,152 +78,122 @@ export const getReserve = async tokenAddress =>
     : getTokenReserves(toLower(tokenAddress), web3Provider);
 
 export const getPair = async (tokenA: Token, tokenB: Token) => {
-  console.log('fetching', tokenA.address, tokenB.address);
+  console.log('fetching pair', tokenA.address, tokenB.address);
   return await Pair.fetchData(tokenA, tokenB, web3Provider);
 };
 
-const getGasLimit = async (
+export const estimateSwapGasLimit = async ({
   accountAddress,
-  exchange,
-  methodName,
-  updatedMethodArgs,
-  value
-) => {
-  const params = { from: accountAddress, value };
-  return exchange['estimate'][methodName](...updatedMethodArgs, params);
-};
-
-export const estimateSwapGasLimit = async (accountAddress, tradeDetails) => {
+  chainId,
+  tradeDetails,
+  useV1,
+}) => {
   try {
     const {
       exchange,
       methodName,
       updatedMethodArgs,
       value,
-    } = getContractExecutionDetails(tradeDetails, web3Provider);
-    const gasLimit = await getGasLimit(
+    } = getContractExecutionDetails({
       accountAddress,
-      exchange,
-      methodName,
-      updatedMethodArgs,
-      value
+      chainId,
+      providerOrSigner: web3Provider,
+      tradeDetails,
+      useV1,
+    });
+    const params = { from: accountAddress, ...(value ? { value } : {}) };
+    const gasLimit = await exchange['estimate'][methodName](
+      ...updatedMethodArgs,
+      params
     );
     return gasLimit ? gasLimit.toString() : ethUnits.basic_swap;
   } catch (error) {
+    logger.log('Error estimating swap gas limit', error);
     return ethUnits.basic_swap;
   }
 };
 
-const getContractExecutionDetails = (tradeDetails, providerOrSigner) => {
-  const slippage = convertStringToNumber(
-    get(tradeDetails, 'executionRateSlippage', 0)
-  );
-  const maxSlippage = Math.max(
-    slippage + SlippageBufferInBips,
-    DefaultMaxSlippageInBips
-  );
-  const executionDetails = getExecutionDetails(tradeDetails, maxSlippage);
-  const {
-    exchangeAddress,
-    methodArguments,
-    methodName,
-    value: rawValue,
-  } = executionDetails;
-  const exchange = new ethers.Contract(
-    exchangeAddress,
-    exchangeABI,
-    providerOrSigner
-  );
-  const updatedMethodArgs = convertArgsForEthers(methodArguments);
-  const value = convertValueForEthers(rawValue);
-  return {
-    exchange,
-    methodName,
-    updatedMethodArgs,
-    value,
-  };
-};
-
-// TODO JIN - fix this for V2
-const getContractExecutionDetailsV2 = (tradeDetails, providerOrSigner) => {
-  const slippage = convertStringToNumber(
-    get(tradeDetails, 'executionRateSlippage', 0)
-  );
-  const maxSlippage = Math.max(
-    slippage + SlippageBufferInBips,
-    DefaultMaxSlippageInBips
-  );
-  // TODO JIN - we'll need to construct our own function to represent this
-  const executionDetails = getExecutionDetails(tradeDetails, maxSlippage);
-  const {
-    exchangeAddress,
-    methodArguments,
-    methodName,
-    value: rawValue,
-  } = executionDetails;
-  const exchange = new ethers.Contract(
-    exchangeAddress,
-    exchangeABI,
-    providerOrSigner
-  );
-  const updatedMethodArgs = convertArgsForEthers(methodArguments);
-  const value = convertValueForEthers(rawValue);
-  return {
-    exchange,
-    methodName,
-    updatedMethodArgs,
-    value,
-  };
-};
-
-export const executeSwap = async (
+const getContractExecutionDetails = ({
+  accountAddress,
+  chainId,
+  providerOrSigner,
   tradeDetails,
+  useV1,
+}) => {
+  const slippage = useV1
+    ? convertNumberToString(get(tradeDetails, 'executionRateSlippage', 0))
+    : tradeDetails?.slippage?.toFixed(2).toString();
+
+  const maxSlippage = Math.max(
+    slippage + SlippageBufferInBips,
+    DefaultMaxSlippageInBips
+  );
+
+  const executionDetails = useV1
+    ? getExecutionDetails(tradeDetails, maxSlippage)
+    : getExecutionDetailsV2({
+        accountAddress,
+        allowedSlippage: maxSlippage,
+        chainId,
+        providerOrSigner,
+        trade: tradeDetails,
+      });
+
+  const {
+    exchangeAddress,
+    methodArguments,
+    methodName,
+    value: rawValue,
+  } = executionDetails;
+
+  const exchange = new ethers.Contract(
+    exchangeAddress,
+    useV1 ? exchangeABI : uniswapV2RouterABI,
+    providerOrSigner
+  );
+
+  const updatedMethodArgs = useV1
+    ? convertV1Args(methodArguments)
+    : methodArguments;
+
+  const value = useV1 ? convertV1Value(rawValue) : rawValue;
+
+  return {
+    exchange,
+    methodName,
+    updatedMethodArgs,
+    value,
+  };
+};
+
+export const executeSwap = async ({
+  accountAddress,
+  chainId,
   gasLimit,
   gasPrice,
+  tradeDetails,
+  useV1 = false,
   wallet = null,
-  executeV1 = false // TODO JIN this doesnt exist yet
-) => {
+}) => {
   const walletToUse = wallet || (await loadWallet());
   if (!walletToUse) return null;
+  const {
+    exchange,
+    methodName,
+    updatedMethodArgs,
+    value,
+  } = getContractExecutionDetails({
+    accountAddress,
+    chainId,
+    providerOrSigner: walletToUse,
+    tradeDetails,
+    useV1,
+  });
   const transactionParams = {
     gasLimit: gasLimit ? toHex(gasLimit) : undefined,
     gasPrice: gasPrice ? toHex(gasPrice) : undefined,
+    ...(value ? { value } : {}),
   };
-  return executeV1
-    ? executeSwapV1(tradeDetails, walletToUse, transactionParams)
-    : executeSwapV2(tradeDetails, walletToUse, transactionParams);
-};
-
-export const executeSwapV1 = async (tradeDetails, walletToUse, params) => {
-  const {
-    exchange,
-    methodName,
-    updatedMethodArgs,
-    value,
-  } = getContractExecutionDetails(tradeDetails, walletToUse);
-
-  const transactionParams = {
-    ...params,
-    value,
-  };
-
-  return exchange[methodName](...updatedMethodArgs, transactionParams);
-};
-
-export const executeSwapV2 = async (tradeDetails, walletToUse, params) => {
-  // TODO JIN - need to fix getContractExec details for v2
-  const {
-    exchange,
-    methodName,
-    updatedMethodArgs,
-    value,
-  } = getContractExecutionDetailsV2(tradeDetails, walletToUse);
-
-  const transactionParams = {
-    ...params,
-    value,
-  };
-
   return exchange[methodName](...updatedMethodArgs, transactionParams);
 };
 
@@ -233,6 +205,7 @@ export const getLiquidityInfo = async (
   const promises = map(exchangeContracts, async exchangeAddress => {
     try {
       const ethReserveCall = web3Provider.getBalance(exchangeAddress);
+      // TODO JIN exchange ABI
       const exchange = new ethers.Contract(
         exchangeAddress,
         exchangeABI,
@@ -459,7 +432,6 @@ export const getAllExchanges = async (tokenOverrides, excluded = []) => {
         dataEnd = true;
       }
     }
-    console.log(data);
   } catch (err) {
     logger.log('error: ', err);
   }
@@ -543,7 +515,6 @@ export const calculateTradeDetailsV2 = (
   pairs: Record<string, Pair>,
   exactInput: boolean
 ): Trade | null => {
-  console.log('calculateTradeDetailsV2', inputToken, outputToken);
   if (!inputToken || !outputToken) {
     return null;
   }

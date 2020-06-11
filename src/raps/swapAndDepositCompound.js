@@ -17,7 +17,7 @@ export const estimateSwapAndDepositCompound = async ({
   tradeDetails,
   useV1,
 }) => {
-  const { accountAddress, network } = store.getState().settings;
+  const { accountAddress, chainId, network } = store.getState().settings;
   const requiresSwap = !!outputCurrency;
   let gasLimits = [];
   if (requiresSwap) {
@@ -37,11 +37,12 @@ export const estimateSwapAndDepositCompound = async ({
       gasLimits = concat(gasLimits, unlockGasLimit);
     }
 
-    const swapGasLimit = await estimateSwapGasLimit(
+    const swapGasLimit = await estimateSwapGasLimit({
       accountAddress,
+      chainId,
       tradeDetails,
-      useV1
-    );
+      useV1,
+    });
     gasLimits = concat(gasLimits, swapGasLimit);
     logger.log('[swap and deposit] making swap func');
   }
@@ -83,7 +84,7 @@ const createSwapAndDepositCompoundRap = async ({
   tradeDetails,
   useV1,
 }) => {
-  const { accountAddress, network } = store.getState().settings;
+  const { accountAddress, chainId, network } = store.getState().settings;
   const requiresSwap = !!outputCurrency;
   logger.log('[swap and deposit] currencies', inputCurrency, outputCurrency);
   logger.log('[swap and deposit] amounts', inputAmount, outputAmount);
@@ -113,6 +114,7 @@ const createSwapAndDepositCompoundRap = async ({
     // create a swap rap
     const swap = createNewAction(RapActionTypes.swap, {
       accountAddress,
+      chainId,
       inputAmount,
       inputCurrency,
       outputCurrency,
