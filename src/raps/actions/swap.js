@@ -84,9 +84,10 @@ const swap = async (wallet, currentRap, index, parameters) => {
     gasPrice = get(gasPrices, `[${gasUtils.FAST}].value.amount`);
   }
 
-  const gasLimit = await estimateSwapGasLimit({
+  const { gasLimit, methodName } = await estimateSwapGasLimit({
     accountAddress,
     chainId,
+    includeMethodName: true,
     tradeDetails,
     useV1,
   });
@@ -94,6 +95,7 @@ const swap = async (wallet, currentRap, index, parameters) => {
   logger.log('[swap] About to execute swap with', {
     gasLimit,
     gasPrice,
+    methodName,
     tradeDetails,
     wallet,
   });
@@ -103,6 +105,7 @@ const swap = async (wallet, currentRap, index, parameters) => {
     chainId,
     gasLimit,
     gasPrice,
+    methodName,
     tradeDetails,
     useV1,
     wallet,

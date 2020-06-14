@@ -3,7 +3,7 @@ import { estimateSwapGasLimit } from '../handlers/uniswap';
 import { add } from '../helpers/utilities';
 import { rapsAddOrUpdate } from '../redux/raps';
 import store from '../redux/store';
-import { ethUnits } from '../references';
+import { ethUnits, UNISWAP_V2_ROUTER_ADDRESS } from '../references';
 import { contractUtils } from '../utils';
 import { assetNeedsUnlocking } from './actions/unlock';
 import { createNewAction, createNewRap, RapActionTypes } from './common';
@@ -17,18 +17,21 @@ export const estimateUnlockAndSwap = async ({
   if (!tradeDetails) return ethUnits.basic_swap;
 
   const { accountAddress, chainId } = store.getState().settings;
+  const contractAddress = useV1
+    ? inputCurrency.exchangeAddress
+    : UNISWAP_V2_ROUTER_ADDRESS;
   let gasLimits = [];
 
   const swapAssetNeedsUnlocking = await assetNeedsUnlocking(
     accountAddress,
     inputAmount,
     inputCurrency,
-    inputCurrency.exchangeAddress
+    contractAddress
   );
   if (swapAssetNeedsUnlocking) {
     const unlockGasLimit = await contractUtils.estimateApprove(
       inputCurrency.address,
-      inputCurrency.exchangeAddress
+      contractAddress
     );
     gasLimits = concat(gasLimits, unlockGasLimit);
   }
@@ -56,20 +59,23 @@ const createUnlockAndSwapRap = async ({
   // create unlock rap
   const { accountAddress, chainId } = store.getState().settings;
 
+  const contractAddress = useV1
+    ? inputCurrency.exchangeAddress
+    : UNISWAP_V2_ROUTER_ADDRESS;
   let actions = [];
 
   const swapAssetNeedsUnlocking = await assetNeedsUnlocking(
     accountAddress,
     inputAmount,
     inputCurrency,
-    inputCurrency.exchangeAddress
+    contractAddress
   );
   if (swapAssetNeedsUnlocking) {
     const unlock = createNewAction(RapActionTypes.unlock, {
       accountAddress,
       amount: inputAmount,
       assetToUnlock: inputCurrency,
-      contractAddress: inputCurrency.exchangeAddress,
+      contractAddress,
     });
     actions = concat(actions, unlock);
   }

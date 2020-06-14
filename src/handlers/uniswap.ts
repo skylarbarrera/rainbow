@@ -85,13 +85,15 @@ export const getPair = async (tokenA: Token, tokenB: Token) => {
 export const estimateSwapGasLimit = async ({
   accountAddress,
   chainId,
+  includeMethodName = false,
   tradeDetails,
   useV1,
 }) => {
+  let methodName = null;
   try {
     const {
       exchange,
-      methodName,
+      methodNames,
       updatedMethodArgs,
       value,
     } = getContractExecutionDetails({
@@ -102,14 +104,49 @@ export const estimateSwapGasLimit = async ({
       useV1,
     });
     const params = { from: accountAddress, ...(value ? { value } : {}) };
-    const gasLimit = await exchange['estimate'][methodName](
-      ...updatedMethodArgs,
-      params
+    const gasEstimates = await Promise.all(
+      methodNames.map(methodName =>
+        exchange.estimate[methodName](...updatedMethodArgs, params)
+          .then(value => value)
+          .catch(_ => {
+            return undefined;
+          })
+      )
     );
-    return gasLimit ? gasLimit.toString() : ethUnits.basic_swap;
+
+    // we expect failures from left to right, so throw if we see failures
+    // from right to left
+    for (let i = 0; i < gasEstimates.length - 1; i++) {
+      // if the FoT method fails, but the regular method does not, we should not
+      // use the regular method. this probably means something is wrong with the fot token.
+      if (gasEstimates[i] && !gasEstimates[i + 1]) {
+        return includeMethodName
+          ? { gasLimit: ethUnits.basic_swap, methodName: null }
+          : ethUnits.basic_swap;
+      }
+    }
+
+    const indexOfSuccessfulEstimation = gasEstimates.findIndex(
+      gasEstimate => !!gasEstimate
+    );
+
+    // all estimations failed...
+    if (indexOfSuccessfulEstimation === -1) {
+      return includeMethodName
+        ? { gasLimit: ethUnits.basic_swap, methodName: null }
+        : ethUnits.basic_swap;
+    } else {
+      methodName = methodNames[indexOfSuccessfulEstimation];
+      const gasEstimate = gasEstimates[indexOfSuccessfulEstimation];
+      return includeMethodName
+        ? { gasLimit: gasEstimate?.toString(), methodName }
+        : gasEstimate?.toString() || ethUnits.basic_swap;
+    }
   } catch (error) {
     logger.log('Error estimating swap gas limit', error);
-    return ethUnits.basic_swap;
+    return includeMethodName
+      ? { gasLimit: ethUnits.basic_swap, methodName: null }
+      : ethUnits.basic_swap;
   }
 };
 
@@ -142,9 +179,13 @@ const getContractExecutionDetails = ({
   const {
     exchangeAddress,
     methodArguments,
-    methodName,
     value: rawValue,
   } = executionDetails;
+
+  // get method name
+  const methodNames = useV1
+    ? [executionDetails?.methodName]
+    : executionDetails?.methodNames;
 
   const abi = useV1 ? uniswapV1ExchangeABI : uniswapV2RouterABI;
   const exchange = new ethers.Contract(exchangeAddress, abi, providerOrSigner);
@@ -157,7 +198,7 @@ const getContractExecutionDetails = ({
 
   return {
     exchange,
-    methodName,
+    methodNames,
     updatedMethodArgs,
     value,
   };
@@ -168,18 +209,14 @@ export const executeSwap = async ({
   chainId,
   gasLimit,
   gasPrice,
+  methodName,
   tradeDetails,
   useV1 = false,
   wallet = null,
 }) => {
   const walletToUse = wallet || (await loadWallet());
   if (!walletToUse) return null;
-  const {
-    exchange,
-    methodName,
-    updatedMethodArgs,
-    value,
-  } = getContractExecutionDetails({
+  const { exchange, updatedMethodArgs, value } = getContractExecutionDetails({
     accountAddress,
     chainId,
     providerOrSigner: walletToUse,

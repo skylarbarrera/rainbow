@@ -174,9 +174,8 @@ const getExecutionDetailsV2 = ({
   }
   return {
     exchangeAddress: UNISWAP_V2_ROUTER_ADDRESS,
-    hello: 'HI',
     methodArguments: args,
-    methodName: methodNames[0], // TODO JIN
+    methodNames,
     value,
   };
 };
