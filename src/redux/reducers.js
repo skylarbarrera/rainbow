@@ -11,6 +11,7 @@ import gas from './gas';
 import imageDimensionsCache from './imageDimensionsCache';
 import keyboardHeight from './keyboardHeight';
 import modal from './modal';
+import multicall from './multicall';
 import navigation from './navigation';
 import nonce from './nonce';
 import openStateSettings from './openStateSettings';
@@ -39,6 +40,7 @@ export default combineReducers({
   imageDimensionsCache,
   keyboardHeight,
   modal,
+  multicall,
   navigation,
   nonce,
   openStateSettings,
