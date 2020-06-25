@@ -113,6 +113,11 @@ export default function useUniswapCurrencies({
   const prevDefaultOutputItem = usePrevious(defaultOutputItem);
   const prevDefaultInputItemInWallet = usePrevious(defaultInputItemInWallet);
 
+  const {
+    updateUniswapInputCurrency,
+    updateUniswapOutputCurrency,
+  } = useUniswapCurrencyReserves();
+
   useEffect(() => {
     if (defaultOutputItem && !prevDefaultOutputItem) {
       updateUniswapOutputCurrency(defaultOutputItem);
@@ -133,10 +138,6 @@ export default function useUniswapCurrencies({
   const previousOutputCurrency = usePrevious(outputCurrency);
 
   const { uniswapAssetsInWallet } = useUniswapAssetsInWallet();
-  const {
-    updateUniswapInputCurrency,
-    updateUniswapOutputCurrency,
-  } = useUniswapCurrencyReserves();
 
   const updateInputCurrency = useCallback(
     async (newInputCurrency, userSelected = true) => {
