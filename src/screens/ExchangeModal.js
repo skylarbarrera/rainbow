@@ -419,20 +419,20 @@ const ExchangeModal = ({
   const isSlippageWarningVisible =
     isSufficientBalance && !!inputAmount && !!outputAmount;
 
-  const showDetailsButton = useMemo(() => {
-    return (
+  const showDetailsButton = useMemo(
+    () =>
       !(isDeposit || isWithdrawal) &&
-      get(inputCurrency, 'symbol') &&
-      get(outputCurrency, 'symbol') &&
-      areTradeDetailsValid
-    );
-  }, [
-    areTradeDetailsValid,
-    inputCurrency,
-    isDeposit,
-    isWithdrawal,
-    outputCurrency,
-  ]);
+      get(inputCurrency, 'symbol', false) &&
+      get(outputCurrency, 'symbol', false) &&
+      areTradeDetailsValid,
+    [
+      areTradeDetailsValid,
+      inputCurrency,
+      isDeposit,
+      isWithdrawal,
+      outputCurrency,
+    ]
+  );
 
   const showConfirmButton =
     isDeposit || isWithdrawal

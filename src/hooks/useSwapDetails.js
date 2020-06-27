@@ -103,7 +103,7 @@ export default function useSwapDetails() {
   }, [extraTradeDetails]);
 
   return {
-    areTradeDetailsValid,
+    areTradeDetailsValid: !!areTradeDetailsValid,
     extraTradeDetails,
     updateExtraTradeDetails,
   };
