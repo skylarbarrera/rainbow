@@ -3,13 +3,20 @@ import analytics from '@segment/analytics-react-native';
 import { find, get } from 'lodash';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { InteractionManager } from 'react-native';
+import { useDispatch } from 'react-redux';
 import CurrencySelectionTypes from '../helpers/currencySelectionTypes';
 import { multiply } from '../helpers/utilities';
+import {
+  multicallAddListeners,
+  multicallUpdateOutdatedListeners,
+} from '../redux/multicall';
 import Routes from '../screens/Routes/routesNames';
 import { ethereumUtils, isNewValueForPath, logger } from '../utils';
 import useAccountAssets from './useAccountAssets';
+import useAccountSettings from './useAccountSettings';
 import usePrevious from './usePrevious';
 import useUniswapAssetsInWallet from './useUniswapAssetsInWallet';
+import useUniswapCalls from './useUniswapCalls';
 import useUniswapCurrencyReserves from './useUniswapCurrencyReserves';
 
 const isSameAsset = (newInputCurrency, previousInputCurrency) =>
@@ -46,8 +53,9 @@ export default function useUniswapCurrencies({
   type,
   underlyingPrice,
 }) {
+  const dispatch = useDispatch();
   const { allAssets } = useAccountAssets();
-
+  const { chainId } = useAccountSettings();
   const defaultInputAddress = get(defaultInputAsset, 'address');
 
   const {
@@ -110,6 +118,11 @@ export default function useUniswapCurrencies({
   const [inputCurrency, setInputCurrency] = useState(defaultInputItemInWallet);
   const [outputCurrency, setOutputCurrency] = useState(defaultOutputItem);
 
+  const previousInputCurrency = usePrevious(inputCurrency);
+  const previousOutputCurrency = usePrevious(outputCurrency);
+
+  const { calls } = useUniswapCalls(inputCurrency, outputCurrency);
+
   const prevDefaultOutputItem = usePrevious(defaultOutputItem);
   const prevDefaultInputItemInWallet = usePrevious(defaultInputItemInWallet);
 
@@ -134,8 +147,25 @@ export default function useUniswapCurrencies({
     updateUniswapInputCurrency,
   ]);
 
-  const previousInputCurrency = usePrevious(inputCurrency);
-  const previousOutputCurrency = usePrevious(outputCurrency);
+  useEffect(() => {
+    if (!inputCurrency || !outputCurrency) return;
+    if (
+      isSameAsset(inputCurrency, previousInputCurrency) &&
+      isSameAsset(outputCurrency, previousOutputCurrency)
+    )
+      return;
+
+    dispatch(multicallAddListeners({ calls, chainId }));
+    dispatch(multicallUpdateOutdatedListeners());
+  }, [
+    calls,
+    chainId,
+    dispatch,
+    inputCurrency,
+    outputCurrency,
+    previousInputCurrency,
+    previousOutputCurrency,
+  ]);
 
   const { uniswapAssetsInWallet } = useUniswapAssetsInWallet();
 

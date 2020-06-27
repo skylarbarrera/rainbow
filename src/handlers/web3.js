@@ -1,3 +1,5 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { JsonRpcProvider } from '@ethersproject/providers';
 import { ethers } from 'ethers';
 import { get, replace, startsWith } from 'lodash';
 import { INFURA_PROJECT_ID, INFURA_PROJECT_ID_DEV } from 'react-native-dotenv';
@@ -18,6 +20,10 @@ const infuraUrl = `https://network.infura.io/v3/${infuraProjectId}`;
  * @desc web3 http instance
  */
 export let web3Provider = new ethers.providers.JsonRpcProvider(
+  replace(infuraUrl, 'network', NetworkTypes.mainnet)
+);
+
+export let web3ProviderV4 = new JsonRpcProvider(
   replace(infuraUrl, 'network', NetworkTypes.mainnet)
 );
 

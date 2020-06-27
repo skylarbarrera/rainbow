@@ -1,7 +1,8 @@
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import { getReserve } from '../handlers/uniswap';
 import { web3Provider } from '../handlers/web3';
 import { logger } from '../utils';
+import { multicallUpdateOutdatedListeners } from './multicall';
 import { uniswapUpdateTokenReserves } from './uniswap';
 
 // -- Actions ---------------------------------------- //
@@ -21,9 +22,28 @@ const web3UpdateReserves = () => async (dispatch, getState) => {
   }
 };
 
+const web3UpdateUniswapV2Reserves = blockNumber => async (
+  dispatch,
+  getState
+) => {
+  const { listeners } = getState().multicall;
+  try {
+    if (isEmpty(listeners)) return;
+    dispatch(multicallUpdateOutdatedListeners(blockNumber));
+  } catch (error) {
+    logger.log(
+      '[web3 listener] - Error updating Uniswap V2 token reserves',
+      error
+    );
+  }
+};
+
 export const web3ListenerInit = () => dispatch => {
   web3Provider.pollingInterval = 10000;
   web3Provider.on('block', () => dispatch(web3UpdateReserves()));
+  web3Provider.on('block', blockNumber =>
+    dispatch(web3UpdateUniswapV2Reserves(blockNumber))
+  );
 };
 
 export const web3ListenerStop = () => () => {

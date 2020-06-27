@@ -86,22 +86,6 @@ const ExchangeModal = ({
   const { initWeb3Listener, stopWeb3Listener } = useBlockPolling();
   const { nativeCurrency } = useAccountSettings();
   const prevSelectedGasPrice = usePrevious(selectedGasPrice);
-  const {
-    getMarketDetails,
-    tradeDetailsV1,
-    tradeDetailsV2,
-    useV1,
-  } = useUniswapMarketDetails();
-  const { maxInputBalance, updateMaxInputBalance } = useMaxInputBalance();
-
-  const {
-    areTradeDetailsValid,
-    extraTradeDetails,
-    updateExtraTradeDetails,
-  } = useSwapDetails();
-
-  const [isAuthorizing, setIsAuthorizing] = useState(false);
-  const [slippage, setSlippage] = useState(null);
 
   const {
     defaultInputAddress,
@@ -119,6 +103,24 @@ const ExchangeModal = ({
     type,
     underlyingPrice,
   });
+
+  const {
+    getMarketDetails,
+    tradeDetailsV1,
+    tradeDetailsV2,
+    useV1,
+  } = useUniswapMarketDetails(inputCurrency, outputCurrency);
+
+  const { maxInputBalance, updateMaxInputBalance } = useMaxInputBalance();
+
+  const {
+    areTradeDetailsValid,
+    extraTradeDetails,
+    updateExtraTradeDetails,
+  } = useSwapDetails();
+
+  const [isAuthorizing, setIsAuthorizing] = useState(false);
+  const [slippage, setSlippage] = useState(null);
 
   const {
     handleFocus,

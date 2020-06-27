@@ -1,92 +1,46 @@
-import { ChainId, Pair, Token, WETH } from '@uniswap/sdk2';
-import { compact, flatMap, map, pick, toLower } from 'lodash';
+import { Pair, TokenAmount } from '@uniswap/sdk2';
 import { useMemo } from 'react';
-import { useSelector } from 'react-redux';
-import { UNISWAP_V2_BASES } from '../references';
+import useMulticall from './useMulticall';
+import useUniswapCalls from './useUniswapCalls';
 
-export default function useUniswapPairs() {
+export default function useUniswapPairs(inputCurrency, outputCurrency) {
   const {
-    chainId,
-    inputCurrency,
-    outputCurrency,
-    pairs,
-    tokens,
-  }: {
-    chainId?: Number;
-    inputCurrency?: { address: string };
-    outputCurrency?: { address: string };
-    pairs: Record<string, Pair>;
-    tokens: Record<string, Token>;
-  } = useSelector(
-    ({
-      settings: { chainId },
-      uniswap2: { pairs, tokens },
-      uniswap: { inputCurrency, outputCurrency },
-    }) => ({
-      chainId,
-      inputCurrency,
-      outputCurrency,
-      pairs,
-      tokens,
-    })
+    allPairCombinations,
+    calls,
+    contractInterface,
+    fragment,
+  } = useUniswapCalls(inputCurrency, outputCurrency);
+
+  const { multicallResults } = useMulticall(
+    calls,
+    contractInterface,
+    fragment
+    // latestBlockNumber // TODO JIN
   );
 
-  // translating v1 tokens into v2. Probably need to fix later
-  const inputToken: Token =
-    inputCurrency && inputCurrency.address !== 'eth'
-      ? tokens[inputCurrency.address]
-      : WETH[ChainId.MAINNET];
+  // create pair with reserve amounts
+  const allPairs = useMemo(
+    () =>
+      multicallResults.map((result, i) => {
+        const { result: reserves, loading } = result;
+        const tokenA = allPairCombinations[i][0];
+        const tokenB = allPairCombinations[i][1];
 
-  const outputToken: Token | null = outputCurrency
-    ? outputCurrency.address === 'eth'
-      ? WETH[ChainId.MAINNET]
-      : tokens[outputCurrency.address]
-    : null;
-
-  const bases = useMemo(() => UNISWAP_V2_BASES[chainId as ChainId] ?? [], [
-    chainId,
-  ]);
-
-  const allPairCombinations: [
-    Token | undefined,
-    Token | undefined
-  ][] = useMemo(() => {
-    if (!inputToken || !outputToken) return [];
-
-    return [
-      // the direct pair
-      [inputToken, outputToken],
-      // token A against all bases
-      ...bases.map((base): [Token | undefined, Token | undefined] => [
-        inputToken,
-        base,
-      ]),
-      // token B against all bases
-      ...bases.map((base): [Token | undefined, Token | undefined] => [
-        outputToken,
-        base,
-      ]),
-      // each base against all bases
-      ...flatMap(bases, (base): [Token, Token][] =>
-        bases.map(otherBase => [base, otherBase])
-      ),
-    ];
-  }, [inputToken, outputToken, bases]);
-
-  const allPairs = useMemo(() => {
-    const pairAddresses = map(
-      allPairCombinations,
-      ([inputToken, outputToken]) =>
-        inputToken && outputToken && !inputToken.equals(outputToken)
-          ? toLower(Pair.getAddress(inputToken, outputToken))
-          : undefined
-    );
-    return pick(pairs, compact(pairAddresses));
-  }, [allPairCombinations, pairs]);
+        if (loading || !tokenA || !tokenB) return undefined;
+        if (!reserves) return null;
+        const { reserve0, reserve1 } = reserves;
+        const [token0, token1] = tokenA.sortsBefore(tokenB)
+          ? [tokenA, tokenB]
+          : [tokenB, tokenA];
+        return new Pair(
+          new TokenAmount(token0, reserve0.toString()),
+          new TokenAmount(token1, reserve1.toString())
+        );
+      }),
+    [allPairCombinations, multicallResults]
+  );
 
   return {
     allPairs,
-    inputToken,
-    outputToken,
   };
 }

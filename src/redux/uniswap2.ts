@@ -1,18 +1,21 @@
 import { getAllPairsAndTokensV2 } from '../handlers/uniswap';
+import { logger } from '../utils';
 
 // -- Constants ------------------------------------------------------------- //
 const UNISWAP2_SET_PAIRS_AND_TOKENS = 'uniswap2/UNISWAP2_SET_PAIRS_AND_TOKENS';
 
 // -- Actions --------------------------------------------------------------- //
-
 export const uniswap2GetAllPairsAndTokens = () => async dispatch => {
-  const pairsAndToken = await getAllPairsAndTokensV2();
-  console.log(pairsAndToken);
-  if (pairsAndToken) {
-    dispatch({
-      payload: pairsAndToken,
-      type: UNISWAP2_SET_PAIRS_AND_TOKENS,
-    });
+  try {
+    const pairsAndToken = await getAllPairsAndTokensV2();
+    if (pairsAndToken) {
+      dispatch({
+        payload: pairsAndToken,
+        type: UNISWAP2_SET_PAIRS_AND_TOKENS,
+      });
+    }
+  } catch (error) {
+    logger.log('Error getting all pairs and tokens', error);
   }
 };
 

@@ -1,6 +1,7 @@
-import { Trade } from '@uniswap/sdk2';
+import { ChainId, Trade, WETH } from '@uniswap/sdk2';
 import { get } from 'lodash';
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
   calculateTradeDetails,
   calculateTradeDetailsV2,
@@ -28,9 +29,29 @@ const updateSlippage = (tradeDetailsV1, tradeDetailsV2, useV1, setSlippage) => {
   setSlippage(slippage);
 };
 
-export default function useUniswapMarketDetails() {
+export default function useUniswapMarketDetails(inputCurrency, outputCurrency) {
   const { chainId } = useAccountSettings();
-  const { allPairs, inputToken, outputToken } = useUniswapPairs();
+  const { tokens } = useSelector(({ uniswap2: tokens }) => ({
+    tokens,
+  }));
+  const { allPairs } = useUniswapPairs(inputCurrency, outputCurrency);
+  const inputToken: Token = useMemo(
+    () =>
+      inputCurrency && inputCurrency.address !== 'eth'
+        ? tokens[inputCurrency.address]
+        : WETH[ChainId.MAINNET],
+    [inputCurrency, tokens]
+  );
+
+  const outputToken: Token | null = useMemo(
+    () =>
+      outputCurrency
+        ? outputCurrency.address === 'eth'
+          ? WETH[ChainId.MAINNET]
+          : tokens[outputCurrency.address]
+        : null,
+    [outputCurrency, tokens]
+  );
 
   const [allTradeDetails, setAllTradeDetails] = useState({});
 

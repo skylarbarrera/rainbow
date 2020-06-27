@@ -29,6 +29,7 @@ export { default as useLoadAccountData } from './useLoadAccountData';
 export { default as useLoadGlobalData } from './useLoadGlobalData';
 export { default as useMagicAutofocus } from './useMagicAutofocus';
 export { default as useMaxInputBalance } from './useMaxInputBalance';
+export { default as useMulticall } from './useMulticall';
 export { default as useOpenInvestmentCards } from './useOpenInvestmentCards';
 export { default as useOpenSavings } from './useOpenSavings';
 export { default as useOpenSmallBalances } from './useOpenSmallBalances';
@@ -52,6 +53,7 @@ export { default as useTransactionConfirmation } from './useTransactionConfirmat
 export { default as useTransformOrigin } from './useTransformOrigin';
 export { default as useUniswapAssets } from './useUniswapAssets';
 export { default as useUniswapAssetsInWallet } from './useUniswapAssetsInWallet';
+export { default as useUniswapCalls } from './useUniswapCalls';
 export { default as useUniswapCurrencies } from './useUniswapCurrencies';
 export { default as useUniswapCurrencyReserves } from './useUniswapCurrencyReserves';
 export { default as useUniswapMarketDetails } from './useUniswapMarketDetails';

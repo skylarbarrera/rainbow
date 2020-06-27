@@ -424,6 +424,9 @@ export const getAllPairsAndTokensV2 = async () => {
   )?.data.pairs.reduce((acc, pair) => {
     const token0 = tokens[pair.token0.id];
     const token1 = tokens[pair.token1.id];
+    if (!token0 || !token1) {
+      return acc;
+    }
 
     const res0 = convertAmountToRawAmount(pair.reserve0, token0.decimals);
     const res1 = convertAmountToRawAmount(pair.reserve1, token1.decimals);
