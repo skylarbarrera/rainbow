@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
 import Animated from 'react-native-reanimated';
 import { useValues } from 'react-native-redash';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components/primitives';
 import TouchableBackdrop from '../components/TouchableBackdrop';
 import ColorCircle from '../components/avatar-builder/ColorCircle';
 import EmojiSelector from '../components/avatar-builder/EmojiSelector';
 import { HeaderHeightWithStatusBar } from '../components/header';
 import { Column, Row } from '../components/layout';
+import { useWallets } from '../hooks';
 import { useNavigation } from '../navigation/Navigation';
-import {
-  settingsUpdateAccountColor,
-  settingsUpdateAccountName,
-} from '../redux/settings';
-import store from '../redux/store';
+import { walletsSetSelected, walletsUpdate } from '../redux/wallets';
 import { deviceUtils } from '../utils';
 import { colors } from '@rainbow-me/styles';
 
@@ -46,15 +44,16 @@ const springTo = (node, toValue) =>
   }).start();
 
 const AvatarBuilder = ({ route: { params } }) => {
+  const { wallets, selectedWallet } = useWallets();
   const [translateX] = useValues((params.initialAccountColor - 4) * 39);
   const { goBack } = useNavigation();
-  const [currentAvatarColor, setCurrentAvatarColor] = useState(
+  const [currentAccountColor, setCurrentAccountColor] = useState(
     colors.avatarColor[params.initialAccountColor]
   );
+  const dispatch = useDispatch();
 
   const onChangeEmoji = event => {
-    store.dispatch(settingsUpdateAccountName(event));
-    // this.saveInfo(event, this.state.avatarColorIndex);
+    saveInfo(`${event} ${params.initialAccountName}`);
   };
 
   const avatarColors = colors.avatarColor.map((color, index) => (
@@ -65,20 +64,29 @@ const AvatarBuilder = ({ route: { params } }) => {
       onPressColor={() => {
         let destination = (index - 4) * 39;
         springTo(translateX, destination);
-        store.dispatch(settingsUpdateAccountColor(index));
-        setCurrentAvatarColor(color);
-        // this.saveInfo(this.state.emoji, index);
+        setCurrentAccountColor(color);
+        saveInfo(null, index);
       }}
     />
   ));
 
-  // const saveInfo = (name, color) => {
-  //   saveAccountInfo(
-  //     { color: color, name: name },
-  //     this.props.accountAddress,
-  //     this.props.network
-  //   );
-  // };
+  const saveInfo = async (name, color) => {
+    const newWallets = { ...wallets };
+    const walletId = selectedWallet.id;
+
+    newWallets[walletId].addresses.some((account, index) => {
+      console.log(newWallets[walletId]);
+      if (name) {
+        newWallets[walletId].addresses[index].label = name;
+      }
+      if (color) {
+        newWallets[walletId].addresses[index].color = color;
+      }
+      dispatch(walletsSetSelected(newWallets[walletId]));
+      return true;
+    });
+    await dispatch(walletsUpdate(newWallets));
+  };
 
   const colorCircleTopPadding = 15;
   const colorCircleBottomPadding = 19;
@@ -101,7 +109,7 @@ const AvatarBuilder = ({ route: { params } }) => {
         >
           <Animated.View
             alignSelf="center"
-            borderColor={currentAvatarColor}
+            borderColor={currentAccountColor}
             borderRadius={19}
             borderWidth={3}
             height={38}
