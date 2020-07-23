@@ -8,7 +8,10 @@ import EmojiSelector from '../components/avatar-builder/EmojiSelector';
 import { HeaderHeightWithStatusBar } from '../components/header';
 import { Column, Row } from '../components/layout';
 import { useNavigation } from '../navigation/Navigation';
-import { settingsUpdateAccountColor } from '../redux/settings';
+import {
+  settingsUpdateAccountColor,
+  settingsUpdateAccountName,
+} from '../redux/settings';
 import store from '../redux/store';
 import { deviceUtils } from '../utils';
 import { colors } from '@rainbow-me/styles';
@@ -48,9 +51,9 @@ const AvatarBuilder = ({ route: { params } }) => {
   const [currentAvatarColor, setCurrentAvatarColor] = useState(
     colors.avatarColor[params.initialAccountColor]
   );
-  const onChangeEmoji = () => {
-    // this.setState({ emoji: event });
-    // store.dispatch(settingsUpdateAccountName(event));
+
+  const onChangeEmoji = event => {
+    store.dispatch(settingsUpdateAccountName(event));
     // this.saveInfo(event, this.state.avatarColorIndex);
   };
 
