@@ -76,6 +76,7 @@ const AvatarBuilder = ({ route: { params } }) => {
 
     newWallets[walletId].addresses.some((account, index) => {
       console.log(newWallets[walletId]);
+      newWallets[walletId].addresses[index].image = undefined;
       if (name) {
         newWallets[walletId].addresses[index].label = name;
       }
