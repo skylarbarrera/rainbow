@@ -100,8 +100,8 @@ const TransactionList = ({
       } else if (response.customButton) {
         if (response.customButton === 'ab') {
           navigate(Routes.AVATAR_BUILDER, {
-            accountColor,
-            accountName,
+            initialAccountColor: accountColor,
+            initialAccountName: accountName,
           });
         }
       } else {
