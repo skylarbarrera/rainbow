@@ -214,16 +214,15 @@ const SettingsModal = () => {
               fontSize: parseFloat(fonts.size.large),
               fontWeight: fonts.weight.medium,
               letterSpacing: fonts.letterSpacing.roundedMedium,
+              textAlign: 'center',
             },
             headerRight: renderHeaderRight,
             headerStatusBarHeight: 0,
             headerStyle: {
               backgroundColor: 'transparent',
-              elevation: 0,
               height: 49,
               shadowColor: 'transparent',
             },
-            headerTitleAlign: 'center',
             headerTitleStyle: {
               fontFamily: fonts.family.SFProRounded,
               fontSize: parseFloat(fonts.size.large),
@@ -242,13 +241,7 @@ const SettingsModal = () => {
             },
           }}
         >
-          <Stack.Screen
-            name="SettingsSection"
-            options={{
-              ...(Platform.OS === 'android' && { headerLeft: null }),
-              title: 'Settings',
-            }}
-          >
+          <Stack.Screen name="SettingsSection" options={{ title: 'Settings' }}>
             {() => (
               <SettingsSection
                 onCloseModal={goBack}
