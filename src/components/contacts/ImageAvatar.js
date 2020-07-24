@@ -53,7 +53,12 @@ const ImageAvatar = ({ image, size = 'medium', ...props }) => {
       shadows={shadows}
     >
       <Centered flex={1}>
-        <Avatar dimensions={dimensions} source={image} />
+        <Avatar
+          dimensions={dimensions}
+          source={{
+            uri: image,
+          }}
+        />
       </Centered>
     </ShadowStack>
   );

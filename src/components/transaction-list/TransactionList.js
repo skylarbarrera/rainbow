@@ -108,10 +108,13 @@ const TransactionList = ({
           });
         }
       } else {
+        const stringIndex = response?.uri.indexOf('/Documents');
         const newWallets = { ...wallets };
         const walletId = selectedWallet.id;
         newWallets[walletId].addresses.some((account, index) => {
-          newWallets[walletId].addresses[index].image = response;
+          newWallets[walletId].addresses[index].image = `~${response.uri.slice(
+            stringIndex
+          )}`;
           dispatch(walletsSetSelected(newWallets[walletId]));
           return true;
         });
@@ -266,7 +269,7 @@ const TransactionList = ({
       <Container
         accountAddress={accountName}
         accountColor={colors.avatarColor[accountColor]}
-        accountImage={accountImage?.uri?.split('://')[1]}
+        accountImage={accountImage}
         accountName={accountSymbol}
         addCashAvailable={addCashAvailable}
         as={NativeTransactionListView}
