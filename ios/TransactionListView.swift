@@ -65,8 +65,11 @@ class TransactionListView: UIView, UITableViewDelegate, UITableViewDataSource {
       let imageData:NSData = NSData(contentsOf: url)!
 
       let image = UIImage(data: imageData as Data)
-
+      
+      header.accountImage.alpha = 1.0;
       header.accountImage.image = image
+    } else {
+      header.accountImage.alpha = 0.0;
     }
    }
  }
