@@ -117,6 +117,34 @@ export default class AnimatedChart extends Component {
     this.animatedIsDone = !this.animatedIsDone;
   };
 
+  // static getDerivedStateFromProps(props, state) {
+  //   if (props.currentState?.points) {
+  //     let data = props.currentData.points;
+  //     data[data.length - 1].y = props.currentValue;
+  //
+  //     const maxValue = maxBy(data, 'y');
+  //     const minValue = minBy(data, 'y');
+  //
+  //     const minX = data[0].x;
+  //     const maxX = data[data.length - 1].x;
+  //
+  //     const reducedData = data.map(({ x, y }) => ({
+  //       x: (x - minX) / (maxX - minX),
+  //       y: (y - minValue.y) / (maxValue.y - minValue.y),
+  //     }));
+  //
+  //     const shape = reducedData
+  //       .map(({ x, y }) => {
+  //         return `L ${x} ${y}`;
+  //       })
+  //       .join(' ')
+  //       .replace('L', 'M');
+  //     return { ...state, shape };
+  //   } else {
+  //     return state;
+  //   }
+  // }
+
   render() {
     return (
       <View
@@ -134,6 +162,14 @@ export default class AnimatedChart extends Component {
             strokeWidth={3.25}
           />
         </Svg>
+
+        {/*<Svg height={200} viewBox="0 0 1 1" width={width}>*/}
+        {/*  <Path*/}
+        {/*    d={this.state.shape}*/}
+        {/*    stroke={this.props.color}*/}
+        {/*    strokeWidth="0.005"*/}
+        {/*  />*/}
+        {/*</Svg>*/}
       </View>
     );
   }
