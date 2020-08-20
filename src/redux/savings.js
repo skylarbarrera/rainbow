@@ -3,9 +3,10 @@ import { compoundClient } from '../apollo/client';
 import { COMPOUND_ACCOUNT_AND_MARKET_QUERY } from '../apollo/queries';
 import { getSavings, saveSavings } from '../handlers/localstorage/accountLocal';
 import assetTypes from '../helpers/assetTypes';
-import { multiply } from '../helpers/utilities';
+import { divide, multiply } from '../helpers/utilities';
 import { parseAssetName, parseAssetSymbol } from '../parsers/accounts';
 import { CDAI_CONTRACT } from '../references';
+import { ethereumUtils } from '../utils';
 
 // -- Constants --------------------------------------- //
 const COMPOUND_QUERY_INTERVAL = 120000;
@@ -19,7 +20,12 @@ const SAVINGS_SET_NUMBER_OF_JUST_FINISHED_DEPOSITS_OR_WITHDRAWAL =
 const getMarketData = (marketData, tokenOverrides) => {
   const underlying = getUnderlyingData(marketData, tokenOverrides);
   const cToken = getCTokenData(marketData, tokenOverrides);
-  const { exchangeRate, supplyRate, underlyingPrice } = marketData;
+  const {
+    exchangeRate,
+    supplyRate,
+    underlyingPrice,
+    underlyingPriceUSD,
+  } = marketData;
 
   return {
     cToken,
@@ -27,6 +33,7 @@ const getMarketData = (marketData, tokenOverrides) => {
     supplyRate,
     underlying,
     underlyingPrice,
+    underlyingPriceUSD,
   };
 };
 
@@ -119,7 +126,7 @@ export const savingsDecrementNumberOfJustFinishedDepositsOrWithdrawals = () => (
 
 const subscribeToCompoundData = async (dispatch, getState) => {
   const { accountAddress, network } = getState().settings;
-  const { tokenOverrides } = getState().data;
+  const { assets, tokenOverrides } = getState().data;
   const { savingsQuery } = getState().savings;
   let shouldRefetch = true;
   if (savingsQuery) {
@@ -153,6 +160,7 @@ const subscribeToCompoundData = async (dispatch, getState) => {
       variables: { id: toLower(accountAddress) },
     });
 
+    const priceOfEth = get(ethereumUtils.getAsset(assets), 'price.value', 0);
     const newSubscription = newQuery.subscribe({
       next: async ({ data }) => {
         let savingsAccountData = [];
@@ -169,11 +177,13 @@ const subscribeToCompoundData = async (dispatch, getState) => {
             exchangeRate,
             supplyRate,
             underlying,
-            underlyingPrice,
+            // underlyingPrice,
+            underlyingPriceUSD,
           } = getMarketData(marketData, tokenOverrides);
 
+          const underlyingPriceInEth = divide(underlyingPriceUSD, priceOfEth);
           const ethPrice = multiply(
-            underlyingPrice,
+            underlyingPriceInEth,
             token.supplyBalanceUnderlying
           );
 
@@ -193,7 +203,7 @@ const subscribeToCompoundData = async (dispatch, getState) => {
             supplyRate,
             type: assetTypes.cToken,
             underlying,
-            underlyingPrice,
+            underlyingPrice: underlyingPriceInEth,
           };
         });
 

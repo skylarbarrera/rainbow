@@ -13,6 +13,7 @@ export const COMPOUND_ACCOUNT_AND_MARKET_QUERY = gql`
       underlyingSymbol
       underlyingDecimals
       underlyingPrice
+      underlyingPriceUSD
     }
     account(id: $id) {
       id
