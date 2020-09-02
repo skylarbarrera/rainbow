@@ -36,10 +36,7 @@ const ChartExpandedState = ({ asset }) => {
   ]);
 
   return (
-    <SlackSheet
-      contentHeight={ChartExpandedStateSheetHeight}
-      scrollEnabled={false}
-    >
+    <SlackSheet contentHeight={ChartExpandedStateSheetHeight}>
       <ChartExpandedStateHeader
         {...asset}
         change={asset?.price?.relative_change_24h || 0}
